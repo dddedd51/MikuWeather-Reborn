@@ -1,0 +1,14 @@
+import { readFileSync } from 'node:fs';
+import { createPublicKey, verify, createHash } from 'node:crypto';
+import { createJwt } from '../shared/qweather.cjs';
+const config = JSON.parse(readFileSync(new URL('../desktop/private.json', import.meta.url)));
+const token = createJwt(config);
+const [header, payload, signature] = token.split('.');
+console.log('JWT header:', JSON.parse(Buffer.from(header, 'base64url')));
+console.log('JWT claims:', JSON.parse(Buffer.from(payload, 'base64url')));
+console.log('Local UTC:', new Date().toISOString());
+console.log('Signature valid locally:', verify(null, Buffer.from(header + '.' + payload), createPublicKey(config.privateKey), Buffer.from(signature, 'base64url')));
+console.log('Public key SHA256:', createHash('sha256').update(createPublicKey(config.privateKey).export({type:'spki',format:'pem'}).trim()).digest('hex'));
+const response = await fetch('https://' + config.host + '/weather/v1/current/22.55/114.06?lang=zh', { headers: {Authorization: 'Bearer ' + token}, signal: AbortSignal.timeout(15000), redirect:'error' });
+console.log('HTTP status:', response.status, 'server date:', response.headers.get('date'));
+console.log((await response.text()).slice(0, 2500));

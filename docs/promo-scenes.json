@@ -1,0 +1,14 @@
+[
+  {"id":"01","layout":"cover","tag":"MIKU WEATHER / REBORN","title":"让初音，回到桌面。","sub":"Windows × Android · 非官方重制","text":"我用约三千六百三十六万累计 token，重写了初音天气。这个数字包含缓存输入，详细统计放在开发日志里。"},
+  {"id":"02","layout":"pet","tag":"01 / RESTART","title":"从停更的旧作出发","sub":"保留天气插画，重新构建日常体验","text":"起点，是一个停更的天气桌宠。我想保留随天气变化的初音，让她重新出现在每天使用的电脑和手机上。"},
+  {"id":"03","layout":"windows","tag":"02 / WEATHER","title":"天气，重新连接。","sub":"当前天气 · 逐小时 · 七日预报","text":"天气数据来自和风天气。当前天气、逐小时和七日预报，都能在新的界面里查看。"},
+  {"id":"04","layout":"pet","tag":"03 / DESKTOP","title":"桌面上，多一份陪伴。","sub":"拖动 · 点击详情 · 右键菜单 · 托盘","text":"在电脑上，初音是一只透明桌宠。拖动就能移动，点击打开天气详情，右键可以刷新、切换城市或者置顶。"},
+  {"id":"05","layout":"android","tag":"04 / ANDROID","title":"把天气，带在身边。","sub":"Android 天气详情 · 城市管理","text":"手机上，也有完整的天气页面。搜索城市，查看预报，再把喜欢的城市收藏起来。"},
+  {"id":"06","layout":"widget","tag":"05 / WIDGET","title":"不打开，也能看见。","sub":"宽版 / 紧凑版 · 原生桌面小组件","text":"安卓桌面还可以添加天气小组件。温度、天气和初音，放在同一张圆角卡片里，也能手动刷新。"},
+  {"id":"07","layout":"solar","tag":"06 / SUNRISE TO SUNSET","title":"日出变浅，日落变深。","sub":"按所选城市的日出日落切换主题","text":"主题跟随所选城市的日出和日落。白天浅色，夜晚深色，天气页、桌宠和小组件一起切换。"},
+  {"id":"08","layout":"location","tag":"07 / CHOOSE YOUR CITY","title":"定位之后，由你确认。","sub":"Windows IP 定位 / Android 系统定位","text":"电脑使用 IP 定位，手机使用系统定位。先给出候选城市，再由你确认。手机位置只在本机匹配，不保存轨迹。"},
+  {"id":"09","layout":"proof","tag":"08 / REAL DEVICES","title":"这些画面，来自实测。","sub":"Windows 桌宠 / Android 页面与小组件","text":"现在看到的电脑和手机画面，来自这次实测。后台刷新和定位表现，还会受到系统和网络环境影响。"},
+  {"id":"10","layout":"install","tag":"09 / WINDOWS INSTALL","title":"请完整解压到非中文目录","sub":"例如 D:\\MikuWeatherReborn","text":"安装电脑版时，请把完整压缩包解压到不含中文的普通目录，再运行程序。不要只拷贝一个可执行文件。"},
+  {"id":"11","layout":"source","tag":"10 / SOURCE CODE","title":"把重制过程，写下来。","sub":"源码 · 实测截图 · 开发日志","text":"源码和开发日志会放到 GitHub。个人密钥不公开，面向公众的免配置安装包还需要服务端天气代理。"},
+  {"id":"12","layout":"credits","tag":"THANK YOU / SEE YOU ON DESKTOP","title":"初音天气 · Reborn","sub":"一个非官方的、重新开始的天气故事","text":"感谢原项目、和风天气和素材作者。本片使用初音语音模型合成配音，模型来源已在画面和简介中标注。我们，桌面上见。"}
+]

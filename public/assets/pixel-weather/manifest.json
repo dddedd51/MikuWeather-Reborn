@@ -1,0 +1,695 @@
+{
+  "source": {
+    "local_apk_path": "C:/Users/xtt20/Downloads/pixel-icon-provider-v4.apk",
+    "sha256": "a63e7289762a72231b68aff246f2811267219395123fc24431aeadd32e1c65e5",
+    "bytes": 988501,
+    "package": "org.breezyweather.pixeliconprovider",
+    "version_name": "4.0",
+    "version_code": 4
+  },
+  "extraction": {
+    "tool": "apktool 2.11.1",
+    "method": "resource table decoding, then byte-for-byte PNG copy verified against original ZIP members",
+    "apk_executed": false,
+    "icons_modified": false
+  },
+  "evidence": {
+    "rea_inventory_parent": "ev_bd16ba4dbd03a1c684b7a7a68bec825ea17c7edaa8f36f53fcc1f972e3ce8e7f",
+    "rea_inventory_summary": "ev_c614106d637750c634513237d1b22bdc62bde02bda1949440b76273d5d596b55",
+    "rea_inventory": "ev_b9c87093235d4c5b5af06b272e28ffeac1f2420a24606b39704059ad44d346a9"
+  },
+  "license": {
+    "status": "not_established",
+    "notice": "The APK has no separately named license/copyright file or icon-license statement in its decoded XML. Package identity or use in an app does not establish redistribution rights. Verify licensing before public distribution.",
+    "named_archive_license_entries": []
+  },
+  "mapping_authority": {
+    "provider_mapping": "observed decoded drawable_filter.xml",
+    "qweather_code_mapping": "integration suggestion, not declared by this APK",
+    "fallback_notes": [
+      "Cloudy/rain/snow/sleet/hail/thunder/fog/haze/wind have a shared day/night PNG in the provider.",
+      "No dedicated sand/dust/heat/cold/unknown icon exists in this base set; use a clearly generic fallback rather than relabel an icon.",
+      "The APK includes animation layers and shortcut icons; only complete static weather PNGs were copied."
+    ]
+  },
+  "icons": [
+    {
+      "id": "clear_day",
+      "label_zh": "晴天",
+      "filename": "weather_clear_day_pixel.png",
+      "android_resource_name": "weather_clear_day_pixel",
+      "width": 256,
+      "height": 256,
+      "bytes": 8753,
+      "sha256": "075395aaf24383678927764c54607129a2be45c145450b74fd55538cd8291bbb",
+      "apk_member_paths": [
+        "res/is.png"
+      ],
+      "suggested_qweather_codes": [
+        100
+      ],
+      "related_day_night_codes": [
+        150
+      ]
+    },
+    {
+      "id": "clear_night",
+      "label_zh": "晴夜",
+      "filename": "weather_clear_night_pixel.png",
+      "android_resource_name": "weather_clear_night_pixel",
+      "width": 256,
+      "height": 256,
+      "bytes": 9493,
+      "sha256": "a64ef91941c80095341d8771d73250243f922975ea260e904c15130850394b96",
+      "apk_member_paths": [
+        "res/y3.png"
+      ],
+      "suggested_qweather_codes": [
+        150
+      ],
+      "related_day_night_codes": [
+        100
+      ]
+    },
+    {
+      "id": "partly_cloudy_day",
+      "label_zh": "少云 / 多云·白天",
+      "filename": "weather_partly_cloudy_day_pixel.png",
+      "android_resource_name": "weather_partly_cloudy_day_pixel",
+      "width": 256,
+      "height": 256,
+      "bytes": 14708,
+      "sha256": "bb9c7f1db469d2e33f20da5d9fd1eb5ecb83d13221ed3c45d0ec6dbe15cfc648",
+      "apk_member_paths": [
+        "res/XA.png"
+      ],
+      "suggested_qweather_codes": [
+        101,
+        102,
+        103
+      ],
+      "related_day_night_codes": [
+        151,
+        152,
+        153
+      ]
+    },
+    {
+      "id": "partly_cloudy_night",
+      "label_zh": "少云 / 多云·夜间",
+      "filename": "weather_partly_cloudy_night_pixel.png",
+      "android_resource_name": "weather_partly_cloudy_night_pixel",
+      "width": 256,
+      "height": 256,
+      "bytes": 7570,
+      "sha256": "76e04a5a66c4efe072cad2c63ccdd0a05b69f6de21d53eaf4c87aa0022aaaf80",
+      "apk_member_paths": [
+        "res/oQ.png"
+      ],
+      "suggested_qweather_codes": [
+        151,
+        152,
+        153
+      ],
+      "related_day_night_codes": [
+        101,
+        102,
+        103
+      ]
+    },
+    {
+      "id": "cloudy",
+      "label_zh": "阴天",
+      "filename": "weather_cloudy_pixel.png",
+      "android_resource_name": "weather_cloudy_pixel",
+      "width": 256,
+      "height": 256,
+      "bytes": 5694,
+      "sha256": "886e7a6e673accd0f645a457b80a879496d0262174b461d17b6ca02bc2c5459a",
+      "apk_member_paths": [
+        "res/A-.png"
+      ],
+      "suggested_qweather_codes": [
+        104
+      ],
+      "related_day_night_codes": []
+    },
+    {
+      "id": "rain",
+      "label_zh": "雨",
+      "filename": "weather_rain_pixel.png",
+      "android_resource_name": "weather_rain_pixel",
+      "width": 256,
+      "height": 256,
+      "bytes": 13977,
+      "sha256": "2f126a8be6a4330543fb8da10b3dbec3af0df9168f209114bf2c71da4323840b",
+      "apk_member_paths": [
+        "res/15.png"
+      ],
+      "suggested_qweather_codes": [
+        300,
+        301,
+        305,
+        306,
+        307,
+        308,
+        309,
+        310,
+        311,
+        312,
+        313,
+        314,
+        315,
+        316,
+        317,
+        318,
+        350,
+        351,
+        399
+      ],
+      "related_day_night_codes": []
+    },
+    {
+      "id": "snow",
+      "label_zh": "雪",
+      "filename": "weather_snow_pixel.png",
+      "android_resource_name": "weather_snow_pixel",
+      "width": 256,
+      "height": 256,
+      "bytes": 9591,
+      "sha256": "a79252ea60db2168c99e8b7b522234658c6baffa398cee4ca23107406497d11f",
+      "apk_member_paths": [
+        "res/Er.png",
+        "res/PF.png"
+      ],
+      "suggested_qweather_codes": [
+        400,
+        401,
+        402,
+        403,
+        407,
+        408,
+        409,
+        410,
+        457,
+        499
+      ],
+      "related_day_night_codes": []
+    },
+    {
+      "id": "sleet",
+      "label_zh": "雨夹雪",
+      "filename": "weather_sleet_pixel.png",
+      "android_resource_name": "weather_sleet_pixel",
+      "width": 256,
+      "height": 256,
+      "bytes": 13170,
+      "sha256": "f6ab5aea0b12da0f282ce63e38fc8404c97cdcaf273cb05a3db21ffd2b4cde63",
+      "apk_member_paths": [
+        "res/0o.png"
+      ],
+      "suggested_qweather_codes": [
+        404,
+        405,
+        406,
+        456
+      ],
+      "related_day_night_codes": []
+    },
+    {
+      "id": "hail",
+      "label_zh": "冰雹",
+      "filename": "weather_hail_pixel.png",
+      "android_resource_name": "weather_hail_pixel",
+      "width": 256,
+      "height": 256,
+      "bytes": 9591,
+      "sha256": "a79252ea60db2168c99e8b7b522234658c6baffa398cee4ca23107406497d11f",
+      "apk_member_paths": [
+        "res/Er.png",
+        "res/PF.png"
+      ],
+      "suggested_qweather_codes": [
+        304
+      ],
+      "related_day_night_codes": []
+    },
+    {
+      "id": "thunderstorm",
+      "label_zh": "雷阵雨 / 雷暴",
+      "filename": "weather_thunderstorm_pixel.png",
+      "android_resource_name": "weather_thunderstorm_pixel",
+      "width": 256,
+      "height": 256,
+      "bytes": 14410,
+      "sha256": "1d8b0292c9aa39bd0325ad3abb38ac158d0599ef31662a631573fa9125805629",
+      "apk_member_paths": [
+        "res/Y_.png"
+      ],
+      "suggested_qweather_codes": [
+        302,
+        303
+      ],
+      "related_day_night_codes": []
+    },
+    {
+      "id": "fog",
+      "label_zh": "雾",
+      "filename": "weather_fog_pixel.png",
+      "android_resource_name": "weather_fog_pixel",
+      "width": 256,
+      "height": 256,
+      "bytes": 8070,
+      "sha256": "9d1c0004a10bc8212249f423deae19f7c8691a2d73bf1819e75060f7bf127486",
+      "apk_member_paths": [
+        "res/06.png",
+        "res/Js.png"
+      ],
+      "suggested_qweather_codes": [
+        500,
+        501,
+        509,
+        510,
+        514,
+        515
+      ],
+      "related_day_night_codes": []
+    },
+    {
+      "id": "haze",
+      "label_zh": "霾",
+      "filename": "weather_haze_pixel.png",
+      "android_resource_name": "weather_haze_pixel",
+      "width": 256,
+      "height": 256,
+      "bytes": 8070,
+      "sha256": "9d1c0004a10bc8212249f423deae19f7c8691a2d73bf1819e75060f7bf127486",
+      "apk_member_paths": [
+        "res/06.png",
+        "res/Js.png"
+      ],
+      "suggested_qweather_codes": [
+        502,
+        511,
+        512,
+        513
+      ],
+      "related_day_night_codes": []
+    },
+    {
+      "id": "wind",
+      "label_zh": "风",
+      "filename": "weather_wind_pixel.png",
+      "android_resource_name": "weather_wind_pixel",
+      "width": 256,
+      "height": 256,
+      "bytes": 6550,
+      "sha256": "b853f70b7619b7ff102c6f7fdc851f259760758a09bd9ab54c484f5dcbaa1798",
+      "apk_member_paths": [
+        "res/v6.png"
+      ],
+      "suggested_qweather_codes": [
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209,
+        210,
+        211,
+        212,
+        213
+      ],
+      "related_day_night_codes": []
+    }
+  ],
+  "observed_provider_mapping": [
+    {
+      "name": "weather_clear_day",
+      "resource": "weather_clear_day_pixel"
+    },
+    {
+      "name": "weather_clear_day_1",
+      "resource": "weather_clear_day_pixel"
+    },
+    {
+      "name": "weather_clear_day_2",
+      "resource": "weather_clear_day_pixel"
+    },
+    {
+      "name": "weather_clear_night",
+      "resource": "weather_clear_night_pixel"
+    },
+    {
+      "name": "weather_clear_night_1",
+      "resource": "weather_clear_night_pixel"
+    },
+    {
+      "name": "weather_partly_cloudy_day",
+      "resource": "weather_partly_cloudy_day_pixel"
+    },
+    {
+      "name": "weather_partly_cloudy_day_1",
+      "resource": "weather_partly_cloudy_1"
+    },
+    {
+      "name": "weather_partly_cloudy_day_2",
+      "resource": "weather_clear_day_pixel"
+    },
+    {
+      "name": "weather_partly_cloudy_day_3",
+      "resource": "weather_clear_day_pixel"
+    },
+    {
+      "name": "weather_partly_cloudy_night",
+      "resource": "weather_partly_cloudy_night_pixel"
+    },
+    {
+      "name": "weather_partly_cloudy_night_1",
+      "resource": "weather_partly_cloudy_mini"
+    },
+    {
+      "name": "weather_partly_cloudy_night_2",
+      "resource": "weather_partly_cloudy_night_pixel_moon"
+    },
+    {
+      "name": "weather_cloudy_day",
+      "resource": "weather_cloudy_pixel"
+    },
+    {
+      "name": "weather_cloudy_day_1",
+      "resource": "weather_cloudy_1"
+    },
+    {
+      "name": "weather_cloudy_day_2",
+      "resource": "weather_cloudy_2"
+    },
+    {
+      "name": "weather_cloudy_night",
+      "resource": "weather_cloudy_pixel"
+    },
+    {
+      "name": "weather_cloudy_night_1",
+      "resource": "weather_cloudy_1"
+    },
+    {
+      "name": "weather_cloudy_night_2",
+      "resource": "weather_cloudy_2"
+    },
+    {
+      "name": "weather_rain_day",
+      "resource": "weather_rain_pixel"
+    },
+    {
+      "name": "weather_rain_day_1",
+      "resource": "weather_rain_1"
+    },
+    {
+      "name": "weather_rain_day_2",
+      "resource": "weather_rain_2"
+    },
+    {
+      "name": "weather_rain_day_3",
+      "resource": "weather_rain_3"
+    },
+    {
+      "name": "weather_rain_night",
+      "resource": "weather_rain_pixel"
+    },
+    {
+      "name": "weather_rain_night_1",
+      "resource": "weather_rain_1"
+    },
+    {
+      "name": "weather_rain_night_2",
+      "resource": "weather_rain_2"
+    },
+    {
+      "name": "weather_rain_night_3",
+      "resource": "weather_rain_3"
+    },
+    {
+      "name": "weather_snow_day",
+      "resource": "weather_snow_pixel"
+    },
+    {
+      "name": "weather_snow_day_1",
+      "resource": "weather_rain_1"
+    },
+    {
+      "name": "weather_snow_day_2",
+      "resource": "weather_snow_2"
+    },
+    {
+      "name": "weather_snow_day_3",
+      "resource": "weather_snow_3"
+    },
+    {
+      "name": "weather_snow_night",
+      "resource": "weather_snow_pixel"
+    },
+    {
+      "name": "weather_snow_night_1",
+      "resource": "weather_rain_1"
+    },
+    {
+      "name": "weather_snow_night_2",
+      "resource": "weather_snow_2"
+    },
+    {
+      "name": "weather_snow_night_3",
+      "resource": "weather_snow_3"
+    },
+    {
+      "name": "weather_wind_day",
+      "resource": "weather_wind_pixel"
+    },
+    {
+      "name": "weather_wind_day_1",
+      "resource": "weather_wind_1"
+    },
+    {
+      "name": "weather_wind_day_2",
+      "resource": "weather_wind_2"
+    },
+    {
+      "name": "weather_wind_night",
+      "resource": "weather_wind_pixel"
+    },
+    {
+      "name": "weather_wind_night_1",
+      "resource": "weather_wind_1"
+    },
+    {
+      "name": "weather_wind_night_2",
+      "resource": "weather_wind_2"
+    },
+    {
+      "name": "weather_fog_day",
+      "resource": "weather_fog_pixel"
+    },
+    {
+      "name": "weather_fog_day_1",
+      "resource": "weather_rain_1"
+    },
+    {
+      "name": "weather_fog_day_2",
+      "resource": "weather_fog_2"
+    },
+    {
+      "name": "weather_fog_day_3",
+      "resource": "weather_fog_2"
+    },
+    {
+      "name": "weather_fog_night",
+      "resource": "weather_fog_pixel"
+    },
+    {
+      "name": "weather_fog_night_1",
+      "resource": "weather_rain_1"
+    },
+    {
+      "name": "weather_fog_night_2",
+      "resource": "weather_fog_2"
+    },
+    {
+      "name": "weather_fog_night_3",
+      "resource": "weather_fog_2"
+    },
+    {
+      "name": "weather_haze_day",
+      "resource": "weather_haze_pixel"
+    },
+    {
+      "name": "weather_haze_day_1",
+      "resource": "weather_rain_1"
+    },
+    {
+      "name": "weather_haze_day_2",
+      "resource": "weather_fog_2"
+    },
+    {
+      "name": "weather_haze_day_3",
+      "resource": "weather_fog_2"
+    },
+    {
+      "name": "weather_haze_night",
+      "resource": "weather_haze_pixel"
+    },
+    {
+      "name": "weather_haze_night_1",
+      "resource": "weather_rain_1"
+    },
+    {
+      "name": "weather_haze_night_2",
+      "resource": "weather_fog_2"
+    },
+    {
+      "name": "weather_haze_night_3",
+      "resource": "weather_fog_2"
+    },
+    {
+      "name": "weather_sleet_day",
+      "resource": "weather_sleet_pixel"
+    },
+    {
+      "name": "weather_sleet_day_1",
+      "resource": "weather_rain_1"
+    },
+    {
+      "name": "weather_sleet_day_2",
+      "resource": "weather_snow_2"
+    },
+    {
+      "name": "weather_sleet_day_3",
+      "resource": "weather_sleet_3"
+    },
+    {
+      "name": "weather_sleet_night",
+      "resource": "weather_sleet_pixel"
+    },
+    {
+      "name": "weather_sleet_night_1",
+      "resource": "weather_rain_1"
+    },
+    {
+      "name": "weather_sleet_night_2",
+      "resource": "weather_snow_2"
+    },
+    {
+      "name": "weather_sleet_night_3",
+      "resource": "weather_sleet_3"
+    },
+    {
+      "name": "weather_hail_day",
+      "resource": "weather_hail_pixel"
+    },
+    {
+      "name": "weather_hail_day_1",
+      "resource": "weather_rain_1"
+    },
+    {
+      "name": "weather_hail_day_2",
+      "resource": "weather_snow_2"
+    },
+    {
+      "name": "weather_hail_day_3",
+      "resource": "weather_snow_3"
+    },
+    {
+      "name": "weather_hail_night",
+      "resource": "weather_hail_pixel"
+    },
+    {
+      "name": "weather_hail_night_1",
+      "resource": "weather_rain_1"
+    },
+    {
+      "name": "weather_hail_night_2",
+      "resource": "weather_snow_2"
+    },
+    {
+      "name": "weather_hail_night_3",
+      "resource": "weather_snow_3"
+    },
+    {
+      "name": "weather_thunder_day",
+      "resource": "weather_thunderstorm_pixel"
+    },
+    {
+      "name": "weather_thunder_day_1",
+      "resource": "weather_thunderstorm_1"
+    },
+    {
+      "name": "weather_thunder_day_2",
+      "resource": "weather_thunderstorm_2"
+    },
+    {
+      "name": "weather_thunder_day_3",
+      "resource": "weather_thunderstorm_3"
+    },
+    {
+      "name": "weather_thunder_night",
+      "resource": "weather_thunderstorm_pixel"
+    },
+    {
+      "name": "weather_thunder_night_1",
+      "resource": "weather_thunderstorm_1"
+    },
+    {
+      "name": "weather_thunder_night_2",
+      "resource": "weather_thunderstorm_2"
+    },
+    {
+      "name": "weather_thunder_night_3",
+      "resource": "weather_thunderstorm_3"
+    },
+    {
+      "name": "weather_thunderstorm_day",
+      "resource": "weather_thunderstorm_pixel"
+    },
+    {
+      "name": "weather_thunderstorm_day_1",
+      "resource": "weather_thunderstorm_1"
+    },
+    {
+      "name": "weather_thunderstorm_day_2",
+      "resource": "weather_thunderstorm_2"
+    },
+    {
+      "name": "weather_thunderstorm_day_3",
+      "resource": "weather_thunderstorm_3"
+    },
+    {
+      "name": "weather_thunderstorm_night",
+      "resource": "weather_thunderstorm_pixel"
+    },
+    {
+      "name": "weather_thunderstorm_night_1",
+      "resource": "weather_thunderstorm_1"
+    },
+    {
+      "name": "weather_thunderstorm_night_2",
+      "resource": "weather_thunderstorm_2"
+    },
+    {
+      "name": "weather_thunderstorm_night_3",
+      "resource": "weather_thunderstorm_3"
+    }
+  ],
+  "targeted_dex_source_strings": [
+    "Lorg/breezyweather/pixeliconprovider/MainActivity;",
+    "Lorg/breezyweather/pixeliconprovider/PixelMoonDrawable;",
+    "Lorg/breezyweather/pixeliconprovider/PixelSunDrawable;",
+    "Lorg/breezyweather/pixeliconprovider/R$animator;",
+    "Lorg/breezyweather/pixeliconprovider/R$drawable;",
+    "Lorg/breezyweather/pixeliconprovider/R$string;",
+    "Lorg/breezyweather/pixeliconprovider/R$xml;",
+    "Lorg/breezyweather/pixeliconprovider/R;",
+    "copyright"
+  ]
+}

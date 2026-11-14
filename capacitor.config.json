@@ -1,0 +1,7 @@
+{
+  "appId": "io.mikuweather.reborn",
+  "appName": "初音天气",
+  "webDir": "dist",
+  "android": { "backgroundColor": "#101c21", "loggingBehavior": "none" },
+  "server": { "androidScheme": "https" }
+}

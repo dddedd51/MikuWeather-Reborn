@@ -1,0 +1,13 @@
+{
+  "scope": "原开发主会话；截止用户提交实测截图、要求开发日志之前；不含子会话和后续宣传制作",
+  "cutoff_utc": "2026-11-14T02:15:38.067Z",
+  "last_usage_utc": "2026-11-14T02:03:48.208Z",
+  "usage": {
+    "input_tokens": 36145837,
+    "cached_input_tokens": 34937074,
+    "cache_write_input_tokens": 1178784,
+    "output_tokens": 216962,
+    "reasoning_output_tokens": 77276,
+    "total_tokens": 36362799
+  }
+}

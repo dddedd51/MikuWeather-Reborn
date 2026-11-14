@@ -1,0 +1,13 @@
+import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { resolve } from 'node:path';
+import { spawnSync } from 'node:child_process';
+const archive='.toolchain/electron-win-mirror.zip';
+const checksums=JSON.parse(readFileSync('node_modules/electron/checksums.json','utf8'));
+const expected=checksums['electron-v39.8.10-win32-x64.zip'];
+if(createHash('sha256').update(readFileSync(archive)).digest('hex')!==expected)throw new Error('Electron official checksum mismatch');
+mkdirSync('node_modules/electron/dist',{recursive:true});
+const unpack=spawnSync('tar.exe',['-xf',archive,'-C',resolve('node_modules/electron/dist')],{stdio:'inherit'});
+if(unpack.status!==0)throw new Error('Electron extraction failed');
+writeFileSync('node_modules/electron/path.txt','electron.exe');
+console.log('Electron Windows runtime verified and prepared.');

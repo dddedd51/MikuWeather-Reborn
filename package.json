@@ -1,0 +1,55 @@
+{
+  "name": "miku-weather-reborn",
+  "version": "0.2.2",
+  "private": true,
+  "description": "初音天气 · 重制版，Windows 与 Android 客户端",
+  "author": "Miku Weather Reborn contributors",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "main": "desktop/main.cjs",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build --configLoader native",
+    "test": "node --test tests/*.test.mjs",
+    "configure": "node scripts/configure.mjs",
+    "desktop": "npm run build && pwsh -NoProfile -File scripts/build-location.ps1 && electron .",
+    "package:win": "npm run build && node scripts/package-windows.mjs",
+    "android:sync": "npm run build && cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.4.4",
+    "@capacitor/android": "^7.4.4",
+    "lucide": "^0.468.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.4",
+    "electron": "^39.0.0",
+    "electron-builder": "^26.0.12",
+    "vite": "^6.4.1"
+  },
+  "build": {
+    "appId": "io.mikuweather.reborn",
+    "productName": "Miku Weather Reborn",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "desktop/**/*",
+      "shared/**/*",
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md",
+      "!node_modules/**/*"
+    ],
+    "npmRebuild": false,
+    "asarUnpack": [
+      "desktop/location-helper/MikuLocation.exe"
+    ],
+    "win": {
+      "icon": "public/assets/icon.ico",
+      "target": "zip",
+      "signAndEditExecutable": false
+    },
+    "artifactName": "MikuWeather-Reborn-${version}-Windows-${arch}.${ext}"
+  }
+}

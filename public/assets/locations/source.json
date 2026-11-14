@@ -1,0 +1,8 @@
+{
+  "source": "https://raw.githubusercontent.com/qwd/LocationList/master/China-City-List-latest.csv",
+  "version": "China-City-List v202506200",
+  "sha256": "95bdaeef4f273feb03d706a066526c61b9e2aee599b1b79c1b54aafc2279b8be",
+  "count": 3577,
+  "updatedAt": "2026-11-13T15:04:17.628Z",
+  "note": "QWeather 官方城市列表，本地匹配城市中心；非行政边界数据。"
+}
