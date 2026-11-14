@@ -72,7 +72,7 @@ Windows 备用系统定位、更多 Android 机型、长时间后台更新和极
 
 发布前通过 27 项 Node 测试、27 项 Android 测试，完成 Android lint、构建和 APK v2 签名验证。Windows ASAR、Android APK、源码 ZIP 与 Git 历史按实际持有的已知凭据扫描，检查完整私钥、编码形式及服务 Key；安装包内不包含 `private.json`。0.2.3 的在线接口和构建已验证，本文的实机截图仍来自 0.2.2；更多机型、备用系统定位与长期后台表现继续保留为待验证项。
 
-**[下载 0.2.3 安装包与宣传片](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.2.3)**。宣传片将 Windows 桌宠与 Android 小组件分段介绍，展示包内初音天气插画，截图保持原始比例且不额外添加白框。配音使用文末所列初音模型，为 AI 合成声音。
+**[下载 0.2.3 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.2.3)**。另制作的宣传片将 Windows 桌宠与 Android 小组件分段介绍，展示包内初音天气插画，截图保持原始比例且不额外添加白框。配音使用文末所列初音模型，为 AI 合成声音；视频与字幕不作为 Release 附件分发。
 
 ## token 到底怎么算
 

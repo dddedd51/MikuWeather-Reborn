@@ -6,7 +6,7 @@
 
 重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.2.3**。
 
-**[下载 Windows / Android 安装包与宣传片](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.2.3)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
+**[下载 Windows / Android 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.2.3)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
 
 📖 [开发日志：我用约 3636 万累计 token，重写了初音天气](docs/DEVLOG.md) · [用量统计范围](docs/token-usage.json) · [构建说明](docs/BUILD.md) · [第三方来源](THIRD_PARTY_NOTICES.md)
 
@@ -58,7 +58,7 @@ Android 8.0+：安装维护者构建的 APK，打开应用选择城市，再通�
 
 ## 下载与服务状态
 
-在 [Release v0.2.3](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.2.3) 下载 Windows x64 ZIP、Android APK、源码 ZIP、1080p 宣传片和字幕。源码 ZIP 不能直接当安装包运行。
+在 [Release v0.2.3](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.2.3) 下载 Windows x64 ZIP、Android APK、源码 ZIP 和 SHA256 校验文件。源码 ZIP 不能直接当安装包运行。
 
 **公众安装包免填 API Key；和风私钥与腾讯 Key 保存在 Cloudflare Secrets，客户端只包含公开服务网址。** 已部署 Pages 中转和 Worker，城市搜索、当前天气、七日与逐小时预报、IP 定位已通过本机直连测试。免费配额、上游服务或网络情况可能影响可用性。
 
