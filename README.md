@@ -26,6 +26,12 @@
 
 <img src="docs/images/windows-desktop-pet.png" alt="Windows 初音桌宠与天气气泡实测" width="260">
 
+### 不同天气下的初音
+
+![安装包中的初音天气插画：晴、多云、阴、雨、大雨、雪、雷雨和雾](docs/images/weather-gallery.jpg)
+
+以上为安装包内的角色插画，晴、多云等天气还提供昼夜版本。[提取路径与 SHA256](docs/weather-art-source.json)记录了素材来源。
+
 <p>
   <img src="docs/images/windows-overview.jpg" alt="Windows 天气详情实测" width="480">
   <img src="docs/images/android-overview.jpg" alt="Android 天气页实测" width="200">

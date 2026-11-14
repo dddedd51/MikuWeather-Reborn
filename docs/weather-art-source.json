@@ -1,0 +1,55 @@
+{
+  "package": "MikuWeather-Reborn-0.2.2-Android.apk",
+  "illustrations": [
+    {
+      "label": "晴_日",
+      "apk_member": "assets/public/assets/晴_日.png",
+      "sha256": "7bb08989d2ac6cd4c504e0d2f3630f43eb1f311c0ce642fa7aae25e035e53383"
+    },
+    {
+      "label": "多云_日",
+      "apk_member": "assets/public/assets/多云_日.png",
+      "sha256": "592202e8aaface2a5754603b1e318c5b7dab9d006d6a7fb03394d9d043381f4b"
+    },
+    {
+      "label": "阴",
+      "apk_member": "assets/public/assets/阴.png",
+      "sha256": "a69a96530c2d594363bffcddadf649a473c68442b5db1ac8d29b20824e83d69e"
+    },
+    {
+      "label": "雨_日",
+      "apk_member": "assets/public/assets/雨_日.png",
+      "sha256": "5c9d1fed09ddb3ab8a1b83643f92a5e7b23d66253889766f40ce451ca7f1bc19"
+    },
+    {
+      "label": "大雨",
+      "apk_member": "assets/public/assets/大雨.png",
+      "sha256": "12b09a593dec4c6606a57a4f186e249a4a487b9152b74f9761bac84e0e185206"
+    },
+    {
+      "label": "雪_日",
+      "apk_member": "assets/public/assets/雪_日.png",
+      "sha256": "ef861ab8f66ee6a25d40578ce66af336364e9a4cf6971fc537665761ab448aed"
+    },
+    {
+      "label": "雷雨",
+      "apk_member": "assets/public/assets/雷雨.png",
+      "sha256": "d81f61d655bf8cd17e021036bf850852aad8d2c6457970f2bcd25e3e567877bf"
+    },
+    {
+      "label": "雾",
+      "apk_member": "assets/public/assets/雾.png",
+      "sha256": "4c6bfb0819bd28115bab247c2836fc7faf8262709f0158f6349393eb9363e6f8"
+    },
+    {
+      "label": "晴_夜",
+      "apk_member": "assets/public/assets/晴_夜.png",
+      "sha256": "245af5a814e3034183e4d530bd77f657ea4c7bf7414d6278eef0624d1b6a42f0"
+    },
+    {
+      "label": "多云_夜",
+      "apk_member": "assets/public/assets/多云_夜.png",
+      "sha256": "f476d3a613147fbe21d09e78c050ac3c7b99ac04528a518ade8aa063ebdb443b"
+    }
+  ]
+}
