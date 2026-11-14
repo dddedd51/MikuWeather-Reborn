@@ -11,17 +11,12 @@ android/local.properties
 android/*.jks
 .toolchain/
 research/*.html
-qa/
+qa/*
+!qa/widget-preview/
+qa/widget-preview/*
+!qa/widget-preview/widgets-0.2.1.png
 *.log
 desktop/location-helper/*.exe
-
-*.pem
-*.keystore
-*.p12
-.env*
-!*.example
-media/*.wav
-media/*.mp4
 
 *.pem
 *.keystore

@@ -20,10 +20,20 @@
 
 ## 实测画面
 
+### Windows：桌宠陪伴
+
+初音常驻桌面，天气气泡显示城市、温度与天气；插画随天气变化。支持拖动位置、点击打开详情、右键菜单、置顶和托盘。
+
+<img src="docs/images/windows-desktop-pet.png" alt="Windows 初音桌宠与天气气泡实测" width="260">
+
 <p>
   <img src="docs/images/windows-overview.jpg" alt="Windows 天气详情实测" width="480">
   <img src="docs/images/android-overview.jpg" alt="Android 天气页实测" width="200">
 </p>
+
+### Android：天气页与桌面小组件
+
+手机提供天气详情、城市管理与原生小组件，宽版和紧凑版卡片均保留天气、初音和刷新入口。
 
 ![Android 桌面小组件实测](docs/images/android-widget.jpg)
 
