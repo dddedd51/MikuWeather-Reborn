@@ -1,7 +1,7 @@
-初音天气 · Reborn 0.2.2（自用测试版）
+初音天气 · Reborn 0.2.3（服务端代理版）
 
 请把 ZIP 完整解压到普通英文目录，再运行 Miku Weather Reborn.exe。
-例如 C:\Users\xtt20\Downloads\MikuWeatherReborn-0.2.2\
+例如 D:\MikuWeatherReborn\
 不需要管理员权限，不需要填写天气 API 密钥。
 
 初音与天气气泡默认显示在屏幕右下角。
@@ -26,6 +26,7 @@
 非官方重制自 https://github.com/lzcapp/MikuWeather_Windows
 原许可证保留在安装包内，天气详情“关于重制版”可查看。
 
-本测试包内置维护者天气凭据，供持有者自用，请勿公开上传或分享。
-公开发行前应改用服务端天气代理，并核实角色素材的使用范围。
+本公开包仅内置天气代理地址，不包含和风私钥或腾讯 Key。
+服务通过 Cloudflare Worker 访问和风天气，IP 定位把请求端公网 IP 转交腾讯；不自行记录 IP。
+角色与图标素材属于各自权利人，来源与许可说明随包保留。
 

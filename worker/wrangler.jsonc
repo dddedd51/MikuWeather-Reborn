@@ -1,0 +1,11 @@
+{
+  "$schema": "../.toolchain/cloudflare/node_modules/wrangler/config-schema.json",
+  "name": "miku-weather-reborn",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-14",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "upload_source_maps": false,
+  "observability": {"enabled": false},
+  "ratelimits": [{"name":"REQUEST_LIMITER","namespace_id":"1001","simple":{"limit":30,"period":60}}]
+}

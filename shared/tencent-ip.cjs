@@ -3,12 +3,14 @@ const ENDPOINT='https://apis.map.qq.com';
 const ROUTE='/ws/location/v1/ip';
 class IpError extends Error {constructor(code,message){super(message);this.code=code;}}
 function validateConfig(config) {
+  if(config?.proxyUrl){require('./qweather.cjs').proxyBase(config.proxyUrl);return config;}
   if(!config||typeof config.key!=='string'||!/^([A-Z0-9]{5}-){5}[A-Z0-9]{5}$/i.test(config.key))throw new IpError('IP_CONFIG','腾讯 IP 定位尚未配置');
   if(config.sk!=null&&(typeof config.sk!=='string'||!/^[a-f0-9]{32}$/i.test(config.sk)))throw new IpError('IP_CONFIG','腾讯 IP 定位签名配置不正确');
   return config;
 }
 function buildUrl(config) {
   validateConfig(config);
+  if(config.proxyUrl)return require('./qweather.cjs').proxyBase(config.proxyUrl)+'/ip';
   const query=new URLSearchParams({key:config.key,output:'json'}).toString();
   const sig=config.sk?'&sig='+createHash('md5').update(ROUTE+'?'+query+config.sk).digest('hex'):'';
   return ENDPOINT+ROUTE+'?'+query+sig;

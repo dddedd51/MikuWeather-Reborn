@@ -4,7 +4,9 @@
 
 ![初音天气重制版实测](docs/images/cover.jpg)
 
-重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.2.2**。
+重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.2.3**。
+
+**[下载 Windows / Android 安装包与宣传片](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.2.3)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
 
 📖 [开发日志：我用约 3636 万累计 token，重写了初音天气](docs/DEVLOG.md) · [用量统计范围](docs/token-usage.json) · [构建说明](docs/BUILD.md) · [第三方来源](THIRD_PARTY_NOTICES.md)
 
@@ -32,14 +34,13 @@
 
 以上为安装包内的角色插画，晴、多云等天气还提供昼夜版本。[提取路径与 SHA256](docs/weather-art-source.json)记录了素材来源。
 
-<p>
-  <img src="docs/images/windows-overview.jpg" alt="Windows 天气详情实测" width="480">
-  <img src="docs/images/android-overview.jpg" alt="Android 天气页实测" width="200">
-</p>
+<img src="docs/images/windows-overview.jpg" alt="Windows 天气详情实测" width="600">
 
 ### Android：天气页与桌面小组件
 
 手机提供天气详情、城市管理与原生小组件，宽版和紧凑版卡片均保留天气、初音和刷新入口。
+
+<img src="docs/images/android-overview.jpg" alt="Android 天气页实测" width="280">
 
 ![Android 桌面小组件实测](docs/images/android-widget.jpg)
 
@@ -57,9 +58,11 @@ Android 8.0+：安装维护者构建的 APK，打开应用选择城市，再通�
 
 ## 下载与服务状态
 
-**本仓库公开源码、日志和展示素材。当前自用安装包含个人服务凭据，不在公共仓库或 Release 分发。** 下载源码 ZIP 不能直接当安装包运行。
+在 [Release v0.2.3](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.2.3) 下载 Windows x64 ZIP、Android APK、源码 ZIP、1080p 宣传片和字幕。源码 ZIP 不能直接当安装包运行。
 
-维护者可根据 [构建说明](docs/BUILD.md) 配置自己的和风天气服务并构建。普通用户免填 API Key 的公众安装包，需要先部署服务端天气代理，目前尚未部署。请勿把私钥、腾讯 Key 或含凭据的安装包提交到 GitHub。
+**公众安装包免填 API Key；和风私钥与腾讯 Key 保存在 Cloudflare Secrets，客户端只包含公开服务网址。** 已部署 Pages 中转和 Worker，城市搜索、当前天气、七日与逐小时预报、IP 定位已通过本机直连测试。免费配额、上游服务或网络情况可能影响可用性。
+
+源码、Git 历史以及解包后的 Windows/Android 产物均做了本项目已知凭据扫描。历史 0.2.2 自用包含凭据，不在公开 Release 分发。自建维护者见 [构建说明](docs/BUILD.md) 和 [代理部署说明](worker/README.md)。Android 使用开发签名，Windows 未做商业代码签名。
 
 ## 开发
 

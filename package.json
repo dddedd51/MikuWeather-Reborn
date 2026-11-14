@@ -1,6 +1,6 @@
 {
   "name": "miku-weather-reborn",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "private": true,
   "description": "初音天气 · 重制版，Windows 与 Android 客户端",
   "author": "Miku Weather Reborn contributors",
@@ -39,7 +39,8 @@
       "shared/**/*",
       "LICENSE",
       "THIRD_PARTY_NOTICES.md",
-      "!node_modules/**/*"
+      "!node_modules/**/*",
+      "!desktop/private.json"
     ],
     "npmRebuild": false,
     "asarUnpack": [

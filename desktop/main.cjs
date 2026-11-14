@@ -8,7 +8,7 @@ app.commandLine.appendSwitch('enable-logging','file');
 app.commandLine.appendSwitch('log-file',path.join(path.dirname(process.execPath),'miku-chromium.log'));
 protocol.registerSchemesAsPrivileged([{scheme:'miku',privileges:{standard:true,secure:true,supportFetchAPI:true,corsEnabled:true}}]);
 let config={};
-try {config=JSON.parse(fs.readFileSync(path.join(__dirname,'private.json'),'utf8'));}catch{}
+for(const file of ['service.json','private.json']){try{config=JSON.parse(fs.readFileSync(path.join(__dirname,file),'utf8'));break;}catch{}}
 const client=createClient(config);
 const ipClient=require('../shared/tencent-ip.cjs').createClient(config.tencent);
 const assets=path.join(__dirname,'../dist');

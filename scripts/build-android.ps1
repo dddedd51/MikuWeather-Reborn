@@ -31,9 +31,8 @@ public static class MikuBuildProcess {
     & (Join-Path $mikuProjectRoot 'node_modules/.bin/cap.cmd') sync android
     Assert-MikuCommand 'Android 资源同步'
 
-    if (-not (Test-Path -LiteralPath 'android/app/src/main/assets/private.json')) {
-        & node.exe scripts/configure.mjs
-        Assert-MikuCommand '本地天气配置'
+    if (-not (Test-Path -LiteralPath 'android/app/src/main/assets/service.json')) {
+        throw '公开构建需要先运行 node scripts/configure-proxy.mjs https://YOUR-WORKER.workers.dev'
     }
 
     $mikuAndroidUserHome = Join-Path $mikuProjectRoot '.toolchain/android-user-home'

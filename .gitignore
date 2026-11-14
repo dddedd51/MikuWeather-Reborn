@@ -17,6 +17,8 @@ qa/widget-preview/*
 !qa/widget-preview/widgets-0.2.1.png
 *.log
 desktop/location-helper/*.exe
+.wrangler/
+.dev.vars*
 
 *.pem
 *.keystore

@@ -40,8 +40,11 @@ public final class QWeatherClient {
     private QWeatherClient(Context context) {
         cache = context.getSharedPreferences("qweather_cache", Context.MODE_PRIVATE);
         JSONObject loaded;
-        try { loaded = new JSONObject(read(context.getAssets().open("private.json"))); }
-        catch (Exception ignored) { loaded = null; }
+        try { loaded = new JSONObject(read(context.getAssets().open("service.json"))); }
+        catch (Exception ignored) {
+            try { loaded = new JSONObject(read(context.getAssets().open("private.json"))); }
+            catch (Exception absent) { loaded = null; }
+        }
         config = loaded;
     }
     public static synchronized QWeatherClient get(Context context) {
@@ -103,12 +106,18 @@ public final class QWeatherClient {
     }
     private JSONObject fetch(String kind, String path) throws Exception {
         if (config == null) throw new WeatherException("NOT_CONFIGURED", "天气服务暂时无法获取实时数据");
-        String host = config.optString("host");
-        if (!host.matches("(?i)(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+qweatherapi\\.com"))
-            throw new WeatherException("CONFIG", "天气服务配置有误");
-        HttpsURLConnection connection = (HttpsURLConnection) new URL("https://" + host + path).openConnection();
+        String proxy = config.optString("proxyUrl");
+        String base;
+        if (!proxy.isEmpty()) base = ServiceEndpoint.proxyBase(proxy);
+        else {
+            String host = config.optString("host");
+            if (!host.matches("(?i)(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+qweatherapi\\.com"))
+                throw new WeatherException("CONFIG", "天气服务配置有误");
+            base = "https://" + host;
+        }
+        HttpsURLConnection connection = (HttpsURLConnection) new URL(base + path).openConnection();
         connection.setConnectTimeout(15000); connection.setReadTimeout(15000); connection.setInstanceFollowRedirects(false);
-        connection.setRequestProperty("Authorization", authorization());
+        if (proxy.isEmpty()) connection.setRequestProperty("Authorization", authorization());
         connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("Accept-Encoding", "gzip");
         try {

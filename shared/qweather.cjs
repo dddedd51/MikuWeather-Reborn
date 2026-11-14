@@ -8,7 +8,14 @@ const messages = {
   402: '天气服务额度不足', 403: '天气接口未开通或访问受限',
   404: '没有找到该地点的天气', 429: '天气服务繁忙，请稍后再试'
 };
+function proxyBase(value) {
+  let url;
+  try { url=new URL(value); } catch { throw new WeatherError('CONFIG','天气代理地址有误'); }
+  if(url.protocol!=='https:'||url.username||url.password||url.search||url.hash||(url.pathname!=='/'&&url.pathname!==''))throw new WeatherError('CONFIG','天气代理必须是 HTTPS 服务地址');
+  return url.origin;
+}
 function validateConfig(config) {
+  if(config?.proxyUrl){proxyBase(config.proxyUrl);return;}
   if (!config || !config.host || !config.kid || !config.iss || !config.sub || !config.privateKey) {
     throw new WeatherError('NOT_CONFIGURED', '天气服务正在配置中，暂时无法获取实时数据');
   }
@@ -18,6 +25,7 @@ function validateConfig(config) {
   if (createPrivateKey(config.privateKey).asymmetricKeyType !== 'ed25519') throw new WeatherError('CONFIG', '需要 Ed25519 私钥');
 }
 function createJwt(config, now = Date.now()) {
+  if(config?.proxyUrl)throw new WeatherError('CONFIG','代理客户端不签发凭据');
   validateConfig(config);
   const iat = Math.floor(now / 1000) - 30;
   const encode = obj => Buffer.from(JSON.stringify(obj)).toString('base64url');
@@ -50,11 +58,11 @@ function createClient(config, fetchImpl = fetch) {
       if (entry && entry.expires > Date.now()) return entry.data;
       if (pending.has(path)) return pending.get(path);
       const job = (async () => {
-        if (Date.now() >= expires) { token = createJwt(config); expires = Date.now() + 12 * 60_000; }
+        if (!config.proxyUrl && Date.now() >= expires) { token = createJwt(config); expires = Date.now() + 12 * 60_000; }
         let response;
         try {
-          response = await fetchImpl('https://' + config.host + path, {
-            headers: { Authorization: 'Bearer ' + token, Accept: 'application/json' },
+          response = await fetchImpl((config.proxyUrl?proxyBase(config.proxyUrl):'https://' + config.host) + path, {
+            headers: config.proxyUrl ? {Accept:'application/json'} : { Authorization: 'Bearer ' + token, Accept: 'application/json' },
             signal: AbortSignal.timeout(15_000), redirect: 'error'
           });
         } catch { throw new WeatherError('NETWORK', '连接天气服务失败，请检查网络后重试'); }
@@ -73,4 +81,4 @@ function createClient(config, fetchImpl = fetch) {
     }
   };
 }
-module.exports = { WeatherError, validateConfig, createJwt, buildPath, createClient };
+module.exports = { WeatherError, validateConfig, createJwt, buildPath, createClient, proxyBase };

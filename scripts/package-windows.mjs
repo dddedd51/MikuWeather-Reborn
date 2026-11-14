@@ -10,7 +10,7 @@ function run(command,args) {
   if(result.status!==0)process.exit(result.status||1);
 }
 if(process.platform!=='win32')throw new Error('Windows 打包脚本需要 Windows 的 tar.exe');
-if(!existsSync(path.join(root,'desktop/private.json')))throw new Error('请先运行 npm run configure 配置天气服务');
+if(!existsSync(path.join(root,'desktop/service.json')))throw new Error('公开构建需要先运行 node scripts/configure-proxy.mjs https://YOUR-WORKER.workers.dev');
 run('pwsh',['-NoProfile','-File','scripts/build-location.ps1']);
 run(process.execPath,['node_modules/electron-builder/cli.js','--win','--dir','--x64','--config.electronDist=node_modules/electron/dist']);
 copyFileSync(path.join(root,'scripts/README-Windows.txt'),path.join(root,'release/win-unpacked/README-Windows.txt'));
