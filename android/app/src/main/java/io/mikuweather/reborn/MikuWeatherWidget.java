@@ -68,6 +68,8 @@ public class MikuWeatherWidget extends AppWidgetProvider {
         Intent refresh = new Intent(context, compactProviderClass(compactProvider)).setAction(REFRESH);
         PendingIntent refreshIntent = PendingIntent.getBroadcast(context, id, refresh, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         views.setOnClickPendingIntent(R.id.widget_miku, refreshIntent);
+        views.setOnClickPendingIntent(R.id.widget_refresh, refreshIntent);
+        views.setContentDescription(R.id.widget_refresh, UiText.word(context,"refresh"));
         manager.updateAppWidget(id, views);
     }
     private static void text(RemoteViews views, int id, float size, int color) {

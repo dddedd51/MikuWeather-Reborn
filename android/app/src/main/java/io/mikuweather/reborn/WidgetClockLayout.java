@@ -13,7 +13,8 @@ final class WidgetClockLayout {
         float scale=Math.max(1,Math.min(1.3f,fontScale))*Math.max(1,Math.min(1.4f,textScale/100f));
         boolean city=height>=170&&width>=180;
         float date=Math.min(14*scale,right/10),weather=Math.min(16*scale,right/8),meta=Math.min(12*scale,right/10);
-        float clock=Math.min(38*scale,right/2.8f),temperature=Math.min(48*scale,right/WidgetCardLayout.glyphWidth(temp));
+        float temperature=Math.min(54*scale,right/WidgetCardLayout.glyphWidth(temp));
+        float clock=Math.min(Math.min(22*scale,right/2.8f),temperature*.55f);
         float extra=date*1.3f+weather*1.3f+(city?meta*1.3f:0)+6;
         float fit=Math.min(1,(h-extra)/((clock+temperature)*1.2f));
         return new WidgetClockLayout(pad,clock*fit,temperature*fit,date,weather,meta,right,city);

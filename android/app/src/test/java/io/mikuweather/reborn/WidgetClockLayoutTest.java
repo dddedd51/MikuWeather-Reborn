@@ -19,6 +19,7 @@ public class WidgetClockLayoutTest {
             for(int scale:new int[]{100,110,140}) for(String value:new String[]{"14°","-112°","131°","—°"}) {
                 WidgetClockLayout p=WidgetClockLayout.fit(size[0]<200,size[0],size[1],2,scale,value);
                 assertTrue(p.temperature>0);
+                assertTrue("time stays smaller than temperature",p.clock<=p.temperature*.56f);
                 assertTrue(p.temperature*WidgetCardLayout.glyphWidth(value)<=p.rightWidth+.01f);
                 assertTrue(p.contentHeight<=size[1]-p.padding*2+.01f);
             }

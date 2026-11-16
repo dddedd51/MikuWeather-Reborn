@@ -27,4 +27,5 @@
             android:shadowColor="#99000000" android:shadowRadius="3" android:shadowDy="1" />
     </LinearLayout>
 </LinearLayout>
+    <ImageView android:id="@+id/widget_refresh" android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="bottom|start" android:padding="13dp" android:src="@drawable/widget_refresh_icon" android:contentDescription="@string/widget_refresh" />
 </FrameLayout>
