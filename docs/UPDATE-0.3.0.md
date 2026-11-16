@@ -7,7 +7,7 @@
 
 ## 构建
 
-Windows 执行 `npm ci`、`npm test`、`npm run package:win`。Android 本机构建保持原有 `scripts/build-android.ps1`，CI 构建未签名 Release APK 后用维护者现有密钥签名。iOS 使用 GitHub Actions 的 **Build unsigned iPhone IPA**，也可在 Mac 上执行 `npm ci`、`npm run ios:sync`、`npm run ios:unsigned`。
+Windows 执行 `npm ci`、`npm test`、`npm run package:win`。Android 本机构建保持原有 `scripts/build-android.ps1`，CI 构建未签名 Release APK 后用维护者现有密钥签名。iOS 使用 GitHub Actions 的 **Build mobile packages**，也可在 Mac 上执行 `npm ci`、`npm run ios:sync`、`npm run ios:unsigned`。
 
 未签名 IPA 不能直接安装。用自己的 Apple 签名通过 AltStore、Sideloadly 等侧载工具安装；签名有效期由使用的 Apple 账号类型决定。
 

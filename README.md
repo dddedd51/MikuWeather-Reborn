@@ -1,16 +1,22 @@
 # 初音天气 · Reborn
 
-**让初音，回到桌面。** Windows 与 Android 的非官方初音天气重制版。
+**让初音，回到桌面。** Windows、Android 与 iOS 的非官方初音天气重制版。
 
 ![初音天气重制版实测](docs/images/cover.jpg)
 
-重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.2.3**。
+重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.3.0**。
 
-**[下载 Windows / Android 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.2.3)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
+**[下载 Windows / Android / iOS 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.3.0)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
 
 📖 [开发日志：我用约 3636 万累计 token，重写了初音天气](docs/DEVLOG.md) · [用量统计范围](docs/token-usage.json) · [构建说明](docs/BUILD.md) · [第三方来源](THIRD_PARTY_NOTICES.md)
 
 > 标题里的累计用量包含缓存输入，不代表新生成 token 数或实际费用。
+
+## 0.3.0 更新
+
+设置里可切换 **简体中文 / 繁體中文 / English / 日本語**，同步 Windows 桌宠菜单和 Android 小组件。Android 小组件改为透明背景、左侧初音、右侧大时钟与日期天气；小组件与桌宠不再显示天气来源字样，详情与关于页保留。
+
+新增 **iOS 14+ 未签名 IPA**，需自行使用 Apple 签名侧载。iOS 当前提供完整天气应用，不含 WidgetKit 扩展。构建说明与验证范围见 [0.3.0 更新说明](docs/UPDATE-0.3.0.md)。
 
 ## 可以做什么
 

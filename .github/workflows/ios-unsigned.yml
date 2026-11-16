@@ -2,7 +2,17 @@ name: Build mobile packages
 on:
   workflow_dispatch:
   push:
-    branches: [update/multilingual-ios]
+    branches: [main, update/multilingual-ios]
+    paths:
+      - 'src/**'
+      - 'android/**'
+      - 'ios/**'
+      - 'desktop/service.json'
+      - 'package*.json'
+      - 'index.html'
+      - 'pet.html'
+      - 'scripts/build-ios.sh'
+      - '.github/workflows/ios-unsigned.yml'
 permissions:
   contents: read
 jobs:

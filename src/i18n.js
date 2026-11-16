@@ -1,3 +1,4 @@
+import './compat.js';
 import catalog from './locales.json' with {type:'json'};
 export const languages = {'zh-CN':'简体中文','zh-TW':'繁體中文',en:'English',ja:'日本語'};
 export const normalizeLanguage = value => Object.hasOwn(languages,value) ? value : 'zh-CN';
