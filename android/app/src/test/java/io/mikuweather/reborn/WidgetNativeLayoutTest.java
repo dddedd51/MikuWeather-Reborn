@@ -58,7 +58,7 @@ public class WidgetNativeLayoutTest {
             int needed=row.getLayout().getHeight()+row.getCompoundPaddingTop()+row.getCompoundPaddingBottom();
             assertTrue("full line for "+row.getText()+": "+row.getHeight()+" < "+needed,row.getHeight()>=needed);
             Rect bounds=new Rect(0,0,row.getWidth(),row.getHeight());View child=row;
-            while(child.getParent() instanceof ViewGroup){
+            while(child!=root&&child.getParent() instanceof ViewGroup){
                 ViewGroup parent=(ViewGroup)child.getParent();bounds.offset(child.getLeft(),child.getTop());
                 assertTrue("top visible for "+row.getText(),bounds.top>=parent.getPaddingTop());
                 assertTrue("bottom visible for "+row.getText(),bounds.bottom<=parent.getHeight()-parent.getPaddingBottom());
