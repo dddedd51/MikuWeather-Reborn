@@ -1,0 +1,47 @@
+import {Capacitor,CapacitorHttp,registerPlugin} from '@capacitor/core';
+import pkg from '../package.json' with {type:'json'};
+import {t} from './i18n.js';
+import * as updateProtocol from '../shared/updates.mjs';
+const Native=registerPlugin('MikuWeather');
+let result=null,busy=false,status='',progress=0,listener=false;
+const platform=()=>window.miku?'windows':Capacitor.getPlatform()==='android'?'android':'ios';
+export function updatePanel(){return `<h3 class="settings-subtitle">应用更新</h3><p class="modal-hint">当前版本 <span data-no-i18n>${pkg.version}</span> · 启动时自动检查更新</p><div id="update-status" role="status">${t(status)}</div><progress id="update-progress" max="100" value="${progress}" ${busy?'':'hidden'}></progress><div class="widget-actions"><button class="secondary" id="check-update" ${busy?'disabled':''}>检查更新</button><button class="primary" id="install-update" ${!result?.available?'hidden':''} ${busy?'disabled':''}>${platform()==='ios'?'下载 IPA':'下载并安装更新'}</button></div>${platform()==='ios'?'<p class="modal-hint">iPhone 更新需要重新签名侧载，不能直接覆盖安装</p>':''}`;}
+function paint(){
+ const statusEl=document.querySelector('#update-status');if(statusEl)statusEl.textContent=t(status)+(result?.available?' · '+result.version:'');
+ const bar=document.querySelector('#update-progress');if(bar){bar.hidden=!busy;bar.value=progress;}
+ const check=document.querySelector('#check-update');if(check)check.disabled=busy;
+ const install=document.querySelector('#install-update');if(install){install.disabled=busy;install.hidden=!result?.available;}
+}
+async function check(manual){
+ if(busy)return;busy=true;status='正在检查更新…';paint();
+ try{
+  if(window.miku)result=await window.miku.checkUpdate();
+  else if(Capacitor.getPlatform()==='android')result=await Native.checkUpdate();
+  else {const response=await CapacitorHttp.get({url:updateProtocol.RELEASE_API,headers:{Accept:'application/vnd.github+json'},connectTimeout:20000,readTimeout:20000});if(response.status!==200)throw Error();result=updateProtocol.releaseUpdate(typeof response.data==='string'?JSON.parse(response.data):response.data,pkg.version,'ios');}
+  status=result.available?'发现新版本':'已是最新版本';
+  localStorage.setItem('miku:update-check',JSON.stringify({at:Date.now(),current:pkg.version,result}));
+  if(result.available&&!manual)banner();
+ }catch{status='检查更新失败，请稍后重试';}finally{busy=false;paint();}
+}
+function banner(){
+ document.getElementById('update-banner')?.remove();const b=document.createElement('button');b.id='update-banner';b.className='update-banner';b.textContent=t('发现新版本')+' '+result.version+' · '+t('查看更新');
+ b.onclick=()=>{b.remove();document.querySelector('[data-action="settings"]')?.click();};document.body.append(b);
+}
+async function install(){
+ if(busy||!result?.available)return;
+ if(platform()==='ios'){window.open(result.page,'_blank','noopener');return;}
+ busy=true;status='正在下载并校验更新…';progress=0;paint();
+ try{
+  if(window.miku)await window.miku.installUpdate();
+  else {const r=await Native.installUpdate();status=r.status==='permission'?'请允许安装此来源的应用，返回后再次点击安装':r.status==='installer'?'请在系统安装界面确认更新':'更新已准备好';}
+ }catch{status='更新未完成，请重试或从发布页下载';}finally{busy=false;paint();}
+}
+export function bindUpdates(root){
+ root.querySelector('#check-update')?.addEventListener('click',()=>check(true));root.querySelector('#install-update')?.addEventListener('click',install);paint();
+ if(!listener){listener=true;const callback=p=>{progress=Math.max(0,Math.min(100,p.percent||0));paint();};window.miku?.onUpdateProgress(callback);if(Capacitor.getPlatform()==='android')Native.addListener('updateProgress',callback);}
+}
+export function startUpdateChecks(){
+ if(!window.miku&&!Capacitor.isNativePlatform())return;
+ try{const saved=JSON.parse(localStorage.getItem('miku:update-check'));if(saved?.current===pkg.version&&Date.now()-saved.at<6*36e5){result=saved.result;status=result?.available?'发现新版本':'已是最新版本';if(result?.available)banner();return;}}catch{}
+ setTimeout(()=>check(false),6000);
+}

@@ -47,7 +47,7 @@ final class WidgetCardData {
         JSONObject city = WidgetPreferences.city(context);
         ZoneId zone = SolarTheme.zone(city.optString("tz", "Asia/Shanghai"));
         Instant now = Instant.now();
-        String name = city.optString("name", "深圳"), unit = WidgetPreferences.unit(context);
+        String name = city.optString("displayName", city.optString("name", "深圳")), unit = WidgetPreferences.unit(context);
         QWeatherClient client = QWeatherClient.get(context);
         QWeatherClient.CachedWeather current = client.cached("current", "", city.optDouble("lat"), city.optDouble("lon"));
         QWeatherClient.CachedWeather daily = client.cached("daily", "", city.optDouble("lat"), city.optDouble("lon"));

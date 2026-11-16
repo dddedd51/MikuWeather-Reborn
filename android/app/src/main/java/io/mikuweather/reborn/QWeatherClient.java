@@ -82,6 +82,13 @@ public final class QWeatherClient {
         return String.format(Locale.US, "/weather/v1/%s/%.2f/%.2f?lang=zh&localTime=true", kind, lat, lon)
             + ("daily".equals(kind) ? "&days=7" : "hourly".equals(kind) ? "&hours=24" : "");
     }
+    public JSONObject lookup(String query, String language) throws Exception {
+        String lang = "zh-hant".equals(language)||"en".equals(language)||"ja".equals(language)?language:"zh";
+        String path = buildPath("lookup",query,null,null).replace("lang=zh&","lang="+lang+"&");
+        String saved=cache.getString(cacheKey(path),null);
+        if(saved!=null){JSONObject item=new JSONObject(saved);if(item.optLong("expires")>System.currentTimeMillis())return item.getJSONObject("data");}
+        return fetch("lookup",path);
+    }
     private String cacheKey(String path) { return "response:" + path; }
     public CachedWeather cached(String kind, String query, Double lat, Double lon) {
         try {

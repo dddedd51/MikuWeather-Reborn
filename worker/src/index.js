@@ -9,7 +9,7 @@ export function route(url){
     const query=(url.searchParams.get('location')||'').trim();
     if(!query||query.length>80||/[\x00-\x1f]/.test(query))throw Error('input');
     for(const k of url.searchParams.keys())if(!['location','lang','number'].includes(k))throw Error('input');
-    return {kind:'lookup',path:'/geo/v2/city/lookup?'+new URLSearchParams({location:query,lang:'zh',number:'12'}),ttl:3600};
+    return {kind:'lookup',path:'/geo/v2/city/lookup?'+new URLSearchParams({location:query,lang:['zh','zh-hant','en','ja'].includes(url.searchParams.get('lang'))?url.searchParams.get('lang'):'zh',number:'12'}),ttl:3600};
   }
   const m=url.pathname.match(/^\/weather\/v1\/(current|daily|hourly)\/(-?\d+(?:\.\d{1,2})?)\/(-?\d+(?:\.\d{1,2})?)$/);
   if(!m||Math.abs(Number(m[2]))>90||Math.abs(Number(m[3]))>180)throw Error('input');

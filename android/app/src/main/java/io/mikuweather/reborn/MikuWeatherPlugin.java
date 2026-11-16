@@ -87,7 +87,7 @@ public class MikuWeatherPlugin extends Plugin {
                 String kind = call.getString("kind", "");
                 Double lat = call.getData().has("lat") ? call.getData().getDouble("lat") : null;
                 Double lon = call.getData().has("lon") ? call.getData().getDouble("lon") : null;
-                result.put("data", new JSObject(QWeatherClient.get(getContext()).request(kind, call.getString("query", ""), lat, lon).toString()));
+                result.put("data", new JSObject(("lookup".equals(kind)?QWeatherClient.get(getContext()).lookup(call.getString("query", ""),call.getString("lang","zh")):QWeatherClient.get(getContext()).request(kind, call.getString("query", ""), lat, lon)).toString()));
                 result.put("ok", true);
                 if ("current".equals(kind)) {
                     org.json.JSONObject selected = WidgetPreferences.city(getContext());
@@ -109,10 +109,17 @@ public class MikuWeatherPlugin extends Plugin {
         try {
             WidgetPreferences.select(getContext(), call.getObject("city"), call.getString("unit", "C"), call.getString("theme", "solar"));
             WidgetPreferences.language(getContext(), call.getString("language", "zh-CN"));
+            WidgetPreferences.appearance(getContext(),call.getInt("opacity",0),call.getInt("textScale",110));
             MikuWeatherWidget.updateAll(getContext());
             WidgetUpdateService.schedule(getContext(), true);
             JSObject result = new JSObject(); result.put("ok", true); call.resolve(result);
         } catch (Exception e) { call.reject("城市坐标无效"); }
+    }
+    @PluginMethod public void checkUpdate(PluginCall call) {
+        executor.execute(()->{try{call.resolve(AppUpdater.check(getContext()));}catch(Exception e){call.reject("检查更新失败，请稍后重试");}});
+    }
+    @PluginMethod public void installUpdate(PluginCall call) {
+        executor.execute(()->AppUpdater.install(this,call,percent->{JSObject value=new JSObject();value.put("percent",percent);notifyListeners("updateProgress",value);}));
     }
     @PluginMethod public void getWidgetStatus(PluginCall call) {
         JSObject result = new JSObject();

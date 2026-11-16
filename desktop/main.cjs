@@ -51,6 +51,7 @@ function refresh(){for(const w of [pet,details])if(w&&!w.isDestroyed())w.webCont
 function makeMenu(){return Menu.buildFromTemplate([
   {label:t('初音天气 · 桌宠'),enabled:false},{label:state.summary||t('点击初音查看天气'),enabled:false},{type:'separator'},
   {label:t('查看天气'),click:()=>openDetails()},{label:t('切换城市 / IP 定位'),click:()=>openDetails('search')},{label:t('刷新天气'),click:refresh},{label:t('偏好设置'),click:()=>openDetails('settings')},
+  {label:t(state.update?.available?'发现新版本':'检查更新')+(state.update?.available?' '+state.update.version:''),click:()=>openDetails('settings')},
   {label:t('桌宠置顶'),type:'checkbox',checked:!!state.pinned,click:item=>{state.pinned=item.checked;pet.setAlwaysOnTop(item.checked);save();}},
   {label:t(pet?.isVisible()?'隐藏桌宠':'显示桌宠'),click:()=>pet.isVisible()?pet.hide():showPet()},
   {type:'separator'},{label:t('退出'),click:()=>{quitting=true;app.quit();}}
@@ -79,6 +80,17 @@ else{
     configureWindow(pet);pet.once('ready-to-show',showPet);pet.on('close',e=>{if(!quitting){e.preventDefault();pet.hide();}});
     pet.webContents.session.setPermissionRequestHandler((_w,_p,callback)=>callback(false));
     tray=new Tray(nativeImage.createFromPath(iconPath));tray.on('click',showPet);tray.on('double-click',()=>openDetails());updateTray();
+    const updater=require('./updater.cjs');
+    tray.on('balloon-click',()=>openDetails('settings'));
+    const announceUpdate=()=>{updateTray();if(state.update?.available)tray.displayBalloon({title:t('初音天气'),content:t('发现新版本')+' '+state.update.version+' · '+t('查看更新')});};
+    if(app.isPackaged)setTimeout(async()=>{
+      try{
+        if(state.updateCurrent!==app.getVersion()||!state.updateCheckedAt||Date.now()-state.updateCheckedAt>6*3600000){state.update=await updater.check(app);state.updateCurrent=app.getVersion();state.updateCheckedAt=Date.now();save();}
+        announceUpdate();
+      }catch(e){log('update check unavailable');}
+    },6000);
+    ipcMain.handle('update:check',event=>{if(!trusted(event)||event.sender!==details?.webContents)throw Error('Denied');return updater.check(app);});
+    ipcMain.handle('update:install',event=>{if(!trusted(event)||event.sender!==details?.webContents)throw Error('Denied');return updater.install(app,p=>{if(!event.sender.isDestroyed())event.sender.send('update:progress',p);},()=>{quitting=true;});});
     ipcMain.handle('weather:request',async(event,input)=>{
       if(!trusted(event))return {ok:false,code:'DENIED',message:'请求被拒绝'};
       try{return {ok:true,data:await client.request(input?.kind,input?.params)};}catch(e){return {ok:false,code:e.code||'UNKNOWN',message:e.code?e.message:'天气服务暂时不可用'};}
@@ -96,13 +108,13 @@ else{
     ipcMain.handle('weather:preferences',event=>trusted(event)?state.preferences:null);
     ipcMain.on('weather:preferences:set',(event,p)=>{
       if(!trusted(event)||event.sender!==details?.webContents||!p)return;
-      const next={theme:['solar','light','dark','system'].includes(p.theme)?p.theme:'solar',unit:p.unit==='F'?'F':'C',language:['zh-CN','zh-TW','en','ja'].includes(p.language)?p.language:'zh-CN'};
+      const next={theme:['solar','light','dark','system'].includes(p.theme)?p.theme:'solar',unit:p.unit==='F'?'F':'C',language:['zh-CN','zh-TW','en','ja'].includes(p.language)?p.language:'zh-CN',widgetOpacity:Math.max(0,Math.min(100,Number(p.widgetOpacity)||0)),widgetTextScale:Math.max(100,Math.min(140,Number(p.widgetTextScale)||110))};
       if(JSON.stringify(next)===JSON.stringify(state.preferences))return;
       state.preferences=next;save();updateTray();pet.setTitle(t('初音天气 · 桌宠'));details?.setTitle(t('初音天气 · 天气详情'));pet.webContents.send('weather:preferencesChanged',next);
     });
     ipcMain.on('weather:city:set',(event,c)=>{
       if(!trusted(event)||!c||!Number.isFinite(Number(c.lat))||!Number.isFinite(Number(c.lon))||Math.abs(Number(c.lat))>90||Math.abs(Number(c.lon))>180)return;
-      const next={id:String(c.id).slice(0,30),name:String(c.name).slice(0,30),adm1:String(c.adm1||'').slice(0,30),country:String(c.country||'').slice(0,30),lat:Number(c.lat),lon:Number(c.lon),tz:String(c.tz||'Asia/Shanghai').slice(0,60)};
+      const next={id:String(c.id).slice(0,30),name:String(c.name).slice(0,80),displayName:String(c.displayName||c.name).slice(0,80),adm1:String(c.adm1||'').slice(0,30),country:String(c.country||'').slice(0,30),lat:Number(c.lat),lon:Number(c.lon),tz:String(c.tz||'Asia/Shanghai').slice(0,60)};
       try{new Intl.DateTimeFormat('en',{timeZone:next.tz});}catch{return;}
       if(JSON.stringify(next)===JSON.stringify(state.city))return;
       state.city=next;save();pet.webContents.send('weather:cityChanged',next);

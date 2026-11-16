@@ -14,4 +14,15 @@ public class WidgetClockLayoutTest {
         assertFalse(WidgetClockLayout.fit(false,260,110,2).city);
         assertTrue(WidgetClockLayout.fit(false,320,180,1).city);
     }
+    @Test public void temperatureAndScaledTextFitIncludingExtremeFahrenheit(){
+        for(int[] size:new int[][]{{120,100},{170,170},{260,110},{320,180},{400,210}})
+            for(int scale:new int[]{100,110,140}) for(String value:new String[]{"14°","-112°","131°","—°"}) {
+                WidgetClockLayout p=WidgetClockLayout.fit(size[0]<200,size[0],size[1],2,scale,value);
+                assertTrue(p.temperature>0);
+                assertTrue(p.temperature*WidgetCardLayout.glyphWidth(value)<=p.rightWidth+.01f);
+                assertTrue(p.contentHeight<=size[1]-p.padding*2+.01f);
+            }
+        WidgetClockLayout p=WidgetClockLayout.fit(false,320,180,1,110,"14°");
+        assertTrue("temperature dominates weather text",p.temperature>p.weather*2);
+    }
 }

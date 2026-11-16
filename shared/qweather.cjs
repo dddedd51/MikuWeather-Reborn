@@ -36,7 +36,7 @@ function buildPath(kind, params = {}) {
   if (kind === 'lookup') {
     const query = String(params.query || '').trim();
     if (!query || query.length > 80) throw new WeatherError('INPUT', '请输入城市名称');
-    return '/geo/v2/city/lookup?' + new URLSearchParams({ location: query, lang: 'zh', number: '12' });
+    return '/geo/v2/city/lookup?' + new URLSearchParams({ location: query, lang: ['zh','zh-hant','en','ja'].includes(params.lang)?params.lang:'zh', number: '12' });
   }
   if (!['current', 'daily', 'hourly'].includes(kind)) throw new WeatherError('INPUT', '未知天气请求');
   const { lat, lon } = params;

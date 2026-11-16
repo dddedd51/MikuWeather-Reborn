@@ -22,8 +22,8 @@ export function cancelLocation() {
   window.miku?.cancelLocate();
   if(android)NativeWeather.cancelLocate().catch(()=>{});
 }
-export async function selectWidgetCity(city, unit, theme = 'solar', language = 'zh-CN') {
-  if (android) return NativeWeather.selectCity({ city, unit, theme, language });
+export async function selectWidgetCity(city, unit, theme = 'solar', language = 'zh-CN', opacity=0, textScale=110) {
+  if (android) return NativeWeather.selectCity({ city, unit, theme, language, opacity, textScale });
 }
 export async function pinWidget(style) {
   if (android) return NativeWeather.pinWidget({ style });

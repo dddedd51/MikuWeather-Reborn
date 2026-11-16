@@ -1,3 +1,6 @@
+import {createCityLabels,cityLanguage} from './city-labels.js';
+import {widgetSettings,bindWidgetSettings,widgetOpacity,widgetTextScale} from './widget-settings.js';
+import {updatePanel,bindUpdates,startUpdateChecks} from './updates.js';
 import {languages,setLanguage,getLanguage,t,localize,observeTranslations} from './i18n.js';
 import './style.css';
 import { createIcons, AudioLines, Search, MapPin, LocateFixed, Building2, Plus, Music2, Settings2, Heart, SunMoon, PictureInPicture2, RefreshCw, WifiOff, Cloud, ArrowUp, ArrowDown, Sparkles, Droplets, Wind, Umbrella, Eye, Clock3, CalendarDays, Droplet, ChevronRight, Sunrise, Sunset, X, ArrowUpRight, CloudLightning, CloudSnow, CloudRain, Snowflake, CloudFog, Moon, Sun, CloudSun } from 'lucide';
@@ -16,13 +19,19 @@ const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } cat
 let saved = read('miku:cities', [CITIES[0], CITIES[1], CITIES[2]]);
 if (!Array.isArray(saved) || !saved.length || saved.some(c => !c?.name || !c?.tz || !Number.isFinite(Number(c.lat)) || !Number.isFinite(Number(c.lon)))) saved = [CITIES[0]];
 let city = saved.find(c => c.id === read('miku:selected', '')) || saved[0];
-let prefs = { theme: 'solar', unit: 'C', language: 'zh-CN', ...read('miku:prefs', {}) };
+let prefs = { theme: 'solar', unit: 'C', language: 'zh-CN', widgetOpacity:0, widgetTextScale:110, ...read('miku:prefs', {}) };
 if(!read('miku:solar-theme-v1',false)){prefs.theme='solar';save('miku:prefs',prefs);save('miku:solar-theme-v1',true);}
 setLanguage(prefs.language);
 observeTranslations();
 let demo = new URLSearchParams(location.search).get('demo') === '1';
 let data = null, loading = false, error = '', epoch = 0, searchEpoch = 0, dialogName = '', refreshingAt = 0;
 let mini = false;
+const cityLabels=createCityLabels({request,read:()=>read('miku:city-labels',{}),write:v=>save('miku:city-labels',v),onChange:()=>{updateCityLabels();syncCompanion();}});
+const displayCity=c=>cityLabels.view(c,getLanguage());
+const cityField=(c,k)=>`<span data-no-i18n data-city-label="${esc(c.id)}" data-field="${k}">${esc(displayCity(c)[k]||'')}</span>`;
+function updateCityLabels(){for(const el of document.querySelectorAll('[data-city-label]')){const c=[...saved,...CITIES].find(c=>String(c.id)===el.dataset.cityLabel);if(c)el.textContent=displayCity(c)[el.dataset.field]||'';}}
+function localizeCities(){cityLabels.ensure([...saved,...CITIES],getLanguage());}
+
 let locating=false,locationEpoch=0;
 const windNames = {n:'北风',nne:'东北偏北风',ne:'东北风',ene:'东北偏东风',e:'东风',ese:'东南偏东风',se:'东南风',sse:'东南偏南风',s:'南风',ssw:'西南偏南风',sw:'西南风',wsw:'西南偏西风',w:'西风',wnw:'西北偏西风',nw:'西北风',nnw:'西北偏北风',none:'静风',vrb:'风向不定'};
 function fmt(n, digits = 0) { return n == null || !Number.isFinite(n) ? '—' : Number(n.toFixed(digits)).toString(); }
@@ -44,13 +53,13 @@ function render() {
     <div class="sidebar-label">每一座城，都有好天气</div>
     <button class="search-open" data-action="search">${icon('search')}<span>搜索城市</span><kbd>⌕</kbd></button>
     <div class="section-caption">我的城市 <span>${saved.length.toString().padStart(2,'0')}</span></div>
-    <nav aria-label="已收藏的城市">${saved.map(c => `<button class="city-nav ${c.id===city.id?'active':''}" data-city="${esc(c.id)}">${icon(c.id===city.id?'map-pin':'building-2')}<span><span data-no-i18n>${esc(c.name)}</span><small>${esc(c.adm1)} · ${esc(c.country||'')}</small></span>${c.id===city.id?'<span class="active-dot"></span>':''}</button>`).join('')}</nav>
+    <nav aria-label="已收藏的城市">${saved.map(c => `<button class="city-nav ${c.id===city.id?'active':''}" data-city="${esc(c.id)}">${icon(c.id===city.id?'map-pin':'building-2')}<span>${cityField(c,'name')}<small>${cityField(c,'adm1')} · ${cityField(c,'country')}</small></span>${c.id===city.id?'<span class="active-dot"></span>':''}</button>`).join('')}</nav>
     <button class="add-city" data-action="search">${icon('plus')} 添加城市</button>
     <div class="sidebar-bottom"><div class="little-note">${icon('music-2')}<span>让每一天，都有一点初音绿。</span></div><button data-action="settings">${icon('settings-2')} 偏好设置</button><button data-action="about">${icon('heart')} 关于重制版</button><div class="edition">FAN-MADE, WITH LOVE <span>01</span></div></div>
   </aside>
   <main>
-    <header class="topbar"><div class="breadcrumb">天气总览 <span>/</span> <strong><span data-no-i18n>${esc(city.name)}</span></strong></div><div class="toolbar">${demo?'<button class="demo-tag" data-action="demo">退出演示</button>':''}<button class="icon-btn mobile-search" data-action="search" aria-label="搜索城市">${icon('search')}</button><button class="unit-btn" data-action="unit" aria-label="切换温度单位">°${prefs.unit}</button><button class="icon-btn" data-action="theme" aria-label="切换明暗主题">${icon('sun-moon')}</button>${desktop?`<button class="icon-btn" data-action="mini" aria-label="迷你窗口">${icon('picture-in-picture-2')}</button>`:''}<button class="icon-btn mobile-settings" data-action="settings" aria-label="设置">${icon('settings-2')}</button></div></header>
-    <div class="page-heading"><div><div class="eyebrow">YOUR DAILY WEATHER COMPANION</div><h1><span data-no-i18n>${esc(city.name)}</span><span>${icon('map-pin')}</span></h1><p>${esc(city.adm1)}，${esc(city.country||'')} <span class="divider">/</span> ${time(Date.now(),{month:'long',day:'numeric',weekday:'long'})}</p></div><button class="refresh-btn ${loading?'spinning':''}" data-action="refresh" ${loading?'disabled':''}>${icon('refresh-cw')}<span>更新天气</span></button></div>
+    <header class="topbar"><div class="breadcrumb">天气总览 <span>/</span> <strong>${cityField(city,'name')}</strong></div><div class="toolbar">${demo?'<button class="demo-tag" data-action="demo">退出演示</button>':''}<button class="icon-btn mobile-search" data-action="search" aria-label="搜索城市">${icon('search')}</button><button class="unit-btn" data-action="unit" aria-label="切换温度单位">°${prefs.unit}</button><button class="icon-btn" data-action="theme" aria-label="切换明暗主题">${icon('sun-moon')}</button>${desktop?`<button class="icon-btn" data-action="mini" aria-label="迷你窗口">${icon('picture-in-picture-2')}</button>`:''}<button class="icon-btn mobile-settings" data-action="settings" aria-label="设置">${icon('settings-2')}</button></div></header>
+    <div class="page-heading"><div><div class="eyebrow">YOUR DAILY WEATHER COMPANION</div><h1>${cityField(city,'name')}<span>${icon('map-pin')}</span></h1><p>${cityField(city,'adm1')}，${cityField(city,'country')} <span class="divider">/</span> ${time(Date.now(),{month:'long',day:'numeric',weekday:'long'})}</p></div><button class="refresh-btn ${loading?'spinning':''}" data-action="refresh" ${loading?'disabled':''}>${icon('refresh-cw')}<span>更新天气</span></button></div>
     ${error?`<div class="notice" role="status">${icon('wifi-off')}<span>${esc(error)}${data?'，当前显示上次保存的数据。':''}</span><button data-action="refresh">重试</button></div>`:''}
     ${demo?'<div class="notice demo-notice" role="status">以下为界面演示数据，不代表当地实际天气。<button data-action="demo">切换实时天气</button></div>':''}
     <section class="hero ${night?'night':''}" aria-label="当前天气">
@@ -103,16 +112,16 @@ async function loadWeather() {
       catch(e) { next.partial.push(label+'：'+e.message); }
     }
     next.attributions=[...new Set(results.filter(r=>r.status==='fulfilled').flatMap(r=>r.value.metadata?.attributions||[]).filter(s=>typeof s==='string'))];
-    data=next; save(cacheKey(),next); window.miku?.setWeather({city:city.name,temp:temp(next.current.temp),text:t(next.current.text)});
+    data=next; save(cacheKey(),next); window.miku?.setWeather({city:displayCity(city).name,temp:temp(next.current.temp),text:t(next.current.text)});
   } catch(e) { error=e.message; }
   render();
 }
 function syncCompanion() {
-  window.miku?.setCity(city);
+  window.miku?.setCity({...city,displayName:displayCity(city).name});
   window.miku?.setPreferences(prefs);
-  selectWidgetCity(city, prefs.unit, prefs.theme, prefs.language).catch(()=>toast('桌面小组件暂未同步，请稍后重试'));
+  selectWidgetCity({...city,displayName:displayCity(city).name}, prefs.unit, prefs.theme, prefs.language,prefs.widgetOpacity,prefs.widgetTextScale).catch(()=>toast('桌面小组件暂未同步，请稍后重试'));
 }
-function pickCity(c) { if(!saved.some(s=>s.id===c.id)) { saved.push(c); save('miku:cities',saved); } city=c; save('miku:selected',c.id); syncCompanion(); closeDialog(); loadWeather(); }
+function pickCity(c) { if(!saved.some(s=>s.id===c.id)) { saved.push(c); save('miku:cities',saved); } city=c; save('miku:selected',c.id); syncCompanion(); localizeCities(); closeDialog(); loadWeather(); }
 function closeDialog() { searchEpoch++;locationEpoch++;locating=false;cancelLocation();dialogName=''; $('#modal')?.close(); }
 function showDialog(name) {
   dialogName=name;
@@ -124,12 +133,15 @@ function showDialog(name) {
     box.innerHTML+=`<form id="search-form"><label for="city-query">城市名 / 拼音</label><div class="search-field">${icon('search')}<input id="city-query" name="query" placeholder="例如：杭州、珠海、Tokyo" autocomplete="off" maxlength="80"><button class="primary" type="submit">搜索</button></div></form><div id="search-results" aria-live="polite"><p class="modal-hint">常用城市</p>${cityResults(CITIES)}</div>`;
   } else if(name==='settings') {
     box.innerHTML+=`<div class="setting-row"><span>语言<small>立即生效，并同步桌宠与小组件</small></span><select id="language-select" aria-label="语言" data-no-i18n>${Object.entries(languages).map(([value,label])=>`<option value="${value}">${label}</option>`).join('')}</select></div>`;
-    box.innerHTML+=`<div class="setting-row"><span>外观<small>为你的每一天换个颜色</small></span><select id="theme-select" aria-label="外观主题"><option value="dark">深海绿</option><option value="light">薄荷白</option><option value="system">跟随系统</option></select></div><div class="setting-row"><span>温度单位</span><select id="unit-select" aria-label="温度单位"><option value="C">摄氏度 °C</option><option value="F">华氏度 °F</option></select></div>${desktop?'<div class="setting-row"><span>桌面置顶<small>让初音一直陪在屏幕上</small></span><button class="secondary" data-action="pin">切换置顶</button></div>':''}<h3 class="settings-subtitle">管理城市</h3>${saved.map(c=>`<div class="manage-city"><span><span data-no-i18n>${esc(c.name)}</span></span><button data-remove="${esc(c.id)}" ${saved.length===1?'disabled':''}>移除</button></div>`).join('')}<div class="settings-note">每 15 分钟自动更新。网络中断时保留最近一次天气，并标明缓存状态。无需填写 API 密钥。</div><button class="secondary" data-action="demo">${demo?'返回实时天气':'查看界面演示'}</button>`;
+    box.innerHTML+=`<div class="setting-row"><span>外观<small>为你的每一天换个颜色</small></span><select id="theme-select" aria-label="外观主题"><option value="dark">深海绿</option><option value="light">薄荷白</option><option value="system">跟随系统</option></select></div><div class="setting-row"><span>温度单位</span><select id="unit-select" aria-label="温度单位"><option value="C">摄氏度 °C</option><option value="F">华氏度 °F</option></select></div>${desktop?'<div class="setting-row"><span>桌面置顶<small>让初音一直陪在屏幕上</small></span><button class="secondary" data-action="pin">切换置顶</button></div>':''}<h3 class="settings-subtitle">管理城市</h3>${saved.map(c=>`<div class="manage-city"><span>${cityField(c,'name')}</span><button data-remove="${esc(c.id)}" ${saved.length===1?'disabled':''}>移除</button></div>`).join('')}<div class="settings-note">每 15 分钟自动更新。网络中断时保留最近一次天气，并标明缓存状态。无需填写 API 密钥。</div><button class="secondary" data-action="demo">${demo?'返回实时天气':'查看界面演示'}</button>`;
+    if(android) box.innerHTML+=widgetSettings(prefs,displayCity(city),data);
+    box.innerHTML+=updatePanel();
     if(android) box.innerHTML+=`<h3 class="settings-subtitle">桌面小组件</h3><p class="modal-hint">初音、时钟与天气常驻手机桌面。小组件跟随当前城市和温度单位，点击打开天气详情。</p><div class="widget-actions"><button class="secondary" data-action="widget-wide">添加宽版 · 4×2</button><button class="secondary" data-action="widget-compact">添加紧凑版 · 2×2</button></div><p class="modal-hint">也可长按手机桌面，选择“小组件”→“初音天气”。后台更新时间受系统省电策略影响。</p>`;
     $('#theme-select').insertAdjacentHTML('afterbegin','<option value="solar">自动 · 日出浅色 / 日落深色</option>');
+    bindWidgetSettings(box,prefs,()=>{save('miku:prefs',prefs);syncCompanion();});bindUpdates(box);
     $('#language-select').value=getLanguage(); $('#theme-select').value=prefs.theme; $('#unit-select').value=prefs.unit;
   } else if(name==='about') {
-    box.innerHTML+=`${artImg('100','about-miku')}<p>把熟悉的初音天气，带回每一天。</p><p>这是 <a href="https://github.com/lzcapp/MikuWeather_Windows" target="_blank" rel="noreferrer">lzcapp / MikuWeather_Windows</a> 的非官方重制版，延续原作的天气插画与陪伴感。</p><p>原作者：RainySummer / lzcapp<br>天气数据：<a href="https://www.qweather.com/" target="_blank" rel="noreferrer">和风天气 QWeather</a><br>版本：0.3.0 · Windows / Android / iOS</p><p>角色插画沿用原仓库资源，角色及素材权利属于各自权利人。本项目与角色权利人无官方关联。</p><details><summary>原作许可证 · Anti-996</summary><pre id="license-text">正在读取…</pre></details><p class="modal-hint">城市列表与天气缓存保存在本机。主动定位在本机匹配附近城市，定位坐标不上传、不留存；天气请求经 Cloudflare 代理发送所选城市的公开中心坐标，服务凭据只保存在服务端。本地城市库来自和风官方城市列表，主要覆盖中国城市及区县。不后台定位，不记录轨迹。系统定位服务自身的数据处理由系统控制。无账号、无广告。</p>`;
+    box.innerHTML+=`${artImg('100','about-miku')}<p>把熟悉的初音天气，带回每一天。</p><p>这是 <a href="https://github.com/lzcapp/MikuWeather_Windows" target="_blank" rel="noreferrer">lzcapp / MikuWeather_Windows</a> 的非官方重制版，延续原作的天气插画与陪伴感。</p><p>原作者：RainySummer / lzcapp<br>天气数据：<a href="https://www.qweather.com/" target="_blank" rel="noreferrer">和风天气 QWeather</a><br>版本：0.3.1 · Windows / Android / iOS</p><p>角色插画沿用原仓库资源，角色及素材权利属于各自权利人。本项目与角色权利人无官方关联。</p><details><summary>原作许可证 · Anti-996</summary><pre id="license-text">正在读取…</pre></details><p class="modal-hint">城市列表与天气缓存保存在本机。主动定位在本机匹配附近城市，定位坐标不上传、不留存；天气请求经 Cloudflare 代理发送所选城市的公开中心坐标，服务凭据只保存在服务端。本地城市库来自和风官方城市列表，主要覆盖中国城市及区县。不后台定位，不记录轨迹。系统定位服务自身的数据处理由系统控制。无账号、无广告。</p>`;
     fetch('./LICENSE.txt').then(r=>r.text()).then(t=>{if($('#license-text'))$('#license-text').textContent=t;}).catch(()=>{if($('#license-text'))$('#license-text').textContent='请查看安装目录随附的 LICENSE 文件。';});
   }
   createIcons({icons});
@@ -137,7 +149,7 @@ function showDialog(name) {
   $('#modal').oncancel=closeDialog;
   if(name==='search') $('#city-query').focus();
 }
-function cityResults(cities) { return cities.map(c=>`<button class="search-result" data-result="${encodeURIComponent(JSON.stringify(c))}">${icon('map-pin')}<span><span data-no-i18n>${esc(c.name)}</span><small>${esc([c.adm2,c.adm1,c.country].filter((v,i,a)=>v&&a.indexOf(v)===i).join(' · '))}</small></span>${icon('arrow-up-right')}</button>`).join(''); }
+function cityResults(cities) { return cities.map(c=>`<button class="search-result" data-result="${encodeURIComponent(JSON.stringify(c))}">${icon('map-pin')}<span>${cityField(c,'name')}<small><span data-no-i18n>${esc([displayCity(c).adm2,displayCity(c).adm1,displayCity(c).country].filter((v,i,a)=>v&&a.indexOf(v)===i).join(' · '))}</span></small></span>${icon('arrow-up-right')}</button>`).join(''); }
 async function locateCity(mode=desktop?'ip':'precise') {
   if(locating||demo)return;
   const run=++locationEpoch;locating=true;showDialog('search');
@@ -175,7 +187,7 @@ document.addEventListener('click', async e=>{
     case 'unit':prefs.unit=prefs.unit==='C'?'F':'C';save('miku:prefs',prefs);syncCompanion();render();break;
     case 'widget-wide':case 'widget-compact':{
       try {
-        await selectWidgetCity(city,prefs.unit,prefs.theme,prefs.language);
+        await selectWidgetCity({...city,displayName:displayCity(city).name},prefs.unit,prefs.theme,prefs.language,prefs.widgetOpacity,prefs.widgetTextScale);
         const result=await pinWidget(b.dataset.action==='widget-wide'?'wide':'compact');
         toast(result.accepted?'请在桌面的确认提示中添加小组件':'请长按手机桌面，在“小组件”中添加初音天气');
       } catch { toast('请长按手机桌面，在“小组件”中添加初音天气'); }
@@ -186,13 +198,13 @@ document.addEventListener('click', async e=>{
     case 'pin':{const enabled=await window.miku?.togglePin();toast(enabled?'已开启窗口置顶':'已取消窗口置顶');break;}
   }
 });
-document.addEventListener('change',e=>{if(e.target.id==='language-select'){prefs.language=e.target.value;setLanguage(prefs.language);save('miku:prefs',prefs);syncCompanion();render();return;}if(e.target.id==='theme-select'||e.target.id==='unit-select'){prefs[e.target.id==='theme-select'?'theme':'unit']=e.target.value;save('miku:prefs',prefs);syncCompanion();render();}});
+document.addEventListener('change',e=>{if(e.target.id==='language-select'){prefs.language=e.target.value;setLanguage(prefs.language);save('miku:prefs',prefs);syncCompanion();render();localizeCities();return;}if(e.target.id==='theme-select'||e.target.id==='unit-select'){prefs[e.target.id==='theme-select'?'theme':'unit']=e.target.value;save('miku:prefs',prefs);syncCompanion();render();}});
 document.addEventListener('submit',async e=>{
   if(e.target.id!=='search-form')return;e.preventDefault();
   const query=$('#city-query').value.trim();if(!query)return;
   const run=++searchEpoch;$('#search-results').innerHTML='<p class="modal-hint">正在寻找这座城市…</p>';
   try {
-    const results=demo?CITIES.filter(c=>c.name.includes(query)||c.adm1.includes(query)):(await request('lookup',{query})).location||[];
+    const results=demo?CITIES.filter(c=>c.name.includes(query)||c.adm1.includes(query)):(await request('lookup',{query,lang:cityLanguage(getLanguage())})).location||[];
     if(run!==searchEpoch||dialogName!=='search')return;
     $('#search-results').innerHTML=results.length?cityResults(results):'<p class="modal-hint">没有找到，试试城市全名或拼音。</p>';createIcons({icons});
   }catch(err){if(run===searchEpoch&&dialogName==='search')$('#search-results').innerHTML=`<p class="search-error">${esc(err.message)}</p><p class="modal-hint">也可以选择常用城市</p>${cityResults(CITIES)}`;createIcons({icons});}
@@ -216,5 +228,5 @@ matchMedia('(prefers-color-scheme: light)').addEventListener('change',()=>{if(pr
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){updateSolarAppearance();if(!loading&&data&&Date.now()-data.fetchedAt>15*60_000)loadWeather();}});
 window.miku?.onRefresh(()=>loadWeather());
 window.miku?.onDialog(name=>showDialog(name));
-(async()=>{try{const p=await window.miku?.getPreferences();if(p){prefs={...prefs,...p};setLanguage(prefs.language);save('miku:prefs',prefs);}const c=await window.miku?.getCity();if(c){city=c;if(!saved.some(s=>s.id===c.id)){saved.push(c);save('miku:cities',saved);}save('miku:selected',c.id);}}catch{}loadWeather();syncCompanion();})();
+(async()=>{try{const p=await window.miku?.getPreferences();if(p){prefs={...prefs,...p};setLanguage(prefs.language);save('miku:prefs',prefs);}const c=await window.miku?.getCity();if(c){city=c;if(!saved.some(s=>s.id===c.id)){saved.push(c);save('miku:cities',saved);}save('miku:selected',c.id);}}catch{}loadWeather();syncCompanion();localizeCities();if(!demo)startUpdateChecks();})();
 

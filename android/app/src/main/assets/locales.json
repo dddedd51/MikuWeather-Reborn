@@ -1338,5 +1338,125 @@
     "天氣請求無效，請重新選擇城市",
     "Invalid weather request. Choose the city again.",
     "天気のリクエストが無効です。都市を選び直してください。"
+  ],
+  "小组件外观": [
+    "小工具外觀",
+    "Widget appearance",
+    "ウィジェットの外観"
+  ],
+  "效果预览，实际布局随桌面尺寸适配": [
+    "效果預覽，實際版面依桌面尺寸調整",
+    "Preview; layout adapts to your home screen size",
+    "プレビューです。配置はホーム画面のサイズに合わせます"
+  ],
+  "底板不透明度": [
+    "底板不透明度",
+    "Background opacity",
+    "背景の不透明度"
+  ],
+  "0% 全透明 · 100% 不透明，文字和初音保持清晰": [
+    "0% 全透明 · 100% 不透明，文字與初音保持清晰",
+    "0% transparent · 100% opaque. Text and Miku stay visible.",
+    "0%で透明、100%で不透明。文字とミクはそのまま表示します"
+  ],
+  "小组件字号": [
+    "小工具字級",
+    "Widget text size",
+    "ウィジェットの文字サイズ"
+  ],
+  "温度独立大字显示；空间不足时优先保留温度": [
+    "溫度以獨立大字顯示；空間不足時優先保留溫度",
+    "Temperature has its own large line and takes priority in small widgets.",
+    "気温を独立した大きな文字で表示。狭い場合も気温を優先します"
+  ],
+  "应用更新": [
+    "應用程式更新",
+    "App updates",
+    "アプリの更新"
+  ],
+  "当前版本": [
+    "目前版本",
+    "Current version",
+    "現在のバージョン"
+  ],
+  "启动时自动检查更新": [
+    "啟動時自動檢查更新",
+    "Automatically check on startup",
+    "起動時に更新を自動確認"
+  ],
+  "检查更新": [
+    "檢查更新",
+    "Check for updates",
+    "更新を確認"
+  ],
+  "下载并安装更新": [
+    "下載並安裝更新",
+    "Download and install",
+    "ダウンロードして更新"
+  ],
+  "下载 IPA": [
+    "下載 IPA",
+    "Download IPA",
+    "IPA をダウンロード"
+  ],
+  "iPhone 更新需要重新签名侧载，不能直接覆盖安装": [
+    "iPhone 更新須重新簽名側載，無法直接覆蓋安裝",
+    "iPhone updates must be signed and sideloaded again.",
+    "iPhone の更新は再署名してサイドロードする必要があります"
+  ],
+  "正在检查更新…": [
+    "正在檢查更新…",
+    "Checking for updates…",
+    "更新を確認中…"
+  ],
+  "发现新版本": [
+    "發現新版本",
+    "Update available",
+    "新しいバージョンがあります"
+  ],
+  "已是最新版本": [
+    "已是最新版本",
+    "You are up to date",
+    "最新バージョンです"
+  ],
+  "检查更新失败，请稍后重试": [
+    "檢查更新失敗，請稍後重試",
+    "Could not check for updates. Please try again.",
+    "更新を確認できません。後でもう一度お試しください"
+  ],
+  "查看更新": [
+    "查看更新",
+    "View update",
+    "更新を見る"
+  ],
+  "正在下载并校验更新…": [
+    "正在下載並驗證更新…",
+    "Downloading and verifying…",
+    "ダウンロードして検証中…"
+  ],
+  "请允许安装此来源的应用，返回后再次点击安装": [
+    "請允許安裝此來源的應用程式，返回後再次點選安裝",
+    "Allow installation from this app, then return and tap install again.",
+    "このアプリからのインストールを許可し、戻ってもう一度インストールを押してください"
+  ],
+  "请在系统安装界面确认更新": [
+    "請在系統安裝介面確認更新",
+    "Confirm the update in the system installer.",
+    "システムのインストール画面で更新を確認してください"
+  ],
+  "更新已准备好": [
+    "更新已準備好",
+    "Update ready",
+    "更新の準備ができました"
+  ],
+  "更新未完成，请重试或从发布页下载": [
+    "更新未完成，請重試或從發布頁下載",
+    "Update incomplete. Retry or download from the release page.",
+    "更新が完了していません。再試行するかリリースページからダウンロードしてください"
+  ],
+  "天气": [
+    "天氣",
+    "Weather",
+    "天気"
   ]
 }

@@ -39,16 +39,19 @@ public class MikuWeatherWidget extends AppWidgetProvider {
         int height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, compactProvider ? 170 : 180);
         if (width <= 0) width = compactProvider ? 170 : 320;
         if (height <= 0) height = compactProvider ? 170 : 180;
-        WidgetClockLayout layout = WidgetClockLayout.fit(compactProvider, width, height, context.getResources().getConfiguration().fontScale);
+        WidgetClockLayout layout = WidgetClockLayout.fit(compactProvider, width, height, context.getResources().getConfiguration().fontScale,WidgetPreferences.textScale(context),data.temperature);
         int padding = Math.round(layout.padding * context.getResources().getDisplayMetrics().density);
         views.setViewPadding(R.id.widget_root, padding, padding, padding, padding);
+        views.setImageViewBitmap(R.id.widget_backdrop,WidgetBackdrop.bitmap(WidgetPreferences.opacity(context)));
+        views.setTextViewText(R.id.widget_temperature,data.temperature);
+        text(views,R.id.widget_temperature,layout.temperature,Color.WHITE);
         // A native TextClock continues ticking without an app process or periodic network requests.
         views.setString(R.id.widget_clock, "setTimeZone", java.util.TimeZone.getDefault().getID());
         java.util.Locale locale = java.util.Locale.forLanguageTag(WidgetPreferences.language(context));
         String datePattern = "en".equals(locale.getLanguage()) ? "MMM d EEE" : "M月d日 EEE";
         String date = java.time.format.DateTimeFormatter.ofPattern(datePattern, locale).format(java.time.ZonedDateTime.now());
         views.setTextViewText(R.id.widget_date, date);
-        String condition = data.hasWeather ? UiText.t(context, data.condition) + "  " + data.temperature : UiText.word(context,"waiting");
+        String condition = data.hasWeather ? UiText.t(context, data.condition) : UiText.word(context,"waiting");
         views.setTextViewText(R.id.widget_weather, condition);
         views.setTextViewText(R.id.widget_city, data.name + (data.cached ? " · " + UiText.word(context,"cached") : ""));
         views.setViewVisibility(R.id.widget_city, layout.city ? View.VISIBLE : View.GONE);

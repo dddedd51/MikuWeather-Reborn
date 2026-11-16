@@ -1,5 +1,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('miku', {
+  checkUpdate: () => ipcRenderer.invoke('update:check'),
+  installUpdate: () => ipcRenderer.invoke('update:install'),
+  onUpdateProgress: callback => ipcRenderer.on('update:progress',(_event,value)=>callback(value)),
   request: (kind, params) => ipcRenderer.invoke('weather:request', { kind, params }),
   locate: () => ipcRenderer.invoke('location:once'),
   locateIp: () => ipcRenderer.invoke('location:ip'),

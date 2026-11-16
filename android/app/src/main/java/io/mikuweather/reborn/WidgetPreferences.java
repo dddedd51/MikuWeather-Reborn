@@ -28,7 +28,7 @@ final class WidgetPreferences {
         boolean validZone = false;
         for (String known : TimeZone.getAvailableIDs()) if (known.equals(tz)) { validZone = true; break; }
         if (!validZone) tz = "Asia/Shanghai";
-        JSONObject safe = new JSONObject().put("id", city.optString("id")).put("name", name)
+        JSONObject safe = new JSONObject().put("id", city.optString("id")).put("name", name).put("displayName", city.optString("displayName",name))
             .put("adm1", city.optString("adm1")).put("lat", lat).put("lon", lon).put("tz", tz);
         prefs(context).edit().putString("city", safe.toString())
             .putString("unit", "F".equalsIgnoreCase(unit) || "i".equalsIgnoreCase(unit) ? "F" : "C")
@@ -39,6 +39,11 @@ final class WidgetPreferences {
         String safe = "zh-TW".equals(language) || "en".equals(language) || "ja".equals(language) ? language : "zh-CN";
         prefs(context).edit().putString("language", safe).apply();
     }
+    static void appearance(Context context, int opacity, int scale) {
+        prefs(context).edit().putInt("opacity",Math.max(0,Math.min(100,opacity))).putInt("textScale",Math.max(100,Math.min(140,scale))).apply();
+    }
+    static int opacity(Context context) { return prefs(context).getInt("opacity",0); }
+    static int textScale(Context context) { return prefs(context).getInt("textScale",110); }
     static String unit(Context context) { return prefs(context).getString("unit", "C"); }
     static String theme(Context context) { return prefs(context).getString("theme", "solar"); }
     static String key(JSONObject city) { return city.optDouble("lat") + "," + city.optDouble("lon"); }

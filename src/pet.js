@@ -14,14 +14,14 @@ function paint(current,cached=false){
   const night=solarNight(Date.now(),city.tz,solarDays);
   document.documentElement.dataset.theme=preferences.theme==='solar'?(night?'dark':'light'):preferences.theme==='system'?(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):preferences.theme;
   const temperature=Math.round(preferences.unit==='F'?current.temp*1.8+32:current.temp);
-  title.textContent=city.name+' '+temperature+'°'+preferences.unit;note.textContent=current.text+(cached?' · 离线缓存':'');
+  title.textContent=(city.displayName||city.name)+' '+temperature+'°'+preferences.unit;note.textContent=current.text+(cached?' · 离线缓存':'');
   const symbol=document.getElementById('weather-icon'),src=pixelIcon(current.code,night);symbol.hidden=!src;if(src)symbol.src=src;
   image.src='./assets/'+art(current.code,night)+'.png';
-  bubble.title=city.name+' '+current.text+'，观测于 '+new Intl.DateTimeFormat(getLanguage(),{timeZone:city.tz,hour:'2-digit',minute:'2-digit'}).format(new Date(current.time))+'。点击查看天气，拖动初音可移动。';
-  window.miku?.setWeather({city:city.name,temp:String(temperature),text:t(current.text)});
+  bubble.title=(city.displayName||city.name)+' '+current.text+'，观测于 '+new Intl.DateTimeFormat(getLanguage(),{timeZone:city.tz,hour:'2-digit',minute:'2-digit'}).format(new Date(current.time))+'。点击查看天气，拖动初音可移动。';
+  window.miku?.setWeather({city:city.displayName||city.name,temp:String(temperature),text:t(current.text)});
 }
 async function update(){
-  const run=++running,c=city;title.textContent=city.name;note.textContent='初音正在看天气…';
+  const run=++running,c=city;title.textContent=city.displayName||city.name;note.textContent='初音正在看天气…';
   try {
     const savedDays=JSON.parse(localStorage.getItem('miku:solar:'+c.id)||'[]');solarDays=Array.isArray(savedDays)?savedDays.filter(d=>Number.isFinite(Date.parse(d?.time))):[];
   } catch {solarDays=[];}
@@ -40,7 +40,7 @@ mascot.addEventListener('pointermove',e=>{if(!dragging)return;if(Math.hypot(e.sc
 mascot.addEventListener('pointerup',()=>{const click=dragging&&!dragging.moved;dragging=null;window.miku?.dragEnd();if(click)window.miku?.openDetails();});
 mascot.addEventListener('pointercancel',()=>{dragging=null;window.miku?.dragEnd();});
 mascot.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')window.miku?.openDetails();});
-window.miku?.onRefresh(update);window.miku?.onCity(c=>{city=c;update();});window.addEventListener('online',update);setInterval(update,15*60_000);
+window.miku?.onRefresh(update);window.miku?.onCity(c=>{const same=city.id===c.id&&city.lat===c.lat&&city.lon===c.lon;city=c;if(same&&lastWeather)paint(lastWeather,lastCached);else update();});window.addEventListener('online',update);setInterval(update,15*60_000);
 window.miku?.onPreferences(p=>{preferences=p;setLanguage(p.language);localize();document.title=t('初音天气 · 桌宠');if(lastWeather)paint(lastWeather,lastCached);});
 matchMedia('(prefers-color-scheme: light)').addEventListener('change',()=>{if(preferences.theme==='system'&&lastWeather)paint(lastWeather,lastCached);});
 setInterval(()=>{if(lastWeather)paint(lastWeather,lastCached);},60_000);
