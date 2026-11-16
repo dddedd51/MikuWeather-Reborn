@@ -25,5 +25,13 @@ public class WidgetClockLayoutTest {
             }
         WidgetClockLayout p=WidgetClockLayout.fit(false,320,180,1,110,"14°");
         assertTrue("temperature dominates weather text",p.temperature>p.weather*2);
+        for(int[] size:new int[][]{{120,100},{170,170},{260,110},{320,180},{400,210}}){
+            float previous=0;
+            for(int scale=100;scale<=140;scale+=10){
+                float temperature=WidgetClockLayout.fit(false,size[0],size[1],1,scale,"14°").temperature;
+                assertTrue("increasing the slider must not shrink temperature",temperature>=previous);
+                previous=temperature;
+            }
+        }
     }
 }

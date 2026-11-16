@@ -12,11 +12,12 @@ final class WidgetClockLayout {
         float pad=4,h=Math.max(90,height)-pad*2,right=(Math.max(120,width)-pad*2)*.58f-4;
         float scale=Math.max(1,Math.min(1.3f,fontScale))*Math.max(1,Math.min(1.4f,textScale/100f));
         boolean city=height>=170&&width>=180;
-        float date=Math.min(14*scale,right/10),weather=Math.min(16*scale,right/8),meta=Math.min(12*scale,right/10);
-        float temperature=Math.min(54*scale,right/WidgetCardLayout.glyphWidth(temp));
-        float clock=Math.min(Math.min(22*scale,right/2.8f),temperature*.55f);
-        float extra=date*1.3f+weather*1.3f+(city?meta*1.3f:0)+6;
-        float fit=Math.min(1,(h-extra)/((clock+temperature)*1.2f));
-        return new WidgetClockLayout(pad,clock*fit,temperature*fit,date,weather,meta,right,city);
+        float date=Math.min(14,right/10),weather=Math.min(16,right/8),meta=Math.min(12,right/10);
+        float temperature=Math.min(54,right/WidgetCardLayout.glyphWidth(temp));
+        float clock=Math.min(Math.min(22,right/2.8f),temperature*.55f);
+        // Scale the entire fitted group together: larger preferences must never shrink temperature.
+        float lines=(clock+temperature)*1.2f+(date+weather+(city?meta:0))*1.3f;
+        float fit=Math.min(scale,Math.min((h-6)/lines,Math.min(right/(temperature*WidgetCardLayout.glyphWidth(temp)),right/(clock*2.8f))));
+        return new WidgetClockLayout(pad,clock*fit,temperature*fit,date*fit,weather*fit,meta*fit,right,city);
     }
 }
