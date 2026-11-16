@@ -1,6 +1,7 @@
 package io.mikuweather.reborn;
 
 import android.content.Context;
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,10 +11,13 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
+import android.widget.TextClock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.Robolectric;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
 import org.robolectric.annotation.GraphicsMode;
 import java.io.File;
@@ -70,12 +74,19 @@ public class WidgetNativeLayoutTest {
     }
     @Test public void cityKeepsFullLineWhenLauncherProvidesSlightlyLessHeight() throws Exception {
         for(boolean night:new boolean[]{false,true}){
-            View root=render(320,180,3,140,"zh-CN","14°",night,4);assertComplete(root);
-            TextView clock=root.findViewById(R.id.widget_clock);assertEquals("15:44",clock.getText().toString());
+            View root=render(320,180,3,140,"zh-CN","14°",night,4);
+            int width=root.getWidth(),height=root.getHeight();
+            // TextClock intentionally does not draw until attached to a visible window.
+            ActivityController<Activity> host=Robolectric.buildActivity(Activity.class).setup().visible();
+            host.get().setContentView(root);
+            TextClock clock=root.findViewById(R.id.widget_clock);clock.setFormat12Hour("'15:44'");clock.setFormat24Hour("'15:44'");
+            root.measure(View.MeasureSpec.makeMeasureSpec(width,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(height,View.MeasureSpec.EXACTLY));root.layout(0,0,width,height);
+            assertComplete(root);assertEquals(View.VISIBLE,clock.getVisibility());assertEquals("15:44",clock.getText().toString());
             TextView city=root.findViewById(R.id.widget_city);assertEquals(View.VISIBLE,city.getVisibility());assertEquals("綦江",city.getText().toString());
             File folder=new File("build/reports/widget-layout");assertTrue(folder.isDirectory()||folder.mkdirs());
             Bitmap bitmap=Bitmap.createBitmap(root.getWidth(),root.getHeight(),Bitmap.Config.ARGB_8888);root.draw(new Canvas(bitmap));
             try(FileOutputStream out=new FileOutputStream(new File(folder,night?"native-night.png":"native-day.png"))){assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG,100,out));}
+            host.pause().stop().destroy();
         }
     }
 }
