@@ -14,6 +14,7 @@ export function t(source,lang=language){
 }
 const originals=new WeakMap();
 export function localize(root=document.body){
+ if(!root)return;
  const translate=(node,attr)=>{
   const value=attr?node.getAttribute(attr):node.nodeValue;
   let map=originals.get(node);if(!map){map={};originals.set(node,map);}
