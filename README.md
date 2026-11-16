@@ -4,13 +4,19 @@
 
 ![初音天气重制版实测](docs/images/cover.jpg)
 
-重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.3.2**。
+重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.3.3**。
 
-**[下载 Windows / Android / iOS 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.3.2)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
+**[下载 Windows / Android / iOS 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.3.3)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
 
 📖 [开发日志：我用约 3636 万累计 token，重写了初音天气](docs/DEVLOG.md) · [用量统计范围](docs/token-usage.json) · [构建说明](docs/BUILD.md) · [第三方来源](THIRD_PARTY_NOTICES.md)
 
 > 标题里的累计用量包含缓存输入，不代表新生成 token 数或实际费用。
+
+## 0.3.3 · 城市完整显示、外观同步与刷新反馈
+
+城市名使用独立底部行，按 Android 实际文字行高测量上方内容，修复被截断的问题。小组件跟随手动浅色、深色或系统外观，自动模式才按日出日落切换。点击刷新会在按钮上方显示等待、更新中、成功、无网络或失败提示，失败时保留缓存天气。
+
+详见 [0.3.3 更新说明](docs/UPDATE-0.3.3.md)。
 
 ## 0.3.2 · 日夜卡牌与留白修复
 

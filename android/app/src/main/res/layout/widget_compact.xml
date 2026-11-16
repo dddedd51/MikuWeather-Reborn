@@ -6,8 +6,9 @@
     <LinearLayout android:id="@+id/widget_content" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center_vertical" android:paddingHorizontal="12dp" android:paddingVertical="14dp">
     <ImageView android:id="@+id/widget_miku" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="0.42"
         android:src="@drawable/miku_clear_day" android:scaleType="fitCenter" android:adjustViewBounds="true" android:contentDescription="@string/widget_refresh" />
-    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="0.58"
+    <LinearLayout android:id="@+id/widget_text_column" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="0.58"
         android:orientation="vertical" android:gravity="center_vertical|end" android:paddingStart="4dp">
+        <LinearLayout android:id="@+id/widget_weather_stack" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="vertical" android:gravity="center_vertical|end">
         <TextClock android:id="@+id/widget_clock" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:format12Hour="h:mm" android:format24Hour="H:mm" android:textSize="54dp" android:textColor="#FFFFFF"
             android:fontFamily="sans-serif-light" android:gravity="end" android:includeFontPadding="false" android:singleLine="true"
@@ -21,11 +22,16 @@
             android:text="@string/widget_waiting" android:layout_marginTop="2dp" android:textSize="14dp" android:textColor="#FFFFFF" android:gravity="end"
             android:includeFontPadding="false" android:maxLines="1" android:ellipsize="end"
             android:shadowColor="#44000000" android:shadowRadius="1" android:shadowDy="1" />
+        </LinearLayout>
         <TextView android:id="@+id/widget_city" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:layout_marginTop="2dp" android:textSize="10dp" android:textColor="#E6FFFFFF" android:gravity="end"
-            android:includeFontPadding="false" android:maxLines="1" android:ellipsize="end"
+            android:layout_marginTop="4dp" android:paddingBottom="2dp" android:textSize="10dp" android:textColor="#E6FFFFFF" android:gravity="end"
+            android:includeFontPadding="true" android:maxLines="1" android:ellipsize="end"
             android:shadowColor="#44000000" android:shadowRadius="1" android:shadowDy="1" />
     </LinearLayout>
 </LinearLayout>
     <ImageView android:id="@+id/widget_refresh" android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="bottom|start" android:padding="13dp" android:src="@drawable/widget_refresh_icon" android:contentDescription="@string/widget_refresh" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom" android:layout_marginBottom="48dp" android:orientation="horizontal" android:paddingStart="8dp" android:paddingEnd="8dp">
+        <TextView android:id="@+id/widget_refresh_status" android:layout_width="0dp" android:layout_weight="0.42" android:layout_height="wrap_content" android:textSize="10dp" android:maxLines="2" android:ellipsize="end" android:visibility="gone" android:shadowColor="#44000000" android:shadowRadius="1" />
+        <Space android:layout_width="0dp" android:layout_weight="0.58" android:layout_height="1dp" />
+    </LinearLayout>
 </FrameLayout>

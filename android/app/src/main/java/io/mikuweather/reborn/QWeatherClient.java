@@ -99,9 +99,12 @@ public final class QWeatherClient {
         } catch (Exception ignored) { return null; }
     }
     public JSONObject request(String kind, String query, Double lat, Double lon) throws Exception {
+        return request(kind,query,lat,lon,false);
+    }
+    JSONObject request(String kind,String query,Double lat,Double lon,boolean force) throws Exception {
         String path = buildPath(kind, query, lat, lon);
         CachedWeather saved = cached(kind, query, lat, lon);
-        if (saved != null && saved.expires > System.currentTimeMillis()) return saved.data;
+        if (!force && saved != null && saved.expires > System.currentTimeMillis()) return saved.data;
         FutureTask<JSONObject> newTask = new FutureTask<>(() -> fetch(kind, path));
         FutureTask<JSONObject> task = inFlight.putIfAbsent(path, newTask);
         if (task == null) { task = newTask; task.run(); }

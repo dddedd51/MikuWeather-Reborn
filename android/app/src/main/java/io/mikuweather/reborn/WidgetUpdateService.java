@@ -18,32 +18,36 @@ import java.util.concurrent.Future;
 public class WidgetUpdateService extends JobService {
     private static final int PERIODIC = 39001, IMMEDIATE = 39002;
     private final ExecutorService executor = Executors.newFixedThreadPool(2);
-    private static final class RunningJob { volatile boolean stopped; Future<?> future; }
+    private static final class RunningJob { volatile boolean stopped; Future<?> future; JSONObject city;long ticket; }
     private final ConcurrentHashMap<Integer, RunningJob> running = new ConcurrentHashMap<>();
 
-    static void schedule(Context context, boolean immediate) {
+    static boolean schedule(Context context, boolean immediate) {
         JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        if (scheduler == null) return;
+        if (scheduler == null) return false;
         if (MikuWeatherWidget.widgetCount(context) == 0) {
-            scheduler.cancel(PERIODIC); scheduler.cancel(IMMEDIATE); return;
+            scheduler.cancel(PERIODIC); scheduler.cancel(IMMEDIATE); return false;
         }
         ComponentName service = new ComponentName(context, WidgetUpdateService.class);
         if (scheduler.getPendingJob(PERIODIC) == null)
             scheduler.schedule(new JobInfo.Builder(PERIODIC, service)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY).setPeriodic(30 * 60 * 1000L, 10 * 60 * 1000L)
                 .setPersisted(true).build());
-        if (immediate) scheduler.schedule(new JobInfo.Builder(IMMEDIATE, service)
-            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY).setMinimumLatency(0).build());
+        if (immediate) return scheduler.schedule(new JobInfo.Builder(IMMEDIATE, service)
+            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY).setMinimumLatency(0).setOverrideDeadline(5000).build())==JobScheduler.RESULT_SUCCESS;
+        return true;
     }
     @Override public boolean onStartJob(JobParameters params) {
         if (MikuWeatherWidget.widgetCount(this) == 0) { schedule(this, false); return false; }
         RunningJob work = new RunningJob();
+        work.city=WidgetPreferences.city(this);work.ticket=WidgetRefreshFeedback.begin(this,work.city);
+        if(work.ticket!=0)MikuWeatherWidget.updateAll(this);
         running.put(params.getJobId(), work);
         work.future = executor.submit(() -> {
-            JSONObject city = WidgetPreferences.city(this);
+            JSONObject city = work.city;
+            String feedback="success";
             try {
                 QWeatherClient client = QWeatherClient.get(this);
-                client.request("current", "", city.optDouble("lat"), city.optDouble("lon"));
+                client.request("current", "", city.optDouble("lat"), city.optDouble("lon"),work.ticket!=0);
                 WidgetPreferences.error(this, city, "");
                 ZoneId zone = SolarTheme.zone(city.optString("tz", "Asia/Shanghai"));
                 QWeatherClient.CachedWeather daily = client.cached("daily", "", city.optDouble("lat"), city.optDouble("lon"));
@@ -52,9 +56,10 @@ public class WidgetUpdateService extends JobService {
                     try { client.request("daily", "", city.optDouble("lat"), city.optDouble("lon")); }
                     catch (Exception ignored) { /* Current weather remains valid; solar falls back to local 06/18. */ }
                 }
-            } catch (QWeatherClient.WeatherException e) { WidgetPreferences.error(this, city, e.getMessage()); }
-            catch (Exception e) { WidgetPreferences.error(this, city, "网络连接失败"); }
+            } catch (QWeatherClient.WeatherException e) { WidgetPreferences.error(this, city, e.getMessage());feedback=WidgetRefreshFeedback.online(this)?"failed":"offline"; }
+            catch (Exception e) { WidgetPreferences.error(this, city, "网络连接失败");feedback=WidgetRefreshFeedback.online(this)?"failed":"offline"; }
             if (!work.stopped && !Thread.currentThread().isInterrupted()) {
+                WidgetRefreshFeedback.finish(this,city,work.ticket,feedback);
                 MikuWeatherWidget.updateAll(this);
                 jobFinished(params, false);
             }
@@ -64,7 +69,10 @@ public class WidgetUpdateService extends JobService {
     }
     @Override public boolean onStopJob(JobParameters params) {
         RunningJob work = running.remove(params.getJobId());
-        if (work != null) { work.stopped = true; if (work.future != null) work.future.cancel(true); }
+        if (work != null) {
+            work.stopped = true; if (work.future != null) work.future.cancel(true);
+            WidgetRefreshFeedback.finish(this,work.city,work.ticket,WidgetRefreshFeedback.online(this)?"retry":"offline");MikuWeatherWidget.updateAll(this);
+        }
         return MikuWeatherWidget.widgetCount(this) > 0;
     }
     @Override public void onDestroy() {

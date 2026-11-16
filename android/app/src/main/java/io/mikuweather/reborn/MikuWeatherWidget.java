@@ -23,6 +23,9 @@ public class MikuWeatherWidget extends AppWidgetProvider {
         return count;
     }
     static void updateAll(Context context) {
+        if(android.os.Looper.myLooper()!=android.os.Looper.getMainLooper()){
+            new android.os.Handler(android.os.Looper.getMainLooper()).post(()->updateAll(context.getApplicationContext()));return;
+        }
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         WidgetCardData data = WidgetCardData.load(context);
         for (Class<?> provider : PROVIDERS) {
@@ -34,35 +37,27 @@ public class MikuWeatherWidget extends AppWidgetProvider {
     private static void render(Context context, AppWidgetManager manager, int id, boolean compactProvider, WidgetCardData data) {
         Bundle options = manager.getAppWidgetOptions(id);
         // Provider identity determines the style; a 4×2 widget never silently turns into 2×2.
-        RemoteViews views = new RemoteViews(context.getPackageName(), compactProvider ? R.layout.widget_compact : R.layout.widget_weather);
+        int layoutId=compactProvider ? R.layout.widget_compact : R.layout.widget_weather;
+        RemoteViews views = new RemoteViews(context.getPackageName(),layoutId);
         int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, compactProvider ? 170 : 320);
         int height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, compactProvider ? 170 : 180);
         if (width <= 0) width = compactProvider ? 170 : 320;
         if (height <= 0) height = compactProvider ? 170 : 180;
         WidgetClockLayout layout = WidgetClockLayout.fit(compactProvider, width, height, context.getResources().getConfiguration().fontScale,WidgetPreferences.textScale(context),data.temperature);
-        int padding = Math.round(layout.padding * context.getResources().getDisplayMetrics().density);
-        views.setViewPadding(R.id.widget_root, padding, padding, padding, padding);
-        int insetX=Math.round(layout.insetX*context.getResources().getDisplayMetrics().density);
-        int insetY=Math.round(layout.insetY*context.getResources().getDisplayMetrics().density);
-        views.setViewPadding(R.id.widget_content,insetX,insetY,insetX,insetY);
-        WidgetPalette palette=WidgetPalette.of(data.solar.night,WidgetPreferences.opacity(context));
+        WidgetPalette palette=WidgetPalette.of(data.appearance.night,WidgetPreferences.opacity(context));
         views.setImageViewBitmap(R.id.widget_backdrop,WidgetBackdrop.bitmap(palette,width-2*layout.padding,height-2*layout.padding));
-        views.setTextViewText(R.id.widget_temperature,data.temperature);
-        text(views,R.id.widget_temperature,layout.temperature,palette.text);
         // A native TextClock continues ticking without an app process or periodic network requests.
         views.setString(R.id.widget_clock, "setTimeZone", java.util.TimeZone.getDefault().getID());
         java.util.Locale locale = java.util.Locale.forLanguageTag(WidgetPreferences.language(context));
         String datePattern = "en".equals(locale.getLanguage()) ? "MMM d EEE" : "M月d日 EEE";
         String date = java.time.format.DateTimeFormatter.ofPattern(datePattern, locale).format(java.time.ZonedDateTime.now());
-        views.setTextViewText(R.id.widget_date, date);
         String condition = data.hasWeather ? UiText.t(context, data.condition) : UiText.word(context,"waiting");
-        views.setTextViewText(R.id.widget_weather, condition);
-        views.setTextViewText(R.id.widget_city, data.name + (data.cached ? " · " + UiText.word(context,"cached") : ""));
-        views.setViewVisibility(R.id.widget_city, layout.city ? View.VISIBLE : View.GONE);
-        text(views, R.id.widget_clock, layout.clock, palette.text);
-        text(views, R.id.widget_date, layout.date, palette.text);
-        text(views, R.id.widget_weather, layout.weather, palette.text);
-        text(views, R.id.widget_city, layout.meta, palette.muted);
+        WidgetTextLayout.apply(context,views,layoutId,width,height,layout,palette,data.temperature,date,condition,
+            data.name + (data.cached ? " · " + UiText.word(context,"cached") : ""));
+        String feedback=WidgetRefreshFeedback.label(context,data.city);
+        views.setTextViewText(R.id.widget_refresh_status,feedback);
+        views.setTextColor(R.id.widget_refresh_status,palette.text);
+        views.setViewVisibility(R.id.widget_refresh_status,feedback.isEmpty()?View.GONE:View.VISIBLE);
         views.setImageViewResource(R.id.widget_miku, drawable(WeatherValues.solarArt(data.code, data.solar.night)));
         views.setContentDescription(R.id.widget_root, data.name + ", " + condition + ", " + date + ". " + UiText.word(context,"open"));
         views.setContentDescription(R.id.widget_miku, UiText.word(context,"refresh"));
@@ -75,10 +70,6 @@ public class MikuWeatherWidget extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.widget_refresh, refreshIntent);
         views.setContentDescription(R.id.widget_refresh, UiText.word(context,"refresh"));
         manager.updateAppWidget(id, views);
-    }
-    private static void text(RemoteViews views, int id, float size, int color) {
-        views.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_DIP, size);
-        views.setTextColor(id, color);
     }
     private static Class<?> compactProviderClass(boolean compact) { return compact ? MikuCompactWidget.class : MikuWeatherWidget.class; }
     private static int pixelDrawable(String condition) {
@@ -128,7 +119,14 @@ public class MikuWeatherWidget extends AppWidgetProvider {
     @Override public void onDisabled(Context context) { WidgetUpdateService.schedule(context, false); updateAll(context); }
     @Override public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        if (REFRESH.equals(intent.getAction())) { updateAll(context); WidgetUpdateService.schedule(context, true); }
+        if (REFRESH.equals(intent.getAction())) {
+            org.json.JSONObject city=WidgetPreferences.city(context);
+            if(!WidgetRefreshFeedback.online(context))WidgetRefreshFeedback.offline(context,city);
+            else if(WidgetRefreshFeedback.queue(context,city)&&!WidgetUpdateService.schedule(context,true)){
+                long ticket=WidgetRefreshFeedback.begin(context,city);WidgetRefreshFeedback.finish(context,city,ticket,"retry");
+            }
+            updateAll(context);
+        }
         if (WidgetSolarScheduler.REDRAW.equals(intent.getAction()) || Intent.ACTION_TIME_CHANGED.equals(intent.getAction())
                 || Intent.ACTION_DATE_CHANGED.equals(intent.getAction()) || Intent.ACTION_TIMEZONE_CHANGED.equals(intent.getAction()) || Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())
                 || Intent.ACTION_CONFIGURATION_CHANGED.equals(intent.getAction())) {
