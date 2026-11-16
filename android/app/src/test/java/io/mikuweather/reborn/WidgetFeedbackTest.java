@@ -54,7 +54,8 @@ public class WidgetFeedbackTest {
         assertEquals("更新成功",WidgetRefreshFeedback.label(c,city));
         Intent timer=Shadows.shadowOf(RuntimeEnvironment.getApplication()).getBroadcastIntents().stream()
             .filter(i->WidgetRefreshFeedback.DISMISS_SUCCESS.equals(i.getAction())).reduce((a,b)->b).orElseThrow();
-        new MikuWeatherWidget().onReceive(c,timer);
+        // Deliver finish()'s queued broadcast before advancing its deadline.
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
         advance(2999);
         assertEquals("更新成功",WidgetRefreshFeedback.label(c,city));
         advance(1);
@@ -66,7 +67,7 @@ public class WidgetFeedbackTest {
         WidgetRefreshFeedback.queue(c,city);long first=WidgetRefreshFeedback.begin(c,city);WidgetRefreshFeedback.finish(c,city,first,"success");
         Intent timer=Shadows.shadowOf(RuntimeEnvironment.getApplication()).getBroadcastIntents().stream()
             .filter(i->WidgetRefreshFeedback.DISMISS_SUCCESS.equals(i.getAction())).reduce((a,b)->b).orElseThrow();
-        new MikuWeatherWidget().onReceive(c,timer);
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
         WidgetRefreshFeedback.queue(c,city);long next=WidgetRefreshFeedback.begin(c,city);
         WidgetRefreshFeedback.finish(c,city,next,"failed");
         advance(3000);
