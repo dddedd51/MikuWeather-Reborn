@@ -7,7 +7,7 @@ public class WidgetClockLayoutTest {
             for(float font:new float[]{1,1.3f,2}) {
                 WidgetClockLayout plan=WidgetClockLayout.fit(size[0]<200,size[0],size[1],font);
                 assertTrue("clock width",plan.clock*2.8f<=plan.rightWidth+.01f);
-                assertTrue("vertical content",plan.contentHeight<=size[1]-plan.padding*2+.01f);
+                assertTrue("vertical content stays inside panel insets",plan.contentHeight<=size[1]-2*(plan.padding+plan.insetY)+.01f);
             }
     }
     @Test public void shortWidgetOmitsCityBeforeClippingTime(){
@@ -21,7 +21,7 @@ public class WidgetClockLayoutTest {
                 assertTrue(p.temperature>0);
                 assertTrue("time stays smaller than temperature",p.clock<=p.temperature*.56f);
                 assertTrue(p.temperature*WidgetCardLayout.glyphWidth(value)<=p.rightWidth+.01f);
-                assertTrue(p.contentHeight<=size[1]-p.padding*2+.01f);
+                assertTrue(p.contentHeight<=size[1]-2*(p.padding+p.insetY)+.01f);
             }
         WidgetClockLayout p=WidgetClockLayout.fit(false,320,180,1,110,"14°");
         assertTrue("temperature dominates weather text",p.temperature>p.weather*2);
@@ -33,5 +33,17 @@ public class WidgetClockLayoutTest {
                 previous=temperature;
             }
         }
+    }
+    @Test public void textHasRoomInsideRoundedPanelAtAllTextSizes(){
+        for(int[] size:new int[][]{{120,100},{170,170},{320,180},{360,190},{400,210},{600,180}})
+            for(int scale:new int[]{100,110,140}){
+                WidgetClockLayout p=WidgetClockLayout.fit(size[0]<200,size[0],size[1],2,scale,"14°");
+                assertTrue("right panel inset",p.insetX>=12);
+                assertTrue("top and bottom panel inset",p.insetY>=10);
+                float column=(size[0]-2*(p.padding+p.insetX))*.58f-4;
+                assertTrue("temperature fits padded column",p.temperature*WidgetCardLayout.glyphWidth("14°")<=column);
+                assertTrue("clock fits padded column",p.clock*2.8f<=column);
+                assertTrue("group fits padded height",p.contentHeight<=size[1]-2*(p.padding+p.insetY));
+            }
     }
 }

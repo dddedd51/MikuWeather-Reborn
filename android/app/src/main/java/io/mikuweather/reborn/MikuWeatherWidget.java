@@ -42,7 +42,10 @@ public class MikuWeatherWidget extends AppWidgetProvider {
         WidgetClockLayout layout = WidgetClockLayout.fit(compactProvider, width, height, context.getResources().getConfiguration().fontScale,WidgetPreferences.textScale(context),data.temperature);
         int padding = Math.round(layout.padding * context.getResources().getDisplayMetrics().density);
         views.setViewPadding(R.id.widget_root, padding, padding, padding, padding);
-        views.setImageViewBitmap(R.id.widget_backdrop,WidgetBackdrop.bitmap(WidgetPreferences.opacity(context)));
+        int insetX=Math.round(layout.insetX*context.getResources().getDisplayMetrics().density);
+        int insetY=Math.round(layout.insetY*context.getResources().getDisplayMetrics().density);
+        views.setViewPadding(R.id.widget_content,insetX,insetY,insetX,insetY);
+        views.setImageViewBitmap(R.id.widget_backdrop,WidgetBackdrop.bitmap(WidgetPreferences.opacity(context),width-2*layout.padding,height-2*layout.padding));
         views.setTextViewText(R.id.widget_temperature,data.temperature);
         text(views,R.id.widget_temperature,layout.temperature,Color.WHITE);
         // A native TextClock continues ticking without an app process or periodic network requests.

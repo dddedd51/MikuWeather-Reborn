@@ -4,13 +4,19 @@
 
 ![初音天气重制版实测](docs/images/cover.jpg)
 
-重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.3.1**。
+重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.3.2**。
 
-**[下载 Windows / Android / iOS 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.3.1)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
+**[下载 Windows / Android / iOS 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.3.2)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
 
 📖 [开发日志：我用约 3636 万累计 token，重写了初音天气](docs/DEVLOG.md) · [用量统计范围](docs/token-usage.json) · [构建说明](docs/BUILD.md) · [第三方来源](THIRD_PARTY_NOTICES.md)
 
 > 标题里的累计用量包含缓存输入，不代表新生成 token 数或实际费用。
+
+## 0.3.2 修复
+
+根据 MIUI 桌面实机截图修复小组件文字贴住遮罩、进入圆角的问题。内容单独增加内边距，字号按扣除留白后的空间适配；圆角按组件比例绘制，避免宽版横向拉伸。保留大温度、小时间、左下角刷新与透明度调节。0.3.1 可在设置中检查更新。
+
+详见 [0.3.2 更新说明](docs/UPDATE-0.3.2.md)。
 
 ## 0.3.1 更新
 
