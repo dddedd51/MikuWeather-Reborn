@@ -119,6 +119,29 @@ public class MikuWeatherWidget extends AppWidgetProvider {
     @Override public void onDisabled(Context context) { WidgetUpdateService.schedule(context, false); updateAll(context); }
     @Override public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+        if(WidgetRefreshFeedback.DISMISS_SUCCESS.equals(intent.getAction())){
+            // Hold the broadcast briefly so Android keeps the timer alive after the
+            // network job completes, without an exact alarm or a background service.
+            final android.content.BroadcastReceiver.PendingResult pending=goAsync();
+            long shownAt=intent.getLongExtra("shownAt",0),ticket=intent.getLongExtra("ticket",0);
+            String cityKey=intent.getStringExtra("cityKey");
+            long delay=Math.max(0,Math.min(WidgetRefreshFeedback.SUCCESS_VISIBLE_MS,shownAt+WidgetRefreshFeedback.SUCCESS_VISIBLE_MS-System.currentTimeMillis()));
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(()->{
+                try{
+                    if(cityKey!=null&&WidgetRefreshFeedback.clearSuccess(context,cityKey,ticket,shownAt)
+                        &&cityKey.equals(WidgetPreferences.key(WidgetPreferences.city(context)))){
+                        AppWidgetManager manager=AppWidgetManager.getInstance(context);
+                        for(Class<?> provider:PROVIDERS){
+                            int layoutId=provider==MikuCompactWidget.class?R.layout.widget_compact:R.layout.widget_weather;
+                            RemoteViews cleared=new RemoteViews(context.getPackageName(),layoutId);
+                            cleared.setTextViewText(R.id.widget_refresh_status,"");cleared.setViewVisibility(R.id.widget_refresh_status,View.GONE);
+                            for(int id:manager.getAppWidgetIds(new ComponentName(context,provider)))manager.partiallyUpdateAppWidget(id,cleared);
+                        }
+                    }
+                }finally{if(pending!=null)pending.finish();}
+            },delay);
+            return;
+        }
         if (REFRESH.equals(intent.getAction())) {
             org.json.JSONObject city=WidgetPreferences.city(context);
             if(!WidgetRefreshFeedback.online(context))WidgetRefreshFeedback.offline(context,city);
