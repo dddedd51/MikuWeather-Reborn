@@ -45,9 +45,10 @@ public class MikuWeatherWidget extends AppWidgetProvider {
         int insetX=Math.round(layout.insetX*context.getResources().getDisplayMetrics().density);
         int insetY=Math.round(layout.insetY*context.getResources().getDisplayMetrics().density);
         views.setViewPadding(R.id.widget_content,insetX,insetY,insetX,insetY);
-        views.setImageViewBitmap(R.id.widget_backdrop,WidgetBackdrop.bitmap(WidgetPreferences.opacity(context),width-2*layout.padding,height-2*layout.padding));
+        WidgetPalette palette=WidgetPalette.of(data.solar.night,WidgetPreferences.opacity(context));
+        views.setImageViewBitmap(R.id.widget_backdrop,WidgetBackdrop.bitmap(palette,width-2*layout.padding,height-2*layout.padding));
         views.setTextViewText(R.id.widget_temperature,data.temperature);
-        text(views,R.id.widget_temperature,layout.temperature,Color.WHITE);
+        text(views,R.id.widget_temperature,layout.temperature,palette.text);
         // A native TextClock continues ticking without an app process or periodic network requests.
         views.setString(R.id.widget_clock, "setTimeZone", java.util.TimeZone.getDefault().getID());
         java.util.Locale locale = java.util.Locale.forLanguageTag(WidgetPreferences.language(context));
@@ -58,10 +59,10 @@ public class MikuWeatherWidget extends AppWidgetProvider {
         views.setTextViewText(R.id.widget_weather, condition);
         views.setTextViewText(R.id.widget_city, data.name + (data.cached ? " · " + UiText.word(context,"cached") : ""));
         views.setViewVisibility(R.id.widget_city, layout.city ? View.VISIBLE : View.GONE);
-        text(views, R.id.widget_clock, layout.clock, Color.WHITE);
-        text(views, R.id.widget_date, layout.date, Color.WHITE);
-        text(views, R.id.widget_weather, layout.weather, Color.WHITE);
-        text(views, R.id.widget_city, layout.meta, Color.parseColor("#E6FFFFFF"));
+        text(views, R.id.widget_clock, layout.clock, palette.text);
+        text(views, R.id.widget_date, layout.date, palette.text);
+        text(views, R.id.widget_weather, layout.weather, palette.text);
+        text(views, R.id.widget_city, layout.meta, palette.muted);
         views.setImageViewResource(R.id.widget_miku, drawable(WeatherValues.solarArt(data.code, data.solar.night)));
         views.setContentDescription(R.id.widget_root, data.name + ", " + condition + ", " + date + ". " + UiText.word(context,"open"));
         views.setContentDescription(R.id.widget_miku, UiText.word(context,"refresh"));

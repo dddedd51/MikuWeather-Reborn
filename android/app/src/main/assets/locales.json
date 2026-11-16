@@ -1458,5 +1458,10 @@
     "天氣",
     "Weather",
     "天気"
+  ],
+  "卡牌随城市日出日落切换，透明度设置保持不变": [
+    "卡牌隨城市日出日落切換，透明度設定保持不變",
+    "The card follows the city’s sunrise and sunset and keeps your opacity setting.",
+    "カードは都市の日の出・日の入りで切り替わり、不透明度の設定は維持されます"
   ]
 }

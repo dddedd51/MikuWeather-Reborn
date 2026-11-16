@@ -11,20 +11,20 @@
         <TextClock android:id="@+id/widget_clock" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:format12Hour="h:mm" android:format24Hour="H:mm" android:textSize="54dp" android:textColor="#FFFFFF"
             android:fontFamily="sans-serif-light" android:gravity="end" android:includeFontPadding="false" android:singleLine="true"
-            android:shadowColor="#99000000" android:shadowRadius="3" android:shadowDy="1" />
-        <TextView android:id="@+id/widget_temperature" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="—°" android:textSize="44dp" android:fontFamily="sans-serif-light" android:textColor="#FFFFFF" android:gravity="end" android:includeFontPadding="false" android:maxLines="1" android:ellipsize="end" android:shadowColor="#99000000" android:shadowRadius="3" android:shadowDy="1" />
+            android:shadowColor="#44000000" android:shadowRadius="1" android:shadowDy="1" />
+        <TextView android:id="@+id/widget_temperature" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="—°" android:textSize="44dp" android:fontFamily="sans-serif-light" android:textColor="#FFFFFF" android:gravity="end" android:includeFontPadding="false" android:maxLines="1" android:ellipsize="end" android:shadowColor="#44000000" android:shadowRadius="1" android:shadowDy="1" />
         <TextView android:id="@+id/widget_date" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:layout_marginTop="2dp" android:textSize="13dp" android:textColor="#FFFFFF" android:gravity="end"
             android:includeFontPadding="false" android:maxLines="1" android:ellipsize="end"
-            android:shadowColor="#99000000" android:shadowRadius="3" android:shadowDy="1" />
+            android:shadowColor="#44000000" android:shadowRadius="1" android:shadowDy="1" />
         <TextView android:id="@+id/widget_weather" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="@string/widget_waiting" android:layout_marginTop="2dp" android:textSize="14dp" android:textColor="#FFFFFF" android:gravity="end"
             android:includeFontPadding="false" android:maxLines="1" android:ellipsize="end"
-            android:shadowColor="#99000000" android:shadowRadius="3" android:shadowDy="1" />
+            android:shadowColor="#44000000" android:shadowRadius="1" android:shadowDy="1" />
         <TextView android:id="@+id/widget_city" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:layout_marginTop="2dp" android:textSize="10dp" android:textColor="#E6FFFFFF" android:gravity="end"
             android:includeFontPadding="false" android:maxLines="1" android:ellipsize="end"
-            android:shadowColor="#99000000" android:shadowRadius="3" android:shadowDy="1" />
+            android:shadowColor="#44000000" android:shadowRadius="1" android:shadowDy="1" />
     </LinearLayout>
 </LinearLayout>
     <ImageView android:id="@+id/widget_refresh" android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="bottom|start" android:padding="13dp" android:src="@drawable/widget_refresh_icon" android:contentDescription="@string/widget_refresh" />
