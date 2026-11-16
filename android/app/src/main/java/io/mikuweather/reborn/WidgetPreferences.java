@@ -34,6 +34,11 @@ final class WidgetPreferences {
             .putString("unit", "F".equalsIgnoreCase(unit) || "i".equalsIgnoreCase(unit) ? "F" : "C")
             .putString("theme", "light".equals(theme) || "dark".equals(theme) || "system".equals(theme) ? theme : "solar").apply();
     }
+    static String language(Context context) { return prefs(context).getString("language", "zh-CN"); }
+    static void language(Context context, String language) {
+        String safe = "zh-TW".equals(language) || "en".equals(language) || "ja".equals(language) ? language : "zh-CN";
+        prefs(context).edit().putString("language", safe).apply();
+    }
     static String unit(Context context) { return prefs(context).getString("unit", "C"); }
     static String theme(Context context) { return prefs(context).getString("theme", "solar"); }
     static String key(JSONObject city) { return city.optDouble("lat") + "," + city.optDouble("lon"); }

@@ -6,11 +6,10 @@
     <string name="custom_url_scheme">io.mikuweather.reborn</string>
     <string name="widget_name">初音 · 时钟天气</string>
     <string name="widget_compact_name">初音 · 迷你天气</string>
-    <string name="widget_description">透明初音角色、时钟与和风天气；在应用中切换城市，点击查看天气，↻ 刷新。</string>
+    <string name="widget_description">透明初音、时钟与天气。点击初音刷新，点击时间查看详情。</string>
     <string name="widget_character">初音天气角色，点击查看天气</string>
     <string name="widget_choose_city">初音天气</string>
     <string name="widget_waiting">等待天气更新</string>
     <string name="widget_refresh_hint">点击 ↻ 获取天气</string>
-    <string name="widget_attribution">数据来自和风天气</string>
     <string name="widget_refresh">刷新桌面天气</string>
 </resources>

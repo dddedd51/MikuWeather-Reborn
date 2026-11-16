@@ -11,19 +11,13 @@ android/local.properties
 android/*.jks
 .toolchain/
 research/*.html
-qa/*
-!qa/widget-preview/
-qa/widget-preview/*
-!qa/widget-preview/widgets-0.2.1.png
+qa/
 *.log
 desktop/location-helper/*.exe
 .wrangler/
 .dev.vars*
 
-*.pem
-*.keystore
-*.p12
-.env*
-!*.example
-media/*.wav
-media/*.mp4
+work/
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml

@@ -1,5 +1,7 @@
 const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, shell, screen, protocol, dialog } = require('electron');
 const path = require('node:path');
+const catalog=require('../src/locales.json');
+function t(text){return require('./i18n.cjs')(text,state.preferences?.language);}
 const fs = require('node:fs');
 const { createClient } = require('../shared/qweather.cjs');
 const windowsLocation=require('./windows-location.cjs');
@@ -38,7 +40,7 @@ function openDetails(openDialog){
   if(!details||details.isDestroyed()){
     const p=pet.getBounds(),area=screen.getDisplayMatching(p).workArea,width=450,height=Math.min(790,area.height-50);
     const pos=constrain({x:p.x-width-14,y:p.y+p.height-height,width,height});
-    details=new BrowserWindow({...pos,minWidth:380,minHeight:500,title:'初音天气 · 天气详情',show:false,backgroundColor:'#10191e',icon:iconPath,webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,sandbox:true,nodeIntegration:false}});
+    details=new BrowserWindow({...pos,minWidth:380,minHeight:500,title:t('初音天气 · 天气详情'),show:false,backgroundColor:'#10191e',icon:iconPath,webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,sandbox:true,nodeIntegration:false}});
     configureWindow(details);
     details.on('close',e=>{windowsLocation.cancel();ipClient.cancel();if(!quitting){e.preventDefault();details.hide();}});
     details.once('ready-to-show',()=>{details.show();if(openDialog)details.webContents.send('ui:dialog',openDialog);});
@@ -47,13 +49,13 @@ function openDetails(openDialog){
 }
 function refresh(){for(const w of [pet,details])if(w&&!w.isDestroyed())w.webContents.send('weather:refresh');}
 function makeMenu(){return Menu.buildFromTemplate([
-  {label:'初音天气 · 桌宠',enabled:false},{label:state.summary||'和风天气',enabled:false},{type:'separator'},
-  {label:'查看天气',click:()=>openDetails()},{label:'切换城市 / IP 定位',click:()=>openDetails('search')},{label:'刷新天气',click:refresh},
-  {label:'桌宠置顶',type:'checkbox',checked:!!state.pinned,click:item=>{state.pinned=item.checked;pet.setAlwaysOnTop(item.checked);save();}},
-  {label:pet?.isVisible()?'隐藏桌宠':'显示桌宠',click:()=>pet.isVisible()?pet.hide():showPet()},
-  {type:'separator'},{label:'退出',click:()=>{quitting=true;app.quit();}}
+  {label:t('初音天气 · 桌宠'),enabled:false},{label:state.summary||t('点击初音查看天气'),enabled:false},{type:'separator'},
+  {label:t('查看天气'),click:()=>openDetails()},{label:t('切换城市 / IP 定位'),click:()=>openDetails('search')},{label:t('刷新天气'),click:refresh},{label:t('偏好设置'),click:()=>openDetails('settings')},
+  {label:t('桌宠置顶'),type:'checkbox',checked:!!state.pinned,click:item=>{state.pinned=item.checked;pet.setAlwaysOnTop(item.checked);save();}},
+  {label:t(pet?.isVisible()?'隐藏桌宠':'显示桌宠'),click:()=>pet.isVisible()?pet.hide():showPet()},
+  {type:'separator'},{label:t('退出'),click:()=>{quitting=true;app.quit();}}
 ]);}
-function updateTray(){if(tray){tray.setToolTip(('初音天气 · '+(state.summary||'点击初音查看天气')).slice(0,120));tray.setContextMenu(makeMenu());}}
+function updateTray(){if(tray){tray.setToolTip((t('初音天气')+' · '+(state.summary||t('点击初音查看天气'))).slice(0,120));tray.setContextMenu(makeMenu());}}
 if(!app.requestSingleInstanceLock())app.quit();
 else{
   app.on('second-instance',showPet);app.on('before-quit',()=>{windowsLocation.cancel();ipClient.cancel();quitting=true;});app.on('activate',showPet);
@@ -73,7 +75,7 @@ else{
     });
     const area=screen.getPrimaryDisplay().workArea;
     const bounds=constrain({x:state.x??area.x+area.width-254,y:state.y??area.y+area.height-290,width:232,height:264});
-    pet=new BrowserWindow({...bounds,frame:false,transparent:true,backgroundColor:'#00000000',hasShadow:false,resizable:false,show:false,skipTaskbar:true,alwaysOnTop:state.pinned,title:'初音天气 · 桌宠',icon:iconPath,webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,sandbox:true,nodeIntegration:false}});
+    pet=new BrowserWindow({...bounds,frame:false,transparent:true,backgroundColor:'#00000000',hasShadow:false,resizable:false,show:false,skipTaskbar:true,alwaysOnTop:state.pinned,title:t('初音天气 · 桌宠'),icon:iconPath,webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,sandbox:true,nodeIntegration:false}});
     configureWindow(pet);pet.once('ready-to-show',showPet);pet.on('close',e=>{if(!quitting){e.preventDefault();pet.hide();}});
     pet.webContents.session.setPermissionRequestHandler((_w,_p,callback)=>callback(false));
     tray=new Tray(nativeImage.createFromPath(iconPath));tray.on('click',showPet);tray.on('double-click',()=>openDetails());updateTray();
@@ -94,9 +96,9 @@ else{
     ipcMain.handle('weather:preferences',event=>trusted(event)?state.preferences:null);
     ipcMain.on('weather:preferences:set',(event,p)=>{
       if(!trusted(event)||event.sender!==details?.webContents||!p)return;
-      const next={theme:['solar','light','dark','system'].includes(p.theme)?p.theme:'solar',unit:p.unit==='F'?'F':'C'};
+      const next={theme:['solar','light','dark','system'].includes(p.theme)?p.theme:'solar',unit:p.unit==='F'?'F':'C',language:['zh-CN','zh-TW','en','ja'].includes(p.language)?p.language:'zh-CN'};
       if(JSON.stringify(next)===JSON.stringify(state.preferences))return;
-      state.preferences=next;save();pet.webContents.send('weather:preferencesChanged',next);
+      state.preferences=next;save();updateTray();pet.setTitle(t('初音天气 · 桌宠'));details?.setTitle(t('初音天气 · 天气详情'));pet.webContents.send('weather:preferencesChanged',next);
     });
     ipcMain.on('weather:city:set',(event,c)=>{
       if(!trusted(event)||!c||!Number.isFinite(Number(c.lat))||!Number.isFinite(Number(c.lon))||Math.abs(Number(c.lat))>90||Math.abs(Number(c.lon))>180)return;

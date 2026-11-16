@@ -15,6 +15,8 @@ final class WidgetSolarScheduler {
         PendingIntent action = PendingIntent.getBroadcast(context, 39003,
             new Intent(context, MikuWeatherWidget.class).setAction(REDRAW), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         manager.cancel(action);
+        Instant midnight = java.time.LocalDate.now().plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant();
+        if (boundary == null || midnight.isBefore(boundary)) boundary = midnight;
         if (boundary != null && MikuWeatherWidget.widgetCount(context) > 0)
             manager.set(AlarmManager.RTC, Math.max(System.currentTimeMillis() + 1000, boundary.toEpochMilli()), action);
     }

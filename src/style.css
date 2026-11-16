@@ -10,3 +10,10 @@
 .mini .sidebar,.mini .metrics,.mini .hourly,.mini .bottom-grid,.mini .page-heading p,.mini .page-heading .eyebrow,.mini .attributions{display:none}.mini main{margin:0;width:100%;padding:0 16px}.mini .topbar{height:49px}.mini .page-heading{margin:14px 0}.mini .page-heading h1{font-size:23px}.mini .hero{min-height:246px}.mini footer>span{display:none}.mini footer{padding-top:15px}.mini .hero-main{padding-left:18px}.mini .temperature{font-size:73px}.mini .miku-hero{width:155px}.mini .hero-message{padding-left:14px;font-size:9px}.mini .hero-number{display:none}
 .location-card{padding:16px;margin:4px 0 20px;background:var(--bg);border:1px solid var(--border);border-radius:12px}.locate-button{display:inline-flex;align-items:center;gap:7px}.location-card p{font-size:11px;line-height:1.6;margin:12px 0 0}#location-error:not(:empty){font-size:12px;color:#e5a890;margin-top:12px}.widget-actions{display:flex;flex-wrap:wrap;gap:10px}
 .weather-icon{width:27px;height:27px;object-fit:contain;flex-shrink:0}.condition .weather-icon{width:35px;height:35px}.hour .weather-icon{width:30px;height:30px;position:relative;z-index:1;margin:16px auto 0}.day-condition .weather-icon{width:26px;height:26px}@media(max-width:520px){.condition .weather-icon{width:27px;height:27px}.day-condition .weather-icon{width:22px;height:22px}}
+
+.setting-row select{max-width:60%;min-width:115px;}
+.setting-row>span{min-width:0;padding-right:12px;}
+.setting-row small{max-width:220px;}
+html[lang="en"] .metric-label{font-size:12px;}
+html[lang="en"] .hero-message{font-size:12px;}
+body{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);}

@@ -1,6 +1,6 @@
 {
   "name": "miku-weather-reborn",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "private": true,
   "description": "初音天气 · 重制版，Windows 与 Android 客户端",
   "author": "Miku Weather Reborn contributors",
@@ -14,11 +14,15 @@
     "configure": "node scripts/configure.mjs",
     "desktop": "npm run build && pwsh -NoProfile -File scripts/build-location.ps1 && electron .",
     "package:win": "npm run build && node scripts/package-windows.mjs",
-    "android:sync": "npm run build && cap sync android"
+    "android:sync": "npm run build && cap sync android",
+    "ios:sync": "npm run build && cap sync ios",
+    "ios:unsigned": "bash scripts/build-ios.sh"
   },
   "dependencies": {
-    "@capacitor/core": "^7.4.4",
     "@capacitor/android": "^7.4.4",
+    "@capacitor/core": "^7.4.4",
+    "@capacitor/geolocation": "^7.1.8",
+    "@capacitor/ios": "^7.6.10",
     "lucide": "^0.468.0"
   },
   "devDependencies": {
@@ -40,7 +44,8 @@
       "LICENSE",
       "THIRD_PARTY_NOTICES.md",
       "!node_modules/**/*",
-      "!desktop/private.json"
+      "!desktop/private.json",
+      "src/locales.json"
     ],
     "npmRebuild": false,
     "asarUnpack": [

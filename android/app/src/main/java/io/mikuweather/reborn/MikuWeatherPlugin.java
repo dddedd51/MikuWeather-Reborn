@@ -108,6 +108,7 @@ public class MikuWeatherPlugin extends Plugin {
     @PluginMethod public void selectCity(PluginCall call) {
         try {
             WidgetPreferences.select(getContext(), call.getObject("city"), call.getString("unit", "C"), call.getString("theme", "solar"));
+            WidgetPreferences.language(getContext(), call.getString("language", "zh-CN"));
             MikuWeatherWidget.updateAll(getContext());
             WidgetUpdateService.schedule(getContext(), true);
             JSObject result = new JSObject(); result.put("ok", true); call.resolve(result);

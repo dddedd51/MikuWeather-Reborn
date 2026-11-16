@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { createClient } from '../shared/qweather.cjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
 let config = {};
-try { config=JSON.parse(readFileSync(root+'desktop/private.json','utf8')); } catch {}
+try { config=JSON.parse(readFileSync(root+'desktop/service.json','utf8')); } catch {}
 const client=createClient(config);
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.ico':'image/x-icon','.txt':'text/plain'};
 createServer(async(req,res)=>{

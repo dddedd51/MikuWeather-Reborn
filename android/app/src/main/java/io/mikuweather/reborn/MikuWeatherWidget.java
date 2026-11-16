@@ -39,51 +39,32 @@ public class MikuWeatherWidget extends AppWidgetProvider {
         int height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, compactProvider ? 170 : 180);
         if (width <= 0) width = compactProvider ? 170 : 320;
         if (height <= 0) height = compactProvider ? 170 : 180;
-        WidgetCardLayout layout = WidgetCardLayout.fit(compactProvider, width, height, context.getResources().getConfiguration().fontScale,
-            data.temperature, data.hasFeels, data.hasRange);
-        int primary = Color.parseColor(data.appearance.night ? "#F2F8F9" : "#163A40");
-        int secondary = Color.parseColor(data.appearance.night ? "#B4CDD2" : "#4A747A");
-        int accent = Color.parseColor(data.appearance.night ? "#88E3D5" : "#087F7E");
-        views.setInt(R.id.widget_card, "setBackgroundResource", data.appearance.night ? R.drawable.widget_card_dark : R.drawable.widget_card_light);
+        WidgetClockLayout layout = WidgetClockLayout.fit(compactProvider, width, height, context.getResources().getConfiguration().fontScale);
         int padding = Math.round(layout.padding * context.getResources().getDisplayMetrics().density);
-        views.setViewPadding(R.id.widget_card, padding, padding, padding, padding);
-        views.setTextViewText(R.id.widget_city, data.name + " · °" + data.unit);
-        views.setString(R.id.widget_clock, "setTimeZone", data.zone.getId());
-        views.setTextViewText(R.id.widget_temp, data.temperature);
-        views.setTextViewText(R.id.widget_weather, data.condition);
-        views.setTextViewText(R.id.widget_feels, data.feels);
-        views.setTextViewText(R.id.widget_range, data.range);
-        views.setTextViewText(R.id.widget_hint, data.hint);
-        String source = width < 210 ? "和风天气" : "数据来自和风天气";
-        if (!layout.hint && data.cached) source += " · 缓存";
-        views.setTextViewText(R.id.widget_source, source);
-        views.setViewVisibility(R.id.widget_clock, layout.clock ? View.VISIBLE : View.GONE);
-        views.setViewVisibility(R.id.widget_feels, layout.feels ? View.VISIBLE : View.GONE);
-        views.setViewVisibility(R.id.widget_range, layout.range ? View.VISIBLE : View.GONE);
-        views.setViewVisibility(R.id.widget_hint, layout.hint ? View.VISIBLE : View.GONE);
-        text(views, R.id.widget_city, layout.city, primary);
-        text(views, R.id.widget_clock, layout.meta, secondary);
-        text(views, R.id.widget_temp, layout.temperature, primary);
-        text(views, R.id.widget_weather, layout.normal, primary);
-        text(views, R.id.widget_feels, layout.normal, secondary);
-        text(views, R.id.widget_range, layout.meta, secondary);
-        text(views, R.id.widget_hint, layout.meta, secondary);
-        text(views, R.id.widget_source, layout.meta, secondary);
-        text(views, R.id.widget_refresh, 20, accent);
-        int drawable = drawable(WeatherValues.solarArt(data.code, data.solar.night));
-        String pixel = data.hasWeather ? PixelWeatherIcons.solarCondition(data.code, data.solar.night) : null;
-        int pixelResource = pixel == null ? 0 : pixelDrawable(pixel);
-        views.setViewVisibility(R.id.widget_icon, pixelResource == 0 ? View.GONE : View.VISIBLE);
-        if (pixelResource != 0) views.setImageViewResource(R.id.widget_icon, pixelResource);
-        views.setImageViewResource(R.id.widget_miku, drawable);
-        views.setContentDescription(R.id.widget_root, data.name + "，" + data.temperature + data.unit + "，" + data.condition + "，"
-            + (data.cached ? "缓存观测 " : "观测 ") + data.observed + "。数据来自和风天气。点击查看天气");
+        views.setViewPadding(R.id.widget_root, padding, padding, padding, padding);
+        // A native TextClock continues ticking without an app process or periodic network requests.
+        views.setString(R.id.widget_clock, "setTimeZone", java.util.TimeZone.getDefault().getID());
+        java.util.Locale locale = java.util.Locale.forLanguageTag(WidgetPreferences.language(context));
+        String datePattern = "en".equals(locale.getLanguage()) ? "MMM d EEE" : "M月d日 EEE";
+        String date = java.time.format.DateTimeFormatter.ofPattern(datePattern, locale).format(java.time.ZonedDateTime.now());
+        views.setTextViewText(R.id.widget_date, date);
+        String condition = data.hasWeather ? UiText.t(context, data.condition) + "  " + data.temperature : UiText.word(context,"waiting");
+        views.setTextViewText(R.id.widget_weather, condition);
+        views.setTextViewText(R.id.widget_city, data.name + (data.cached ? " · " + UiText.word(context,"cached") : ""));
+        views.setViewVisibility(R.id.widget_city, layout.city ? View.VISIBLE : View.GONE);
+        text(views, R.id.widget_clock, layout.clock, Color.WHITE);
+        text(views, R.id.widget_date, layout.date, Color.WHITE);
+        text(views, R.id.widget_weather, layout.weather, Color.WHITE);
+        text(views, R.id.widget_city, layout.meta, Color.parseColor("#E6FFFFFF"));
+        views.setImageViewResource(R.id.widget_miku, drawable(WeatherValues.solarArt(data.code, data.solar.night)));
+        views.setContentDescription(R.id.widget_root, data.name + ", " + condition + ", " + date + ". " + UiText.word(context,"open"));
+        views.setContentDescription(R.id.widget_miku, UiText.word(context,"refresh"));
         Intent open = new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent launch = PendingIntent.getActivity(context, 0, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         views.setOnClickPendingIntent(R.id.widget_root, launch);
         Intent refresh = new Intent(context, compactProviderClass(compactProvider)).setAction(REFRESH);
         PendingIntent refreshIntent = PendingIntent.getBroadcast(context, id, refresh, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        views.setOnClickPendingIntent(R.id.widget_refresh, refreshIntent);
+        views.setOnClickPendingIntent(R.id.widget_miku, refreshIntent);
         manager.updateAppWidget(id, views);
     }
     private static void text(RemoteViews views, int id, float size, int color) {
@@ -140,7 +121,7 @@ public class MikuWeatherWidget extends AppWidgetProvider {
         super.onReceive(context, intent);
         if (REFRESH.equals(intent.getAction())) { updateAll(context); WidgetUpdateService.schedule(context, true); }
         if (WidgetSolarScheduler.REDRAW.equals(intent.getAction()) || Intent.ACTION_TIME_CHANGED.equals(intent.getAction())
-                || Intent.ACTION_TIMEZONE_CHANGED.equals(intent.getAction()) || Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())
+                || Intent.ACTION_DATE_CHANGED.equals(intent.getAction()) || Intent.ACTION_TIMEZONE_CHANGED.equals(intent.getAction()) || Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())
                 || Intent.ACTION_CONFIGURATION_CHANGED.equals(intent.getAction())) {
             updateAll(context);
             if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) WidgetUpdateService.schedule(context, true);
