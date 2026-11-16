@@ -25,7 +25,7 @@ final class WidgetRefreshFeedback {
     static synchronized long begin(Context c,JSONObject city){
         SharedPreferences p=prefs(c);String key=key(city);
         if(!"queued".equals(p.getString(key+":state","")))return 0;
-        long ticket=p.getLong(key+":ticket",0);p.edit().putString(key+":state","running").apply();return ticket;
+        long ticket=p.getLong(key+":ticket",0);p.edit().putString(key+":state","running").putLong(key+":at",System.currentTimeMillis()).apply();return ticket;
     }
     static synchronized void finish(Context c,JSONObject city,long ticket,String state){
         SharedPreferences p=prefs(c);String key=key(city);

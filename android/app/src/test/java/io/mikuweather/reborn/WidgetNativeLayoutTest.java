@@ -39,14 +39,16 @@ public class WidgetNativeLayoutTest {
         remote.setImageViewBitmap(R.id.widget_backdrop,WidgetBackdrop.bitmap(palette,width-plan.padding*2,height-plan.padding*2));
         remote.setImageViewResource(R.id.widget_miku,night?R.drawable.miku_rain_night:R.drawable.miku_rain_day);
         remote.setTextViewText(R.id.widget_refresh_status,"更新成功");remote.setTextColor(R.id.widget_refresh_status,palette.text);
+        remote.setViewVisibility(R.id.widget_refresh_status,View.VISIBLE);
         View root=remote.apply(context,new FrameLayout(context));
+        root.findViewById(R.id.widget_clock).onVisibilityAggregated(true);
         ((TextView)root.findViewById(R.id.widget_clock)).setText("15:44");
         int w=Math.round(width*context.getResources().getDisplayMetrics().density),h=Math.round((height-hostShrink)*context.getResources().getDisplayMetrics().density);
         root.measure(View.MeasureSpec.makeMeasureSpec(w,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(h,View.MeasureSpec.EXACTLY));root.layout(0,0,w,h);
         return root;
     }
     private void assertComplete(View root){
-        for(int id:new int[]{R.id.widget_clock,R.id.widget_temperature,R.id.widget_date,R.id.widget_weather,R.id.widget_city}){
+        for(int id:new int[]{R.id.widget_clock,R.id.widget_temperature,R.id.widget_date,R.id.widget_weather,R.id.widget_city,R.id.widget_refresh_status}){
             TextView row=root.findViewById(id);if(row.getVisibility()!=View.VISIBLE)continue;
             assertNotNull("native text layout",row.getLayout());
             int needed=row.getLayout().getHeight()+row.getCompoundPaddingTop()+row.getCompoundPaddingBottom();
@@ -69,6 +71,7 @@ public class WidgetNativeLayoutTest {
     @Test public void cityKeepsFullLineWhenLauncherProvidesSlightlyLessHeight() throws Exception {
         for(boolean night:new boolean[]{false,true}){
             View root=render(320,180,3,140,"zh-CN","14°",night,4);assertComplete(root);
+            TextView clock=root.findViewById(R.id.widget_clock);assertEquals("15:44",clock.getText().toString());
             TextView city=root.findViewById(R.id.widget_city);assertEquals(View.VISIBLE,city.getVisibility());assertEquals("綦江",city.getText().toString());
             File folder=new File("build/reports/widget-layout");assertTrue(folder.isDirectory()||folder.mkdirs());
             Bitmap bitmap=Bitmap.createBitmap(root.getWidth(),root.getHeight(),Bitmap.Config.ARGB_8888);root.draw(new Canvas(bitmap));
