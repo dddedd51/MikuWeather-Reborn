@@ -2,6 +2,8 @@ package io.mikuweather.reborn;
 import android.content.Context;
 import org.json.JSONObject;
 import org.junit.Test;
+import org.junit.Before;
+import org.junit.After;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -10,10 +12,19 @@ import org.robolectric.Shadows;
 import android.os.Looper;
 import android.content.Intent;
 import java.time.Duration;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import static org.junit.Assert.*;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk=35)
 public class WidgetFeedbackTest {
+    @Before public void fixedClock(){WidgetRefreshFeedback.clock=Clock.fixed(Instant.parse("2026-11-16T00:00:00Z"),ZoneOffset.UTC);}
+    @After public void restoreClock(){WidgetRefreshFeedback.clock=Clock.systemUTC();}
+    private void advance(long millis){
+        WidgetRefreshFeedback.clock=Clock.offset(WidgetRefreshFeedback.clock,Duration.ofMillis(millis));
+        Shadows.shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(millis));
+    }
     private JSONObject city(double lat) throws Exception{return new JSONObject().put("id","city").put("name","綦江").put("lat",lat).put("lon",106.7).put("tz","Asia/Shanghai");}
     @Test public void refreshReportsProgressAndCompletionWithoutOverwritingANewerAttempt() throws Exception {
         Context c=RuntimeEnvironment.getApplication();JSONObject city=city(29);
@@ -44,9 +55,9 @@ public class WidgetFeedbackTest {
         Intent timer=Shadows.shadowOf(RuntimeEnvironment.getApplication()).getBroadcastIntents().stream()
             .filter(i->WidgetRefreshFeedback.DISMISS_SUCCESS.equals(i.getAction())).reduce((a,b)->b).orElseThrow();
         new MikuWeatherWidget().onReceive(c,timer);
-        Shadows.shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(2999));
+        advance(2999);
         assertEquals("更新成功",WidgetRefreshFeedback.label(c,city));
-        Shadows.shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(1));
+        advance(1);
         assertEquals("",WidgetRefreshFeedback.label(c,city));
         assertFalse(WidgetRefreshFeedback.clearSuccess(c,WidgetPreferences.key(city),ticket,timer.getLongExtra("shownAt",0)));
     }
@@ -58,7 +69,7 @@ public class WidgetFeedbackTest {
         new MikuWeatherWidget().onReceive(c,timer);
         WidgetRefreshFeedback.queue(c,city);long next=WidgetRefreshFeedback.begin(c,city);
         WidgetRefreshFeedback.finish(c,city,next,"failed");
-        Shadows.shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(3000));
+        advance(3000);
         assertEquals("更新失败",WidgetRefreshFeedback.label(c,city));
     }
 }

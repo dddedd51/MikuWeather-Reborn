@@ -5,12 +5,15 @@ import android.content.SharedPreferences;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
+import java.time.Clock;
 import org.json.JSONObject;
 
 /** Feedback belongs to the selected city and to one explicit refresh attempt. */
 final class WidgetRefreshFeedback {
     static final long SUCCESS_VISIBLE_MS=3000;
     static final String DISMISS_SUCCESS="io.mikuweather.reborn.WIDGET_DISMISS_SUCCESS";
+    static Clock clock=Clock.systemUTC();
+    static long now(){return clock.millis();}
     private static SharedPreferences prefs(Context c){return c.getSharedPreferences("miku_widget_feedback",Context.MODE_PRIVATE);}
     private static String key(JSONObject city){return WidgetPreferences.key(city);}
     static boolean online(Context c){
@@ -21,19 +24,19 @@ final class WidgetRefreshFeedback {
     }
     static synchronized boolean queue(Context c,JSONObject city){
         SharedPreferences p=prefs(c);String key=key(city),state=p.getString(key+":state","");
-        long now=System.currentTimeMillis();
+        long now=now();
         if(("queued".equals(state)||"running".equals(state))&&now-p.getLong(key+":at",0)<120000)return false;
         p.edit().putString(key+":state","queued").putLong(key+":at",now).putLong(key+":ticket",p.getLong(key+":ticket",0)+1).apply();return true;
     }
     static synchronized long begin(Context c,JSONObject city){
         SharedPreferences p=prefs(c);String key=key(city);
         if(!"queued".equals(p.getString(key+":state","")))return 0;
-        long ticket=p.getLong(key+":ticket",0);p.edit().putString(key+":state","running").putLong(key+":at",System.currentTimeMillis()).apply();return ticket;
+        long ticket=p.getLong(key+":ticket",0);p.edit().putString(key+":state","running").putLong(key+":at",now()).apply();return ticket;
     }
     static synchronized void finish(Context c,JSONObject city,long ticket,String state){
         SharedPreferences p=prefs(c);String key=key(city);
         if(ticket==0||ticket!=p.getLong(key+":ticket",0))return;
-        long shownAt=System.currentTimeMillis();
+        long shownAt=now();
         p.edit().putString(key+":state",state).putLong(key+":at",shownAt).apply();
         if("success".equals(state))c.sendBroadcast(new Intent(c,MikuWeatherWidget.class).setAction(DISMISS_SUCCESS)
             .putExtra("cityKey",key).putExtra("ticket",ticket).putExtra("shownAt",shownAt));
@@ -46,12 +49,12 @@ final class WidgetRefreshFeedback {
     }
     static synchronized void offline(Context c,JSONObject city){
         SharedPreferences p=prefs(c);String key=key(city);
-        p.edit().putString(key+":state","offline").putLong(key+":at",System.currentTimeMillis()).putLong(key+":ticket",p.getLong(key+":ticket",0)+1).apply();
+        p.edit().putString(key+":state","offline").putLong(key+":at",now()).putLong(key+":ticket",p.getLong(key+":ticket",0)+1).apply();
     }
     static String label(Context c,JSONObject city){
         SharedPreferences p=prefs(c);String key=key(city),state=p.getString(key+":state","");
-        if("success".equals(state)&&System.currentTimeMillis()-p.getLong(key+":at",0)>=SUCCESS_VISIBLE_MS)return "";
-        if(("queued".equals(state)||"running".equals(state))&&System.currentTimeMillis()-p.getLong(key+":at",0)>120000)return UiText.t(c,"刷新超时");
+        if("success".equals(state)&&now()-p.getLong(key+":at",0)>=SUCCESS_VISIBLE_MS)return "";
+        if(("queued".equals(state)||"running".equals(state))&&now()-p.getLong(key+":at",0)>120000)return UiText.t(c,"刷新超时");
         String text;
         switch(state){
             case "queued":text="等待刷新";break;

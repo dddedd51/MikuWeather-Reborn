@@ -125,7 +125,7 @@ public class MikuWeatherWidget extends AppWidgetProvider {
             final android.content.BroadcastReceiver.PendingResult pending=goAsync();
             long shownAt=intent.getLongExtra("shownAt",0),ticket=intent.getLongExtra("ticket",0);
             String cityKey=intent.getStringExtra("cityKey");
-            long delay=Math.max(0,Math.min(WidgetRefreshFeedback.SUCCESS_VISIBLE_MS,shownAt+WidgetRefreshFeedback.SUCCESS_VISIBLE_MS-System.currentTimeMillis()));
+            long delay=Math.max(0,Math.min(WidgetRefreshFeedback.SUCCESS_VISIBLE_MS,shownAt+WidgetRefreshFeedback.SUCCESS_VISIBLE_MS-WidgetRefreshFeedback.now()));
             new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(()->{
                 try{
                     if(cityKey!=null&&WidgetRefreshFeedback.clearSuccess(context,cityKey,ticket,shownAt)
