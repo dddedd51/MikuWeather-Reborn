@@ -1,238 +1,1342 @@
 {
- "初音天气首页":["初音天氣首頁","Miku Weather home","ミク天気ホーム"],
- "初音天气":["初音天氣","Miku Weather","ミク天気"],
- "每一座城，都有好天气":["每一座城，都有好天氣","Good weather in every city","どの街にも、いい天気を"],
- "搜索城市":["搜尋城市","Search cities","都市を検索"],
- "我的城市":["我的城市","My cities","マイ都市"],
- "已收藏的城市":["已收藏的城市","Saved cities","保存した都市"],
- "添加城市":["新增城市","Add a city","都市を追加"],
- "让每一天，都有一点初音绿。":["讓每一天，都有一點初音綠。","A little Miku green, every day.","毎日に、ミクの彩りを。"],
- "偏好设置":["偏好設定","Preferences","環境設定"],
- "关于重制版":["關於重製版","About Reborn","Reborn について"],
- "天气总览":["天氣總覽","Weather overview","天気の概要"],
- "退出演示":["離開示範","Exit demo","デモを終了"],
- "切换温度单位":["切換溫度單位","Change temperature unit","温度の単位を切り替え"],
- "切换明暗主题":["切換明暗主題","Toggle light / dark","ライト・ダークを切り替え"],
- "迷你窗口":["迷你視窗","Mini window","ミニウィンドウ"],
- "设置":["設定","Settings","設定"],
- "更新天气":["更新天氣","Refresh weather","天気を更新"],
- "，当前显示上次保存的数据。":["，目前顯示上次儲存的資料。",". Showing the last saved weather.","。前回保存した天気を表示しています。"],
- "重试":["重試","Retry","再試行"],
- "以下为界面演示数据，不代表当地实际天气。":["以下為介面示範資料，不代表當地實際天氣。","Demo data only. This is not the actual local weather.","デモ用データです。現地の実際の天気ではありません。"],
- "切换实时天气":["切換即時天氣","Show live weather","現在の天気に切り替え"],
- "当前天气":["目前天氣","Current weather","現在の天気"],
- "演示数据 · 非实时天气":["示範資料 · 非即時天氣","Demo · not live weather","デモ · 実際の天気ではありません"],
- "正在更新天气":["正在更新天氣","Updating weather","天気を更新中"],
- "离线缓存 · 请留意更新时间":["離線快取 · 請留意更新時間","Offline cache · check update time","オフライン · 更新時刻をご確認ください"],
- "等待天气数据":["等待天氣資料","Waiting for weather","天気を取得しています"],
- "观测于 ":["觀測於 ","Observed at ","観測時刻 "],
- "等风，也等你":["等風，也等你","Waiting for the weather","天気を待っています"],
- "体感 ":["體感 ","Feels like ","体感 "],
- "天气连接中，初音正在等你。":["天氣連線中，初音正在等你。","Connecting to the weather, with Miku.","ミクと一緒に、天気を取得中。"],
- "出门记得带伞，让初音陪你听雨。":["出門記得帶傘，讓初音陪你聽雨。","Take an umbrella and enjoy the rain with Miku.","傘を忘れずに。ミクと雨の音を楽しもう。"],
- "夜色温柔，今天也辛苦了。":["夜色溫柔，今天也辛苦了。","A gentle night. You did well today.","穏やかな夜。今日もお疲れさま。"],
- "把天气装进口袋，把好心情留给今天。":["把天氣裝進口袋，把好心情留給今天。","Carry the weather. Enjoy your day.","天気をポケットに、今日もいい気分で。"],
- "暂未获取到实时数据。":["尚未取得即時資料。","Live weather is not available yet.","現在の天気はまだ取得できていません。"],
- "选择城市":["選擇城市","Choose a city","都市を選択"],
- "预览界面":["預覽介面","Preview","プレビュー"],
- "天气详情":["天氣詳情","Weather details","天気の詳細"],
- "相对湿度":["相對濕度","Humidity","湿度"],
- "空气中的水分":["空氣中的水分","Moisture in the air","空気中の水分"],
- "当前风况":["目前風況","Current wind","現在の風"],
- "小时降水量":["每小時降水量","Hourly precipitation","1時間降水量"],
- "过去一小时":["過去一小時","Over the past hour","過去1時間"],
- "能见度":["能見度","Visibility","視程"],
- "看见更远的风景":["看見更遠的風景","How far you can see","見通せる距離"],
- "逐小时预报":["逐小時預報","Hourly forecast","時間ごとの予報"],
- "未来 ":["未來 ","Next ","今後 "],
- " 小时":[" 小時"," hours"," 時間"],
- "正在获取逐小时天气…":["正在取得逐小時天氣…","Loading hourly weather…","時間ごとの天気を取得中…"],
- "暂时没有逐小时预报":["暫時沒有逐小時預報","Hourly forecast unavailable","時間ごとの予報はありません"],
- "暂无逐小时预报":["暫無逐小時預報","Hourly forecast unavailable","時間ごとの予報はありません"],
- "七日天气":["七日天氣","7-day forecast","7日間の天気"],
- "七日预报":["七日預報","7-day forecast","7日間の予報"],
- "好好安排每一天":["好好安排每一天","Plan each day","毎日の予定に"],
- "暂无逐日预报":["暫無逐日預報","Daily forecast unavailable","日ごとの予報はありません"],
- "明日小笺":["明日小箋","Tomorrow's note","明日のひとこと"],
- "带上一把伞，从容迎接明天。":["帶上一把傘，從容迎接明天。","Take an umbrella for tomorrow.","明日は傘を持って、ゆっくり出かけよう。"],
- "新的一天，也要和初音一起出发。":["新的一天，也要和初音一起出發。","A new day, together with Miku.","新しい一日も、ミクと一緒に。"],
- "明天的天气，稍后见。":["明天的天氣，稍後見。","Tomorrow's weather will be here soon.","明日の天気は、もう少しお待ちください。"],
- "日出":["日出","Sunrise","日の出"],
- "日落":["日落","Sunset","日の入り"],
- "部分预报暂不可用：":["部分預報暫不可用：","Some forecasts are unavailable: ","一部の予報を取得できません："],
- "数据来自和风天气":["資料來自和風天氣","Weather by QWeather","気象データ：QWeather"],
- "致敬每一份热爱":["致敬每一份熱愛","Made with love","すべての「好き」に敬意を"],
- "数据来源声明":["資料來源聲明","Data attribution","データ提供元"],
- "今天":["今天","Today","今日"],
- "明天":["明天","Tomorrow","明日"],
- "左右滚动查看24小时预报":["左右捲動查看24小時預報","Scroll horizontally for the 24-hour forecast","左右にスクロールして24時間予報を表示"],
- "降水概率":["降水機率","Chance of rain ","降水確率 "],
- "桌面小组件暂未同步，请稍后重试":["桌面小工具尚未同步，請稍後重試","Widget sync failed. Please try again.","ウィジェットを同期できません。後でもう一度お試しください。"],
- "去看看另一座城":["去看看另一座城","Explore another city","ほかの街の天気を見る"],
- "让天气，更合心意":["讓天氣，更合心意","Make it yours","お好みの設定に"],
- "关闭":["關閉","Close","閉じる"],
- "正在定位…":["正在定位…","Finding your location…","現在地を取得中…"],
- "IP 定位当前城市 · 腾讯位置服务":["IP 定位目前城市 · 騰訊位置服務","Find city by IP · Tencent Location","IP で都市を検索 · Tencent Location"],
- "定位当前城市 · GPS / 系统定位":["定位目前城市 · GPS / 系統定位","Find my city · GPS / device location","現在の都市を検索 · GPS / 端末の位置情報"],
- "定位当前城市":["定位目前城市","Find my city","現在の都市を検索"],
- "使用 Windows 系统定位":["使用 Windows 系統定位","Use Windows location","Windows の位置情報を使用"],
- "IP 定位经 Cloudflare 天气代理连接腾讯，代理把请求端公网 IP 交给腾讯匹配城市；应用不保存 IP。IP 推算可能偏到另一座城市，请先确认候选。":["IP 定位經 Cloudflare 天氣代理連接騰訊，代理把請求端公網 IP 交給騰訊比對城市；應用程式不儲存 IP。IP 推算可能偏到另一座城市，請先確認候選。","The Cloudflare proxy sends your public IP to Tencent to estimate a city. The app does not save your IP. Please confirm the suggested city; IP location may be inaccurate.","Cloudflare 経由で公開 IP を Tencent に送り、都市を推定します。アプリは IP を保存しません。推定には誤差があるため候補をご確認ください。"],
- "仅点击后申请定位权限，精确位置允许时优先 GPS；也支持系统网络定位。完成、取消或超时后停止。":["僅點選後申請定位權限，允許精確位置時優先 GPS；也支援系統網路定位。完成、取消或逾時後停止。","Location permission is requested only when tapped. GPS is preferred when precise location is allowed. Location stops on completion, cancellation or timeout.","タップしたときだけ位置情報の許可を求めます。正確な位置情報が許可されていれば GPS を優先し、完了・キャンセル・タイムアウトで停止します。"],
- "系统定位坐标仅在本机处理。":["系統定位座標僅在本機處理。","Device coordinates are processed locally. ","端末の座標は端末内だけで処理します。"],
- "设备定位坐标仅在本机匹配、不上传、不留存；选择后只请求该城市的天气。":["裝置定位座標僅在本機比對、不上傳、不留存；選擇後只請求該城市的天氣。","Coordinates are matched locally and are not uploaded or saved. Only the selected city's weather is requested.","位置座標は端末内で照合し、送信・保存しません。選択した都市の天気だけを取得します。"],
- "城市名 / 拼音":["城市名 / 拼音","City name / Pinyin","都市名 / ピンイン"],
- "例如：杭州、珠海、Tokyo":["例如：杭州、珠海、Tokyo","e.g. Hangzhou, London, Tokyo","例：杭州、東京、London"],
- "搜索":["搜尋","Search","検索"],
- "常用城市":["常用城市","Popular cities","よく使う都市"],
- "外观主题":["外觀主題","Appearance theme","外観テーマ"],
- "外观":["外觀","Appearance","外観"],
- "为你的每一天换个颜色":["為你的每一天換個顏色","A color for every day","毎日を彩るテーマ"],
- "深海绿":["深海綠","Deep sea","ディープグリーン"],
- "薄荷白":["薄荷白","Mint white","ミントホワイト"],
- "跟随系统":["跟隨系統","System","システムに合わせる"],
- "温度单位":["溫度單位","Temperature unit","温度の単位"],
- "摄氏度 °C":["攝氏度 °C","Celsius °C","摂氏 °C"],
- "华氏度 °F":["華氏度 °F","Fahrenheit °F","華氏 °F"],
- "桌面置顶":["桌面置頂","Always on top","最前面に表示"],
- "让初音一直陪在屏幕上":["讓初音一直陪在螢幕上","Keep Miku on your screen","ミクをいつも画面に"],
- "切换置顶":["切換置頂","Toggle on top","最前面表示を切り替え"],
- "管理城市":["管理城市","Manage cities","都市を管理"],
- "移除":["移除","Remove","削除"],
- "每 15 分钟自动更新。网络中断时保留最近一次天气，并标明缓存状态。无需填写 API 密钥。":["每 15 分鐘自動更新。網路中斷時保留最近一次天氣，並標明快取狀態。無需填寫 API 金鑰。","Updates every 15 minutes. The latest weather is kept and marked as cached when offline. No API key is needed.","15分ごとに自動更新します。オフライン時は前回の天気をキャッシュとして表示します。API キーの入力は不要です。"],
- "返回实时天气":["返回即時天氣","Back to live weather","現在の天気に戻る"],
- "查看界面演示":["查看介面示範","View demo","デモを表示"],
- "桌面小组件":["桌面小工具","Home screen widgets","ホーム画面ウィジェット"],
- "初音、时钟与天气常驻手机桌面。小组件跟随当前城市和温度单位，点击打开天气详情。":["初音、時鐘與天氣常駐手機桌面。小工具會同步城市、單位與語言，點選開啟詳情。","Miku, time and weather on your home screen. Widgets follow your city, unit and language. Tap to open details.","ホーム画面にミク、時計、天気を表示。都市・単位・言語を同期し、タップで詳細を開きます。"],
- "添加宽版 · 4×2":["新增寬版 · 4×2","Add wide · 4×2","横長を追加 · 4×2"],
- "添加紧凑版 · 2×2":["新增精簡版 · 2×2","Add compact · 2×2","コンパクトを追加 · 2×2"],
- "也可长按手机桌面，选择“小组件”→“初音天气”。后台更新时间受系统省电策略影响。":["也可長按手機桌面，選擇「小工具」→「初音天氣」。背景更新時間受系統省電策略影響。","You can also long-press the home screen and choose Widgets → Miku Weather. Battery saving may delay background updates.","ホーム画面を長押しして「ウィジェット」→「ミク天気」からも追加できます。省電力設定により更新が遅れることがあります。"],
- "自动 · 日出浅色 / 日落深色":["自動 · 日出淺色 / 日落深色","Auto · sunrise / sunset","自動 · 日の出 / 日の入り"],
- "语言":["語言","Language","言語"],
- "立即生效，并同步桌宠与小组件":["立即生效，並同步桌寵與小工具","Applies immediately to Miku and widgets","すぐに反映し、デスクトップとウィジェットにも同期"],
- "把熟悉的初音天气，带回每一天。":["把熟悉的初音天氣，帶回每一天。","Bring familiar Miku Weather back to every day.","懐かしいミク天気を、毎日に。"],
- "这是 ":["這是 ","This is ","これは "],
- " 的非官方重制版，延续原作的天气插画与陪伴感。":[" 的非官方重製版，延續原作的天氣插畫與陪伴感。"," — an unofficial remake, keeping the original weather illustrations and companionship."," の非公式リメイクです。原作の天気イラストと寄り添う雰囲気を受け継いでいます。"],
- "原作者：":["原作者：","Original author: ","原作者："],
- "天气数据：":["天氣資料：","Weather data: ","気象データ："],
- "和风天气 QWeather":["和風天氣 QWeather","QWeather","QWeather"],
- "版本：":["版本：","Version: ","バージョン："],
- "角色插画沿用原仓库资源，角色及素材权利属于各自权利人。本项目与角色权利人无官方关联。":["角色插畫沿用原倉庫資源，角色及素材權利屬於各自權利人。本專案與角色權利人無官方關聯。","Character artwork comes from the original repository. All rights belong to their respective owners. This project is not officially affiliated with the character rights holders.","キャラクター画像は原作リポジトリの素材です。各権利はそれぞれの権利者に帰属します。本プロジェクトは権利者と公式な関係はありません。"],
- "原作许可证 · Anti-996":["原作授權條款 · Anti-996","Original license · Anti-996","原作ライセンス · Anti-996"],
- "正在读取…":["正在讀取…","Loading…","読み込み中…"],
- "城市列表与天气缓存保存在本机。主动定位在本机匹配附近城市，定位坐标不上传、不留存；天气请求经 Cloudflare 代理发送所选城市的公开中心坐标，服务凭据只保存在服务端。本地城市库来自和风官方城市列表，主要覆盖中国城市及区县。不后台定位，不记录轨迹。系统定位服务自身的数据处理由系统控制。无账号、无广告。":["城市清單與天氣快取儲存在本機。定位僅在本機比對附近城市，不上傳、不留存座標；天氣請求經 Cloudflare 代理傳送所選城市的公開中心座標，服務憑證只儲存在伺服器端。本機城市庫來自和風官方城市清單，主要涵蓋中國城市及區縣。無背景定位、軌跡、帳號或廣告。系統定位服務的資料處理由系統控制。","Cities and weather caches are stored on this device. Device location is matched locally, never uploaded or saved. Weather requests send only the selected city's public center coordinates through Cloudflare; credentials stay on the server. The local city index comes from QWeather and mainly covers China. No background location, tracking, accounts or ads. System location services follow the operating system's policies.","都市と天気キャッシュは端末内に保存します。位置情報は近隣都市の照合にのみ使い、座標を送信・保存しません。天気の取得には選択した都市の公開中心座標だけを Cloudflare 経由で送り、認証情報はサーバーに保存します。都市データは QWeather の公式リストを使用し、主に中国を対象としています。バックグラウンド測位、軌跡記録、アカウント、広告はありません。システムの位置情報サービスは OS の方針に従います。"],
- "请查看安装目录随附的 LICENSE 文件。":["請查看安裝目錄隨附的 LICENSE 檔案。","See the bundled LICENSE file.","同梱の LICENSE ファイルをご覧ください。"],
- "本地城市库暂未覆盖这个位置，请手动搜索城市":["本機城市庫尚未涵蓋此位置，請手動搜尋城市","This location is outside the local index. Please search for a city.","この地域は端末内の都市データにありません。都市を検索してください。"],
- "定位失败，仍可手动选择城市":["定位失敗，仍可手動選擇城市","Location unavailable. You can select a city manually.","位置を取得できません。都市を手動で選択できます。"],
- "白天降水概率 ":["白天降水機率 ","Daytime rain chance ","日中の降水確率 "],
- "最大紫外线指数 ":["最大紫外線指數 ","Maximum UV index ","最大 UV 指数 "],
- "白天 ":["白天 ","Day ","昼 "],
- "夜间 ":["夜間 ","Night ","夜 "],
- "刚刚更新过，请稍后再试":["剛剛更新過，請稍後再試","Just updated. Please try again shortly.","更新したばかりです。少しお待ちください。"],
- "请在桌面的确认提示中添加小组件":["請在桌面的確認提示中新增小工具","Confirm adding the widget on your home screen.","ホーム画面の確認でウィジェットを追加してください。"],
- "请长按手机桌面，在“小组件”中添加初音天气":["請長按手機桌面，在「小工具」中新增初音天氣","Long-press the home screen and add Miku Weather from Widgets.","ホーム画面を長押しし、ウィジェットからミク天気を追加してください。"],
- "已开启窗口置顶":["已開啟視窗置頂","Always on top enabled","最前面表示をオンにしました"],
- "已取消窗口置顶":["已取消視窗置頂","Always on top disabled","最前面表示をオフにしました"],
- "正在寻找这座城市…":["正在尋找這座城市…","Searching for this city…","都市を検索中…"],
- "没有找到，试试城市全名或拼音。":["沒有找到，試試城市全名或拼音。","No results. Try the full city name or Pinyin.","見つかりません。都市の正式名やピンインをお試しください。"],
- "也可以选择常用城市":["也可以選擇常用城市","You can also choose a popular city","よく使う都市からも選べます"],
- "初音正在看天气…":["初音正在看天氣…","Miku is checking the weather…","ミクが天気を確認中…"],
- "离线缓存":["離線快取","Offline cache","オフラインキャッシュ"],
- "天气暂时连不上 · 点击重试":["天氣暫時連不上 · 點選重試","Weather unavailable · tap to open","天気を取得できません · タップで開く"],
- "。点击查看天气，拖动初音可移动。":["。點選查看天氣，拖曳初音可移動。",". Click for weather; drag Miku to move.","。クリックで天気、ドラッグでミクを移動。"],
- "点击查看天气，右键管理桌宠":["點選查看天氣，右鍵管理桌寵","Click for weather; right-click for options","クリックで天気、右クリックで設定"],
- "初音桌宠，可拖动，点击查看天气":["初音桌寵，可拖曳，點選查看天氣","Miku companion: drag to move, click for weather","ミク：ドラッグで移動、クリックで天気"],
- "初音桌宠":["初音桌寵","Miku companion","デスクトップのミク"],
- "正在等天气来 ♪":["正在等天氣來 ♪","Waiting for the weather ♪","天気を待っています ♪"],
- "桌宠置顶":["桌寵置頂","Keep Miku on top","ミクを最前面に表示"],
- "查看天气":["查看天氣","View weather","天気を見る"],
- "切换城市 / IP 定位":["切換城市 / IP 定位","Change city / IP location","都市を変更 / IP で検索"],
- "刷新天气":["重新整理天氣","Refresh weather","天気を更新"],
- "隐藏桌宠":["隱藏桌寵","Hide Miku","ミクを隠す"],
- "显示桌宠":["顯示桌寵","Show Miku","ミクを表示"],
- "退出":["離開","Quit","終了"],
- "桌宠":["桌寵","Desktop companion","デスクトップ"],
- "点击初音查看天气":["點選初音查看天氣","Click Miku for weather","ミクをクリックして天気を見る"],
- "天气数据不完整":["天氣資料不完整","Incomplete weather data","天気データが不完全です"],
- "连接天气服务失败，请检查网络后重试":["連接天氣服務失敗，請檢查網路後重試","Could not connect. Check your network and try again.","接続できません。ネットワークを確認して再試行してください。"],
- "天气服务暂时不可用":["天氣服務暫時無法使用","Weather service temporarily unavailable","天気サービスを利用できません"],
- "天气服务认证失败":["天氣服務驗證失敗","Weather service authentication failed","天気サービスの認証に失敗しました"],
- "天气服务额度不足":["天氣服務額度不足","Weather service quota reached","天気サービスの利用上限に達しました"],
- "天气接口未开通或访问受限":["天氣介面未開通或存取受限","Weather access is restricted","天気サービスへのアクセスが制限されています"],
- "没有找到该地点的天气":["找不到該地點的天氣","No weather for this location","この地点の天気が見つかりません"],
- "天气服务繁忙，请稍后再试":["天氣服務忙碌中，請稍後再試","Weather service is busy. Try again later.","天気サービスが混み合っています。後でお試しください。"],
- "暂时没有天气数据":["暫時沒有天氣資料","Weather data unavailable","天気データがありません"],
- "天气服务返回了无效数据":["天氣服務傳回無效資料","Invalid weather response","天気サービスの応答が無効です"],
- "未知":["未知","Unknown","不明"],
- "东北偏北风":["東北偏北風","NNE wind","北北東の風"],
- "东北偏东风":["東北偏東風","ENE wind","東北東の風"],
- "东南偏东风":["東南偏東風","ESE wind","東南東の風"],
- "东南偏南风":["東南偏南風","SSE wind","南南東の風"],
- "西南偏南风":["西南偏南風","SSW wind","南南西の風"],
- "西南偏西风":["西南偏西風","WSW wind","西南西の風"],
- "西北偏西风":["西北偏西風","WNW wind","西北西の風"],
- "西北偏北风":["西北偏北風","NNW wind","北北西の風"],
- "东北风":["東北風","NE wind","北東の風"],
- "东南风":["東南風","SE wind","南東の風"],
- "西南风":["西南風","SW wind","南西の風"],
- "西北风":["西北風","NW wind","北西の風"],
- "北风":["北風","N wind","北の風"],
- "东风":["東風","E wind","東の風"],
- "南风":["南風","S wind","南の風"],
- "西风":["西風","W wind","西の風"],
- "静风":["靜風","Calm","静穏"],
- "风向不定":["風向不定","Variable wind","風向不定"],
- "风速":["風速","Wind speed","風速"],
- "晴间多云":["晴時多雲","Partly cloudy","晴れ時々曇り"],
- "少云":["少雲","Mostly clear","おおむね晴れ"],
- "多云":["多雲","Cloudy","曇り"],
- "晴":["晴","Clear","晴れ"],
- "阴":["陰","Overcast","曇天"],
- "强雷阵雨":["強雷陣雨","Severe thunderstorms","激しい雷雨"],
- "雷阵雨伴有冰雹":["雷陣雨伴冰雹","Thunderstorms with hail","雷雨とひょう"],
- "雷阵雨":["雷陣雨","Thunderstorms","雷雨"],
- "强阵雨":["強陣雨","Heavy showers","激しいにわか雨"],
- "阵雨":["陣雨","Showers","にわか雨"],
- "小到中雨":["小到中雨","Light to moderate rain","弱い雨から雨"],
- "中到大雨":["中到大雨","Moderate to heavy rain","雨から強い雨"],
- "大到暴雨":["大到暴雨","Heavy to torrential rain","強い雨から激しい雨"],
- "暴雨到大暴雨":["暴雨到大暴雨","Torrential rain","非常に激しい雨"],
- "大暴雨到特大暴雨":["大暴雨到特大暴雨","Extreme downpour","猛烈な雨"],
- "特大暴雨":["特大暴雨","Extreme downpour","猛烈な雨"],
- "大暴雨":["大暴雨","Severe downpour","非常に激しい雨"],
- "暴雨":["暴雨","Downpour","激しい雨"],
- "极端降雨":["極端降雨","Extreme rain","極端な大雨"],
- "毛毛雨/细雨":["毛毛雨／細雨","Drizzle","霧雨"],
- "毛毛雨":["毛毛雨","Drizzle","霧雨"],
- "冻雨":["凍雨","Freezing rain","着氷性の雨"],
- "小雨":["小雨","Light rain","小雨"],
- "中雨":["中雨","Rain","雨"],
- "大雨":["大雨","Heavy rain","強い雨"],
- "雨夹雪":["雨夾雪","Sleet","みぞれ"],
- "雨雪天气":["雨雪天氣","Rain and snow","雨と雪"],
- "阵雨夹雪":["陣雨夾雪","Sleet showers","にわかみぞれ"],
- "阵雪":["陣雪","Snow showers","にわか雪"],
- "小到中雪":["小到中雪","Light to moderate snow","小雪から雪"],
- "中到大雪":["中到大雪","Moderate to heavy snow","雪から大雪"],
- "大到暴雪":["大到暴雪","Heavy to severe snow","大雪から激しい雪"],
- "暴雪":["暴雪","Snowstorm","激しい雪"],
- "小雪":["小雪","Light snow","小雪"],
- "中雪":["中雪","Snow","雪"],
- "大雪":["大雪","Heavy snow","大雪"],
- "强浓雾":["強濃霧","Very dense fog","非常に濃い霧"],
- "特强浓雾":["特強濃霧","Extremely dense fog","極めて濃い霧"],
- "浓雾":["濃霧","Dense fog","濃霧"],
- "大雾":["大霧","Thick fog","濃い霧"],
- "薄雾":["薄霧","Mist","薄い霧"],
- "轻度霾":["輕度霾","Light haze","薄い煙霧"],
- "中度霾":["中度霾","Moderate haze","煙霧"],
- "重度霾":["重度霾","Heavy haze","濃い煙霧"],
- "严重霾":["嚴重霾","Severe haze","非常に濃い煙霧"],
- "强沙尘暴":["強沙塵暴","Severe sandstorm","激しい砂嵐"],
- "沙尘暴":["沙塵暴","Sandstorm","砂嵐"],
- "浮尘":["浮塵","Dust","浮遊する砂塵"],
- "扬沙":["揚沙","Blowing sand","風塵"],
- "雾":["霧","Fog","霧"],
- "霾":["霾","Haze","煙霧"],
- "热":["熱","Hot","暑い"],
- "冷":["冷","Cold","寒い"]
+  "初音天气首页": [
+    "初音天氣首頁",
+    "Miku Weather home",
+    "ミク天気ホーム"
+  ],
+  "初音天气": [
+    "初音天氣",
+    "Miku Weather",
+    "ミク天気"
+  ],
+  "每一座城，都有好天气": [
+    "每一座城，都有好天氣",
+    "Good weather in every city",
+    "どの街にも、いい天気を"
+  ],
+  "搜索城市": [
+    "搜尋城市",
+    "Search cities",
+    "都市を検索"
+  ],
+  "我的城市": [
+    "我的城市",
+    "My cities",
+    "マイ都市"
+  ],
+  "已收藏的城市": [
+    "已收藏的城市",
+    "Saved cities",
+    "保存した都市"
+  ],
+  "添加城市": [
+    "新增城市",
+    "Add a city",
+    "都市を追加"
+  ],
+  "让每一天，都有一点初音绿。": [
+    "讓每一天，都有一點初音綠。",
+    "A little Miku green, every day.",
+    "毎日に、ミクの彩りを。"
+  ],
+  "偏好设置": [
+    "偏好設定",
+    "Preferences",
+    "環境設定"
+  ],
+  "关于重制版": [
+    "關於重製版",
+    "About Reborn",
+    "Reborn について"
+  ],
+  "天气总览": [
+    "天氣總覽",
+    "Weather overview",
+    "天気の概要"
+  ],
+  "退出演示": [
+    "離開示範",
+    "Exit demo",
+    "デモを終了"
+  ],
+  "切换温度单位": [
+    "切換溫度單位",
+    "Change temperature unit",
+    "温度の単位を切り替え"
+  ],
+  "切换明暗主题": [
+    "切換明暗主題",
+    "Toggle light / dark",
+    "ライト・ダークを切り替え"
+  ],
+  "迷你窗口": [
+    "迷你視窗",
+    "Mini window",
+    "ミニウィンドウ"
+  ],
+  "设置": [
+    "設定",
+    "Settings",
+    "設定"
+  ],
+  "更新天气": [
+    "更新天氣",
+    "Refresh weather",
+    "天気を更新"
+  ],
+  "，当前显示上次保存的数据。": [
+    "，目前顯示上次儲存的資料。",
+    ". Showing the last saved weather.",
+    "。前回保存した天気を表示しています。"
+  ],
+  "重试": [
+    "重試",
+    "Retry",
+    "再試行"
+  ],
+  "以下为界面演示数据，不代表当地实际天气。": [
+    "以下為介面示範資料，不代表當地實際天氣。",
+    "Demo data only. This is not the actual local weather.",
+    "デモ用データです。現地の実際の天気ではありません。"
+  ],
+  "切换实时天气": [
+    "切換即時天氣",
+    "Show live weather",
+    "現在の天気に切り替え"
+  ],
+  "当前天气": [
+    "目前天氣",
+    "Current weather",
+    "現在の天気"
+  ],
+  "演示数据 · 非实时天气": [
+    "示範資料 · 非即時天氣",
+    "Demo · not live weather",
+    "デモ · 実際の天気ではありません"
+  ],
+  "正在更新天气": [
+    "正在更新天氣",
+    "Updating weather",
+    "天気を更新中"
+  ],
+  "离线缓存 · 请留意更新时间": [
+    "離線快取 · 請留意更新時間",
+    "Offline cache · check update time",
+    "オフライン · 更新時刻をご確認ください"
+  ],
+  "等待天气数据": [
+    "等待天氣資料",
+    "Waiting for weather",
+    "天気を取得しています"
+  ],
+  "观测于 ": [
+    "觀測於 ",
+    "Observed at ",
+    "観測時刻 "
+  ],
+  "等风，也等你": [
+    "等風，也等你",
+    "Waiting for the weather",
+    "天気を待っています"
+  ],
+  "体感 ": [
+    "體感 ",
+    "Feels like ",
+    "体感 "
+  ],
+  "天气连接中，初音正在等你。": [
+    "天氣連線中，初音正在等你。",
+    "Connecting to the weather, with Miku.",
+    "ミクと一緒に、天気を取得中。"
+  ],
+  "出门记得带伞，让初音陪你听雨。": [
+    "出門記得帶傘，讓初音陪你聽雨。",
+    "Take an umbrella and enjoy the rain with Miku.",
+    "傘を忘れずに。ミクと雨の音を楽しもう。"
+  ],
+  "夜色温柔，今天也辛苦了。": [
+    "夜色溫柔，今天也辛苦了。",
+    "A gentle night. You did well today.",
+    "穏やかな夜。今日もお疲れさま。"
+  ],
+  "把天气装进口袋，把好心情留给今天。": [
+    "把天氣裝進口袋，把好心情留給今天。",
+    "Carry the weather. Enjoy your day.",
+    "天気をポケットに、今日もいい気分で。"
+  ],
+  "暂未获取到实时数据。": [
+    "尚未取得即時資料。",
+    "Live weather is not available yet.",
+    "現在の天気はまだ取得できていません。"
+  ],
+  "选择城市": [
+    "選擇城市",
+    "Choose a city",
+    "都市を選択"
+  ],
+  "预览界面": [
+    "預覽介面",
+    "Preview",
+    "プレビュー"
+  ],
+  "天气详情": [
+    "天氣詳情",
+    "Weather details",
+    "天気の詳細"
+  ],
+  "相对湿度": [
+    "相對濕度",
+    "Humidity",
+    "湿度"
+  ],
+  "空气中的水分": [
+    "空氣中的水分",
+    "Moisture in the air",
+    "空気中の水分"
+  ],
+  "当前风况": [
+    "目前風況",
+    "Current wind",
+    "現在の風"
+  ],
+  "小时降水量": [
+    "每小時降水量",
+    "Hourly precipitation",
+    "1時間降水量"
+  ],
+  "过去一小时": [
+    "過去一小時",
+    "Over the past hour",
+    "過去1時間"
+  ],
+  "能见度": [
+    "能見度",
+    "Visibility",
+    "視程"
+  ],
+  "看见更远的风景": [
+    "看見更遠的風景",
+    "How far you can see",
+    "見通せる距離"
+  ],
+  "逐小时预报": [
+    "逐小時預報",
+    "Hourly forecast",
+    "時間ごとの予報"
+  ],
+  "未来 ": [
+    "未來 ",
+    "Next ",
+    "今後 "
+  ],
+  " 小时": [
+    " 小時",
+    " hours",
+    " 時間"
+  ],
+  "正在获取逐小时天气…": [
+    "正在取得逐小時天氣…",
+    "Loading hourly weather…",
+    "時間ごとの天気を取得中…"
+  ],
+  "暂时没有逐小时预报": [
+    "暫時沒有逐小時預報",
+    "Hourly forecast unavailable",
+    "時間ごとの予報はありません"
+  ],
+  "暂无逐小时预报": [
+    "暫無逐小時預報",
+    "Hourly forecast unavailable",
+    "時間ごとの予報はありません"
+  ],
+  "七日天气": [
+    "七日天氣",
+    "7-day forecast",
+    "7日間の天気"
+  ],
+  "七日预报": [
+    "七日預報",
+    "7-day forecast",
+    "7日間の予報"
+  ],
+  "好好安排每一天": [
+    "好好安排每一天",
+    "Plan each day",
+    "毎日の予定に"
+  ],
+  "暂无逐日预报": [
+    "暫無逐日預報",
+    "Daily forecast unavailable",
+    "日ごとの予報はありません"
+  ],
+  "明日小笺": [
+    "明日小箋",
+    "Tomorrow's note",
+    "明日のひとこと"
+  ],
+  "带上一把伞，从容迎接明天。": [
+    "帶上一把傘，從容迎接明天。",
+    "Take an umbrella for tomorrow.",
+    "明日は傘を持って、ゆっくり出かけよう。"
+  ],
+  "新的一天，也要和初音一起出发。": [
+    "新的一天，也要和初音一起出發。",
+    "A new day, together with Miku.",
+    "新しい一日も、ミクと一緒に。"
+  ],
+  "明天的天气，稍后见。": [
+    "明天的天氣，稍後見。",
+    "Tomorrow's weather will be here soon.",
+    "明日の天気は、もう少しお待ちください。"
+  ],
+  "日出": [
+    "日出",
+    "Sunrise",
+    "日の出"
+  ],
+  "日落": [
+    "日落",
+    "Sunset",
+    "日の入り"
+  ],
+  "部分预报暂不可用：": [
+    "部分預報暫不可用：",
+    "Some forecasts are unavailable: ",
+    "一部の予報を取得できません："
+  ],
+  "数据来自和风天气": [
+    "資料來自和風天氣",
+    "Weather by QWeather",
+    "気象データ：QWeather"
+  ],
+  "致敬每一份热爱": [
+    "致敬每一份熱愛",
+    "Made with love",
+    "すべての「好き」に敬意を"
+  ],
+  "数据来源声明": [
+    "資料來源聲明",
+    "Data attribution",
+    "データ提供元"
+  ],
+  "今天": [
+    "今天",
+    "Today",
+    "今日"
+  ],
+  "明天": [
+    "明天",
+    "Tomorrow",
+    "明日"
+  ],
+  "左右滚动查看24小时预报": [
+    "左右捲動查看24小時預報",
+    "Scroll horizontally for the 24-hour forecast",
+    "左右にスクロールして24時間予報を表示"
+  ],
+  "降水概率": [
+    "降水機率",
+    "Chance of rain ",
+    "降水確率 "
+  ],
+  "桌面小组件暂未同步，请稍后重试": [
+    "桌面小工具尚未同步，請稍後重試",
+    "Widget sync failed. Please try again.",
+    "ウィジェットを同期できません。後でもう一度お試しください。"
+  ],
+  "去看看另一座城": [
+    "去看看另一座城",
+    "Explore another city",
+    "ほかの街の天気を見る"
+  ],
+  "让天气，更合心意": [
+    "讓天氣，更合心意",
+    "Make it yours",
+    "お好みの設定に"
+  ],
+  "关闭": [
+    "關閉",
+    "Close",
+    "閉じる"
+  ],
+  "正在定位…": [
+    "正在定位…",
+    "Finding your location…",
+    "現在地を取得中…"
+  ],
+  "IP 定位当前城市 · 腾讯位置服务": [
+    "IP 定位目前城市 · 騰訊位置服務",
+    "Find city by IP · Tencent Location",
+    "IP で都市を検索 · Tencent Location"
+  ],
+  "定位当前城市 · GPS / 系统定位": [
+    "定位目前城市 · GPS / 系統定位",
+    "Find my city · GPS / device location",
+    "現在の都市を検索 · GPS / 端末の位置情報"
+  ],
+  "定位当前城市": [
+    "定位目前城市",
+    "Find my city",
+    "現在の都市を検索"
+  ],
+  "使用 Windows 系统定位": [
+    "使用 Windows 系統定位",
+    "Use Windows location",
+    "Windows の位置情報を使用"
+  ],
+  "IP 定位经 Cloudflare 天气代理连接腾讯，代理把请求端公网 IP 交给腾讯匹配城市；应用不保存 IP。IP 推算可能偏到另一座城市，请先确认候选。": [
+    "IP 定位經 Cloudflare 天氣代理連接騰訊，代理把請求端公網 IP 交給騰訊比對城市；應用程式不儲存 IP。IP 推算可能偏到另一座城市，請先確認候選。",
+    "The Cloudflare proxy sends your public IP to Tencent to estimate a city. The app does not save your IP. Please confirm the suggested city; IP location may be inaccurate.",
+    "Cloudflare 経由で公開 IP を Tencent に送り、都市を推定します。アプリは IP を保存しません。推定には誤差があるため候補をご確認ください。"
+  ],
+  "仅点击后申请定位权限，精确位置允许时优先 GPS；也支持系统网络定位。完成、取消或超时后停止。": [
+    "僅點選後申請定位權限，允許精確位置時優先 GPS；也支援系統網路定位。完成、取消或逾時後停止。",
+    "Location permission is requested only when tapped. GPS is preferred when precise location is allowed. Location stops on completion, cancellation or timeout.",
+    "タップしたときだけ位置情報の許可を求めます。正確な位置情報が許可されていれば GPS を優先し、完了・キャンセル・タイムアウトで停止します。"
+  ],
+  "系统定位坐标仅在本机处理。": [
+    "系統定位座標僅在本機處理。",
+    "Device coordinates are processed locally. ",
+    "端末の座標は端末内だけで処理します。"
+  ],
+  "设备定位坐标仅在本机匹配、不上传、不留存；选择后只请求该城市的天气。": [
+    "裝置定位座標僅在本機比對、不上傳、不留存；選擇後只請求該城市的天氣。",
+    "Coordinates are matched locally and are not uploaded or saved. Only the selected city's weather is requested.",
+    "位置座標は端末内で照合し、送信・保存しません。選択した都市の天気だけを取得します。"
+  ],
+  "城市名 / 拼音": [
+    "城市名 / 拼音",
+    "City name / Pinyin",
+    "都市名 / ピンイン"
+  ],
+  "例如：杭州、珠海、Tokyo": [
+    "例如：杭州、珠海、Tokyo",
+    "e.g. Hangzhou, London, Tokyo",
+    "例：杭州、東京、London"
+  ],
+  "搜索": [
+    "搜尋",
+    "Search",
+    "検索"
+  ],
+  "常用城市": [
+    "常用城市",
+    "Popular cities",
+    "よく使う都市"
+  ],
+  "外观主题": [
+    "外觀主題",
+    "Appearance theme",
+    "外観テーマ"
+  ],
+  "外观": [
+    "外觀",
+    "Appearance",
+    "外観"
+  ],
+  "为你的每一天换个颜色": [
+    "為你的每一天換個顏色",
+    "A color for every day",
+    "毎日を彩るテーマ"
+  ],
+  "深海绿": [
+    "深海綠",
+    "Deep sea",
+    "ディープグリーン"
+  ],
+  "薄荷白": [
+    "薄荷白",
+    "Mint white",
+    "ミントホワイト"
+  ],
+  "跟随系统": [
+    "跟隨系統",
+    "System",
+    "システムに合わせる"
+  ],
+  "温度单位": [
+    "溫度單位",
+    "Temperature unit",
+    "温度の単位"
+  ],
+  "摄氏度 °C": [
+    "攝氏度 °C",
+    "Celsius °C",
+    "摂氏 °C"
+  ],
+  "华氏度 °F": [
+    "華氏度 °F",
+    "Fahrenheit °F",
+    "華氏 °F"
+  ],
+  "桌面置顶": [
+    "桌面置頂",
+    "Always on top",
+    "最前面に表示"
+  ],
+  "让初音一直陪在屏幕上": [
+    "讓初音一直陪在螢幕上",
+    "Keep Miku on your screen",
+    "ミクをいつも画面に"
+  ],
+  "切换置顶": [
+    "切換置頂",
+    "Toggle on top",
+    "最前面表示を切り替え"
+  ],
+  "管理城市": [
+    "管理城市",
+    "Manage cities",
+    "都市を管理"
+  ],
+  "移除": [
+    "移除",
+    "Remove",
+    "削除"
+  ],
+  "每 15 分钟自动更新。网络中断时保留最近一次天气，并标明缓存状态。无需填写 API 密钥。": [
+    "每 15 分鐘自動更新。網路中斷時保留最近一次天氣，並標明快取狀態。無需填寫 API 金鑰。",
+    "Updates every 15 minutes. The latest weather is kept and marked as cached when offline. No API key is needed.",
+    "15分ごとに自動更新します。オフライン時は前回の天気をキャッシュとして表示します。API キーの入力は不要です。"
+  ],
+  "返回实时天气": [
+    "返回即時天氣",
+    "Back to live weather",
+    "現在の天気に戻る"
+  ],
+  "查看界面演示": [
+    "查看介面示範",
+    "View demo",
+    "デモを表示"
+  ],
+  "桌面小组件": [
+    "桌面小工具",
+    "Home screen widgets",
+    "ホーム画面ウィジェット"
+  ],
+  "初音、时钟与天气常驻手机桌面。小组件跟随当前城市和温度单位，点击打开天气详情。": [
+    "初音、時鐘與天氣常駐手機桌面。小工具會同步城市、單位與語言，點選開啟詳情。",
+    "Miku, time and weather on your home screen. Widgets follow your city, unit and language. Tap to open details.",
+    "ホーム画面にミク、時計、天気を表示。都市・単位・言語を同期し、タップで詳細を開きます。"
+  ],
+  "添加宽版 · 4×2": [
+    "新增寬版 · 4×2",
+    "Add wide · 4×2",
+    "横長を追加 · 4×2"
+  ],
+  "添加紧凑版 · 2×2": [
+    "新增精簡版 · 2×2",
+    "Add compact · 2×2",
+    "コンパクトを追加 · 2×2"
+  ],
+  "也可长按手机桌面，选择“小组件”→“初音天气”。后台更新时间受系统省电策略影响。": [
+    "也可長按手機桌面，選擇「小工具」→「初音天氣」。背景更新時間受系統省電策略影響。",
+    "You can also long-press the home screen and choose Widgets → Miku Weather. Battery saving may delay background updates.",
+    "ホーム画面を長押しして「ウィジェット」→「ミク天気」からも追加できます。省電力設定により更新が遅れることがあります。"
+  ],
+  "自动 · 日出浅色 / 日落深色": [
+    "自動 · 日出淺色 / 日落深色",
+    "Auto · sunrise / sunset",
+    "自動 · 日の出 / 日の入り"
+  ],
+  "语言": [
+    "語言",
+    "Language",
+    "言語"
+  ],
+  "立即生效，并同步桌宠与小组件": [
+    "立即生效，並同步桌寵與小工具",
+    "Applies immediately to Miku and widgets",
+    "すぐに反映し、デスクトップとウィジェットにも同期"
+  ],
+  "把熟悉的初音天气，带回每一天。": [
+    "把熟悉的初音天氣，帶回每一天。",
+    "Bring familiar Miku Weather back to every day.",
+    "懐かしいミク天気を、毎日に。"
+  ],
+  "这是 ": [
+    "這是 ",
+    "This is ",
+    "これは "
+  ],
+  " 的非官方重制版，延续原作的天气插画与陪伴感。": [
+    " 的非官方重製版，延續原作的天氣插畫與陪伴感。",
+    " — an unofficial remake, keeping the original weather illustrations and companionship.",
+    " の非公式リメイクです。原作の天気イラストと寄り添う雰囲気を受け継いでいます。"
+  ],
+  "原作者：": [
+    "原作者：",
+    "Original author: ",
+    "原作者："
+  ],
+  "天气数据：": [
+    "天氣資料：",
+    "Weather data: ",
+    "気象データ："
+  ],
+  "和风天气 QWeather": [
+    "和風天氣 QWeather",
+    "QWeather",
+    "QWeather"
+  ],
+  "版本：": [
+    "版本：",
+    "Version: ",
+    "バージョン："
+  ],
+  "角色插画沿用原仓库资源，角色及素材权利属于各自权利人。本项目与角色权利人无官方关联。": [
+    "角色插畫沿用原倉庫資源，角色及素材權利屬於各自權利人。本專案與角色權利人無官方關聯。",
+    "Character artwork comes from the original repository. All rights belong to their respective owners. This project is not officially affiliated with the character rights holders.",
+    "キャラクター画像は原作リポジトリの素材です。各権利はそれぞれの権利者に帰属します。本プロジェクトは権利者と公式な関係はありません。"
+  ],
+  "原作许可证 · Anti-996": [
+    "原作授權條款 · Anti-996",
+    "Original license · Anti-996",
+    "原作ライセンス · Anti-996"
+  ],
+  "正在读取…": [
+    "正在讀取…",
+    "Loading…",
+    "読み込み中…"
+  ],
+  "城市列表与天气缓存保存在本机。主动定位在本机匹配附近城市，定位坐标不上传、不留存；天气请求经 Cloudflare 代理发送所选城市的公开中心坐标，服务凭据只保存在服务端。本地城市库来自和风官方城市列表，主要覆盖中国城市及区县。不后台定位，不记录轨迹。系统定位服务自身的数据处理由系统控制。无账号、无广告。": [
+    "城市清單與天氣快取儲存在本機。定位僅在本機比對附近城市，不上傳、不留存座標；天氣請求經 Cloudflare 代理傳送所選城市的公開中心座標，服務憑證只儲存在伺服器端。本機城市庫來自和風官方城市清單，主要涵蓋中國城市及區縣。無背景定位、軌跡、帳號或廣告。系統定位服務的資料處理由系統控制。",
+    "Cities and weather caches are stored on this device. Device location is matched locally, never uploaded or saved. Weather requests send only the selected city's public center coordinates through Cloudflare; credentials stay on the server. The local city index comes from QWeather and mainly covers China. No background location, tracking, accounts or ads. System location services follow the operating system's policies.",
+    "都市と天気キャッシュは端末内に保存します。位置情報は近隣都市の照合にのみ使い、座標を送信・保存しません。天気の取得には選択した都市の公開中心座標だけを Cloudflare 経由で送り、認証情報はサーバーに保存します。都市データは QWeather の公式リストを使用し、主に中国を対象としています。バックグラウンド測位、軌跡記録、アカウント、広告はありません。システムの位置情報サービスは OS の方針に従います。"
+  ],
+  "请查看安装目录随附的 LICENSE 文件。": [
+    "請查看安裝目錄隨附的 LICENSE 檔案。",
+    "See the bundled LICENSE file.",
+    "同梱の LICENSE ファイルをご覧ください。"
+  ],
+  "本地城市库暂未覆盖这个位置，请手动搜索城市": [
+    "本機城市庫尚未涵蓋此位置，請手動搜尋城市",
+    "This location is outside the local index. Please search for a city.",
+    "この地域は端末内の都市データにありません。都市を検索してください。"
+  ],
+  "定位失败，仍可手动选择城市": [
+    "定位失敗，仍可手動選擇城市",
+    "Location unavailable. You can select a city manually.",
+    "位置を取得できません。都市を手動で選択できます。"
+  ],
+  "白天降水概率 ": [
+    "白天降水機率 ",
+    "Daytime rain chance ",
+    "日中の降水確率 "
+  ],
+  "最大紫外线指数 ": [
+    "最大紫外線指數 ",
+    "Maximum UV index ",
+    "最大 UV 指数 "
+  ],
+  "白天 ": [
+    "白天 ",
+    "Day ",
+    "昼 "
+  ],
+  "夜间 ": [
+    "夜間 ",
+    "Night ",
+    "夜 "
+  ],
+  "刚刚更新过，请稍后再试": [
+    "剛剛更新過，請稍後再試",
+    "Just updated. Please try again shortly.",
+    "更新したばかりです。少しお待ちください。"
+  ],
+  "请在桌面的确认提示中添加小组件": [
+    "請在桌面的確認提示中新增小工具",
+    "Confirm adding the widget on your home screen.",
+    "ホーム画面の確認でウィジェットを追加してください。"
+  ],
+  "请长按手机桌面，在“小组件”中添加初音天气": [
+    "請長按手機桌面，在「小工具」中新增初音天氣",
+    "Long-press the home screen and add Miku Weather from Widgets.",
+    "ホーム画面を長押しし、ウィジェットからミク天気を追加してください。"
+  ],
+  "已开启窗口置顶": [
+    "已開啟視窗置頂",
+    "Always on top enabled",
+    "最前面表示をオンにしました"
+  ],
+  "已取消窗口置顶": [
+    "已取消視窗置頂",
+    "Always on top disabled",
+    "最前面表示をオフにしました"
+  ],
+  "正在寻找这座城市…": [
+    "正在尋找這座城市…",
+    "Searching for this city…",
+    "都市を検索中…"
+  ],
+  "没有找到，试试城市全名或拼音。": [
+    "沒有找到，試試城市全名或拼音。",
+    "No results. Try the full city name or Pinyin.",
+    "見つかりません。都市の正式名やピンインをお試しください。"
+  ],
+  "也可以选择常用城市": [
+    "也可以選擇常用城市",
+    "You can also choose a popular city",
+    "よく使う都市からも選べます"
+  ],
+  "初音正在看天气…": [
+    "初音正在看天氣…",
+    "Miku is checking the weather…",
+    "ミクが天気を確認中…"
+  ],
+  "离线缓存": [
+    "離線快取",
+    "Offline cache",
+    "オフラインキャッシュ"
+  ],
+  "天气暂时连不上 · 点击重试": [
+    "天氣暫時連不上 · 點選重試",
+    "Weather unavailable · tap to open",
+    "天気を取得できません · タップで開く"
+  ],
+  "。点击查看天气，拖动初音可移动。": [
+    "。點選查看天氣，拖曳初音可移動。",
+    ". Click for weather; drag Miku to move.",
+    "。クリックで天気、ドラッグでミクを移動。"
+  ],
+  "点击查看天气，右键管理桌宠": [
+    "點選查看天氣，右鍵管理桌寵",
+    "Click for weather; right-click for options",
+    "クリックで天気、右クリックで設定"
+  ],
+  "初音桌宠，可拖动，点击查看天气": [
+    "初音桌寵，可拖曳，點選查看天氣",
+    "Miku companion: drag to move, click for weather",
+    "ミク：ドラッグで移動、クリックで天気"
+  ],
+  "初音桌宠": [
+    "初音桌寵",
+    "Miku companion",
+    "デスクトップのミク"
+  ],
+  "正在等天气来 ♪": [
+    "正在等天氣來 ♪",
+    "Waiting for the weather ♪",
+    "天気を待っています ♪"
+  ],
+  "桌宠置顶": [
+    "桌寵置頂",
+    "Keep Miku on top",
+    "ミクを最前面に表示"
+  ],
+  "查看天气": [
+    "查看天氣",
+    "View weather",
+    "天気を見る"
+  ],
+  "切换城市 / IP 定位": [
+    "切換城市 / IP 定位",
+    "Change city / IP location",
+    "都市を変更 / IP で検索"
+  ],
+  "刷新天气": [
+    "重新整理天氣",
+    "Refresh weather",
+    "天気を更新"
+  ],
+  "隐藏桌宠": [
+    "隱藏桌寵",
+    "Hide Miku",
+    "ミクを隠す"
+  ],
+  "显示桌宠": [
+    "顯示桌寵",
+    "Show Miku",
+    "ミクを表示"
+  ],
+  "退出": [
+    "離開",
+    "Quit",
+    "終了"
+  ],
+  "桌宠": [
+    "桌寵",
+    "Desktop companion",
+    "デスクトップ"
+  ],
+  "点击初音查看天气": [
+    "點選初音查看天氣",
+    "Click Miku for weather",
+    "ミクをクリックして天気を見る"
+  ],
+  "天气数据不完整": [
+    "天氣資料不完整",
+    "Incomplete weather data",
+    "天気データが不完全です"
+  ],
+  "连接天气服务失败，请检查网络后重试": [
+    "連接天氣服務失敗，請檢查網路後重試",
+    "Could not connect. Check your network and try again.",
+    "接続できません。ネットワークを確認して再試行してください。"
+  ],
+  "天气服务暂时不可用": [
+    "天氣服務暫時無法使用",
+    "Weather service temporarily unavailable",
+    "天気サービスを利用できません"
+  ],
+  "天气服务认证失败": [
+    "天氣服務驗證失敗",
+    "Weather service authentication failed",
+    "天気サービスの認証に失敗しました"
+  ],
+  "天气服务额度不足": [
+    "天氣服務額度不足",
+    "Weather service quota reached",
+    "天気サービスの利用上限に達しました"
+  ],
+  "天气接口未开通或访问受限": [
+    "天氣介面未開通或存取受限",
+    "Weather access is restricted",
+    "天気サービスへのアクセスが制限されています"
+  ],
+  "没有找到该地点的天气": [
+    "找不到該地點的天氣",
+    "No weather for this location",
+    "この地点の天気が見つかりません"
+  ],
+  "天气服务繁忙，请稍后再试": [
+    "天氣服務忙碌中，請稍後再試",
+    "Weather service is busy. Try again later.",
+    "天気サービスが混み合っています。後でお試しください。"
+  ],
+  "暂时没有天气数据": [
+    "暫時沒有天氣資料",
+    "Weather data unavailable",
+    "天気データがありません"
+  ],
+  "天气服务返回了无效数据": [
+    "天氣服務傳回無效資料",
+    "Invalid weather response",
+    "天気サービスの応答が無効です"
+  ],
+  "未知": [
+    "未知",
+    "Unknown",
+    "不明"
+  ],
+  "东北偏北风": [
+    "東北偏北風",
+    "NNE wind",
+    "北北東の風"
+  ],
+  "东北偏东风": [
+    "東北偏東風",
+    "ENE wind",
+    "東北東の風"
+  ],
+  "东南偏东风": [
+    "東南偏東風",
+    "ESE wind",
+    "東南東の風"
+  ],
+  "东南偏南风": [
+    "東南偏南風",
+    "SSE wind",
+    "南南東の風"
+  ],
+  "西南偏南风": [
+    "西南偏南風",
+    "SSW wind",
+    "南南西の風"
+  ],
+  "西南偏西风": [
+    "西南偏西風",
+    "WSW wind",
+    "西南西の風"
+  ],
+  "西北偏西风": [
+    "西北偏西風",
+    "WNW wind",
+    "西北西の風"
+  ],
+  "西北偏北风": [
+    "西北偏北風",
+    "NNW wind",
+    "北北西の風"
+  ],
+  "东北风": [
+    "東北風",
+    "NE wind",
+    "北東の風"
+  ],
+  "东南风": [
+    "東南風",
+    "SE wind",
+    "南東の風"
+  ],
+  "西南风": [
+    "西南風",
+    "SW wind",
+    "南西の風"
+  ],
+  "西北风": [
+    "西北風",
+    "NW wind",
+    "北西の風"
+  ],
+  "北风": [
+    "北風",
+    "N wind",
+    "北の風"
+  ],
+  "东风": [
+    "東風",
+    "E wind",
+    "東の風"
+  ],
+  "南风": [
+    "南風",
+    "S wind",
+    "南の風"
+  ],
+  "西风": [
+    "西風",
+    "W wind",
+    "西の風"
+  ],
+  "静风": [
+    "靜風",
+    "Calm",
+    "静穏"
+  ],
+  "风向不定": [
+    "風向不定",
+    "Variable wind",
+    "風向不定"
+  ],
+  "风速": [
+    "風速",
+    "Wind speed",
+    "風速"
+  ],
+  "晴间多云": [
+    "晴時多雲",
+    "Partly cloudy",
+    "晴れ時々曇り"
+  ],
+  "少云": [
+    "少雲",
+    "Mostly clear",
+    "おおむね晴れ"
+  ],
+  "多云": [
+    "多雲",
+    "Cloudy",
+    "曇り"
+  ],
+  "晴": [
+    "晴",
+    "Clear",
+    "晴れ"
+  ],
+  "阴": [
+    "陰",
+    "Overcast",
+    "曇天"
+  ],
+  "强雷阵雨": [
+    "強雷陣雨",
+    "Severe thunderstorms",
+    "激しい雷雨"
+  ],
+  "雷阵雨伴有冰雹": [
+    "雷陣雨伴冰雹",
+    "Thunderstorms with hail",
+    "雷雨とひょう"
+  ],
+  "雷阵雨": [
+    "雷陣雨",
+    "Thunderstorms",
+    "雷雨"
+  ],
+  "强阵雨": [
+    "強陣雨",
+    "Heavy showers",
+    "激しいにわか雨"
+  ],
+  "阵雨": [
+    "陣雨",
+    "Showers",
+    "にわか雨"
+  ],
+  "小到中雨": [
+    "小到中雨",
+    "Light to moderate rain",
+    "弱い雨から雨"
+  ],
+  "中到大雨": [
+    "中到大雨",
+    "Moderate to heavy rain",
+    "雨から強い雨"
+  ],
+  "大到暴雨": [
+    "大到暴雨",
+    "Heavy to torrential rain",
+    "強い雨から激しい雨"
+  ],
+  "暴雨到大暴雨": [
+    "暴雨到大暴雨",
+    "Torrential rain",
+    "非常に激しい雨"
+  ],
+  "大暴雨到特大暴雨": [
+    "大暴雨到特大暴雨",
+    "Extreme downpour",
+    "猛烈な雨"
+  ],
+  "特大暴雨": [
+    "特大暴雨",
+    "Extreme downpour",
+    "猛烈な雨"
+  ],
+  "大暴雨": [
+    "大暴雨",
+    "Severe downpour",
+    "非常に激しい雨"
+  ],
+  "暴雨": [
+    "暴雨",
+    "Downpour",
+    "激しい雨"
+  ],
+  "极端降雨": [
+    "極端降雨",
+    "Extreme rain",
+    "極端な大雨"
+  ],
+  "毛毛雨/细雨": [
+    "毛毛雨／細雨",
+    "Drizzle",
+    "霧雨"
+  ],
+  "毛毛雨": [
+    "毛毛雨",
+    "Drizzle",
+    "霧雨"
+  ],
+  "冻雨": [
+    "凍雨",
+    "Freezing rain",
+    "着氷性の雨"
+  ],
+  "小雨": [
+    "小雨",
+    "Light rain",
+    "小雨"
+  ],
+  "中雨": [
+    "中雨",
+    "Rain",
+    "雨"
+  ],
+  "大雨": [
+    "大雨",
+    "Heavy rain",
+    "強い雨"
+  ],
+  "雨夹雪": [
+    "雨夾雪",
+    "Sleet",
+    "みぞれ"
+  ],
+  "雨雪天气": [
+    "雨雪天氣",
+    "Rain and snow",
+    "雨と雪"
+  ],
+  "阵雨夹雪": [
+    "陣雨夾雪",
+    "Sleet showers",
+    "にわかみぞれ"
+  ],
+  "阵雪": [
+    "陣雪",
+    "Snow showers",
+    "にわか雪"
+  ],
+  "小到中雪": [
+    "小到中雪",
+    "Light to moderate snow",
+    "小雪から雪"
+  ],
+  "中到大雪": [
+    "中到大雪",
+    "Moderate to heavy snow",
+    "雪から大雪"
+  ],
+  "大到暴雪": [
+    "大到暴雪",
+    "Heavy to severe snow",
+    "大雪から激しい雪"
+  ],
+  "暴雪": [
+    "暴雪",
+    "Snowstorm",
+    "激しい雪"
+  ],
+  "小雪": [
+    "小雪",
+    "Light snow",
+    "小雪"
+  ],
+  "中雪": [
+    "中雪",
+    "Snow",
+    "雪"
+  ],
+  "大雪": [
+    "大雪",
+    "Heavy snow",
+    "大雪"
+  ],
+  "强浓雾": [
+    "強濃霧",
+    "Very dense fog",
+    "非常に濃い霧"
+  ],
+  "特强浓雾": [
+    "特強濃霧",
+    "Extremely dense fog",
+    "極めて濃い霧"
+  ],
+  "浓雾": [
+    "濃霧",
+    "Dense fog",
+    "濃霧"
+  ],
+  "大雾": [
+    "大霧",
+    "Thick fog",
+    "濃い霧"
+  ],
+  "薄雾": [
+    "薄霧",
+    "Mist",
+    "薄い霧"
+  ],
+  "轻度霾": [
+    "輕度霾",
+    "Light haze",
+    "薄い煙霧"
+  ],
+  "中度霾": [
+    "中度霾",
+    "Moderate haze",
+    "煙霧"
+  ],
+  "重度霾": [
+    "重度霾",
+    "Heavy haze",
+    "濃い煙霧"
+  ],
+  "严重霾": [
+    "嚴重霾",
+    "Severe haze",
+    "非常に濃い煙霧"
+  ],
+  "强沙尘暴": [
+    "強沙塵暴",
+    "Severe sandstorm",
+    "激しい砂嵐"
+  ],
+  "沙尘暴": [
+    "沙塵暴",
+    "Sandstorm",
+    "砂嵐"
+  ],
+  "浮尘": [
+    "浮塵",
+    "Dust",
+    "浮遊する砂塵"
+  ],
+  "扬沙": [
+    "揚沙",
+    "Blowing sand",
+    "風塵"
+  ],
+  "雾": [
+    "霧",
+    "Fog",
+    "霧"
+  ],
+  "霾": [
+    "霾",
+    "Haze",
+    "煙霧"
+  ],
+  "热": [
+    "熱",
+    "Hot",
+    "暑い"
+  ],
+  "冷": [
+    "冷",
+    "Cold",
+    "寒い"
+  ],
+  "系统返回的是默认位置，无法判断所在地，请手动搜索城市": [
+    "系統傳回的是預設位置，無法判斷所在地，請手動搜尋城市",
+    "The device returned a default location. Please search for your city.",
+    "端末が既定の位置を返しました。都市を検索してください。"
+  ],
+  "系统位置精度不足，无法可靠判断所在城市，请手动搜索城市": [
+    "系統位置精度不足，無法可靠判斷所在城市，請手動搜尋城市",
+    "Location accuracy is too low. Please search for your city.",
+    "位置情報の精度が不足しています。都市を検索してください。"
+  ],
+  "系统给到的位置已过期，请重新定位或手动搜索城市": [
+    "系統提供的位置已過期，請重新定位或手動搜尋城市",
+    "This location is out of date. Locate again or search manually.",
+    "位置情報が古くなっています。再取得するか都市を検索してください。"
+  ],
+  "系统返回了无效位置，请手动选择城市": [
+    "系統傳回無效位置，請手動選擇城市",
+    "The device returned an invalid location. Choose a city manually.",
+    "端末の位置情報が無効です。都市を手動で選択してください。"
+  ],
+  "本地城市库暂不可用": [
+    "本機城市庫暫時無法使用",
+    "The local city index is unavailable.",
+    "端末内の都市データを利用できません。"
+  ],
+  "腾讯位置服务 · IP 大致位置：": [
+    "騰訊位置服務 · IP 概略位置：",
+    "Tencent Location · approximate IP location: ",
+    "Tencent Location · IP による推定位置："
+  ],
+  "。这是网络出口所属地区，可能偏到另一座城市。请确认候选后再选择，VPN、代理或运营商出口会影响结果。": [
+    "。這是網路出口所屬地區，可能偏到另一座城市。請確認候選後再選擇，VPN、代理或電信業者出口會影響結果。",
+    ". This is the network exit region and may differ from your city. Check the candidates; VPNs, proxies and carrier routing affect the result.",
+    "。ネットワーク出口の地域のため、実際の都市と異なる場合があります。VPN、プロキシ、通信事業者の経路に影響されるため候補をご確認ください。"
+  ],
+  "：可能偏到另一座城市，VPN、代理或运营商出口都会影响 IP 结果。这里只提供候选，请确认城市后再选择；也可直接手动搜索。": [
+    "：可能偏到另一座城市，VPN、代理或電信業者出口都會影響 IP 結果。僅提供候選，請確認後再選擇；也可手動搜尋。",
+    ": This may point to another city. VPNs, proxies and carrier routing affect IP location. Confirm a candidate or search manually.",
+    "：別の都市を示す場合があります。VPN、プロキシ、通信事業者の経路に影響されます。候補を確認するか、手動で検索してください。"
+  ],
+  "。请确认你所在的城市，城市中心匹配不等于行政区边界。": [
+    "。請確認所在城市，城市中心比對不等於行政區邊界。",
+    ". Please confirm your city; matching city centers does not identify administrative boundaries.",
+    "。都市をご確認ください。都市中心との距離による照合は行政区域の判定ではありません。"
+  ],
+  "IP 大致位置": [
+    "IP 概略位置",
+    "Approximate IP location",
+    "IP による推定位置"
+  ],
+  "系统大致位置（精度较低）": [
+    "系統概略位置（精度較低）",
+    "Approximate device location (low accuracy)",
+    "端末の推定位置（低精度）"
+  ],
+  "GPS / 卫星": [
+    "GPS / 衛星",
+    "GPS / satellite",
+    "GPS / 衛星"
+  ],
+  "移动网络": [
+    "行動網路",
+    "Cellular network",
+    "モバイルネットワーク"
+  ],
+  "Android 系统网络定位": [
+    "Android 系統網路定位",
+    "Android network location",
+    "Android ネットワーク位置情報"
+  ],
+  "Android 系统融合定位": [
+    "Android 系統融合定位",
+    "Android fused location",
+    "Android 複合位置情報"
+  ],
+  "系统大致位置": [
+    "系統概略位置",
+    "Approximate device location",
+    "端末の推定位置"
+  ],
+  "系统位置": [
+    "系統位置",
+    "Device location",
+    "端末の位置情報"
+  ],
+  " · 精度约 ": [
+    " · 精度約 ",
+    " · accuracy about ",
+    " · 精度約 "
+  ],
+  " 公里": [
+    " 公里",
+    " km",
+    " km"
+  ],
+  " 米": [
+    " 公尺",
+    " m",
+    " m"
+  ],
+  "定位暂不可用，请手动选择城市": [
+    "定位暫時無法使用，請手動選擇城市",
+    "Location unavailable. Please choose a city manually.",
+    "位置を取得できません。都市を手動で選択してください。"
+  ],
+  "此设备不支持定位，请手动选择城市": [
+    "此裝置不支援定位，請手動選擇城市",
+    "This device does not support location. Choose a city manually.",
+    "この端末は位置情報に対応していません。都市を選択してください。"
+  ],
+  "未允许访问位置，仍可手动选择城市": [
+    "未允許存取位置，仍可手動選擇城市",
+    "Location permission was denied. You can choose a city manually.",
+    "位置情報が許可されていません。都市を手動で選択できます。"
+  ],
+  "定位超时，请稍后重试或手动选择城市": [
+    "定位逾時，請稍後重試或手動選擇城市",
+    "Location timed out. Retry or choose a city manually.",
+    "位置の取得がタイムアウトしました。再試行するか都市を選択してください。"
+  ],
+  "暂时无法定位，请手动选择城市": [
+    "暫時無法定位，請手動選擇城市",
+    "Location unavailable. Choose a city manually.",
+    "位置を取得できません。都市を選択してください。"
+  ],
+  "未允许位置权限，可手动选择城市；精确位置允许时可使用 GPS": [
+    "未允許位置權限，可手動選擇城市；允許精確位置時可使用 GPS",
+    "Location permission was denied. Choose a city manually; precise permission enables GPS.",
+    "位置情報が許可されていません。都市を手動で選択できます。正確な位置情報の許可で GPS を利用できます。"
+  ],
+  "正在定位，请稍候或先取消": [
+    "正在定位，請稍候或先取消",
+    "Locating. Please wait or cancel first.",
+    "位置を取得中です。お待ちいただくかキャンセルしてください。"
+  ],
+  "已取消定位": [
+    "已取消定位",
+    "Location cancelled",
+    "位置情報の取得をキャンセルしました"
+  ],
+  "请在天气界面中点击定位": [
+    "請在天氣介面中點選定位",
+    "Use Locate from the weather screen.",
+    "天気画面から現在地を取得してください。"
+  ],
+  "天气服务暂时无法获取实时数据": [
+    "天氣服務暫時無法取得即時資料",
+    "Live weather is temporarily unavailable.",
+    "現在の天気を一時的に取得できません。"
+  ],
+  "请输入城市名称": [
+    "請輸入城市名稱",
+    "Enter a city name",
+    "都市名を入力してください"
+  ],
+  "天气请求无效，请重新选择城市": [
+    "天氣請求無效，請重新選擇城市",
+    "Invalid weather request. Choose the city again.",
+    "天気のリクエストが無効です。都市を選び直してください。"
+  ]
 }

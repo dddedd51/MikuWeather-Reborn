@@ -14,7 +14,7 @@ function paint(current,cached=false){
   const night=solarNight(Date.now(),city.tz,solarDays);
   document.documentElement.dataset.theme=preferences.theme==='solar'?(night?'dark':'light'):preferences.theme==='system'?(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):preferences.theme;
   const temperature=Math.round(preferences.unit==='F'?current.temp*1.8+32:current.temp);
-  title.textContent=city.name+' '+temperature+'°'+preferences.unit;note.textContent=t(current.text)+(cached?' · '+t('离线缓存'):'');
+  title.textContent=city.name+' '+temperature+'°'+preferences.unit;note.textContent=current.text+(cached?' · 离线缓存':'');
   const symbol=document.getElementById('weather-icon'),src=pixelIcon(current.code,night);symbol.hidden=!src;if(src)symbol.src=src;
   image.src='./assets/'+art(current.code,night)+'.png';
   bubble.title=city.name+' '+current.text+'，观测于 '+new Intl.DateTimeFormat(getLanguage(),{timeZone:city.tz,hour:'2-digit',minute:'2-digit'}).format(new Date(current.time))+'。点击查看天气，拖动初音可移动。';
