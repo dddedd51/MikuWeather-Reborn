@@ -81,6 +81,10 @@ else{
     pet.webContents.session.setPermissionRequestHandler((_w,_p,callback)=>callback(false));
     tray=new Tray(nativeImage.createFromPath(iconPath));tray.on('click',showPet);tray.on('double-click',()=>openDetails());updateTray();
     const updater=require('./updater.cjs');
+    updater.takeResult(app).then(result=>{
+      if(!result)return;log('update result '+result.status+' '+result.message);
+      if(result.status==='failed')dialog.showMessageBox({type:'warning',title:t('初音天气'),message:t('更新未完成，请重试或从发布页下载'),detail:result.message+'\n'+result.log});
+    });
     tray.on('balloon-click',()=>openDetails('settings'));
     const announceUpdate=()=>{updateTray();if(state.update?.available)tray.displayBalloon({title:t('初音天气'),content:t('发现新版本')+' '+state.update.version+' · '+t('查看更新')});};
     if(app.isPackaged)setTimeout(async()=>{

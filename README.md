@@ -4,13 +4,17 @@
 
 ![初音天气重制版实测](docs/images/cover.jpg)
 
-重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.3.4**。
+重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.3.5**。
 
-**[下载 Windows / Android / iOS 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.3.4)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
+**[下载 Windows / Android / iOS 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.3.5)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
 
 📖 [开发日志：我用约 3636 万累计 token，重写了初音天气](docs/DEVLOG.md) · [用量统计范围](docs/token-usage.json) · [构建说明](docs/BUILD.md) · [第三方来源](THIRD_PARTY_NOTICES.md)
 
 > 标题里的累计用量包含缓存输入，不代表新生成 token 数或实际费用。
+
+## 0.3.5 · 修复 Windows 应用内更新
+
+Windows 更新会确认辅助程序完成校验和备份后再退出，支持中文目录，替换失败会回退并记录错误。旧版更新器存在相同问题，本次请从发布页下载 Windows ZIP，退出应用后完整解压覆盖一次。详见 [0.3.5 更新说明](docs/UPDATE-0.3.5.md)。
 
 ## 0.3.4 · 刷新成功提示自动消失
 

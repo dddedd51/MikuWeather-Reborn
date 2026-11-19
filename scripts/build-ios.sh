@@ -10,7 +10,7 @@ mkdir -p work release
 xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release \
   -destination 'generic/platform=iOS' -sdk iphoneos -derivedDataPath work/ios-derived \
   CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY='' \
-  CURRENT_PROJECT_VERSION=10 MARKETING_VERSION="$version" build 2>&1 | tee work/ios-build.log
+  CURRENT_PROJECT_VERSION=11 MARKETING_VERSION="$version" build 2>&1 | tee work/ios-build.log
 app=work/ios-derived/Build/Products/Release-iphoneos/App.app
 test -f "$app/App"
 # Use a fresh staging directory so repeat runs cannot include obsolete resources.

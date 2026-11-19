@@ -15,6 +15,21 @@ async function download(url,file,size,sha,onProgress){
  if(bytes!==size||hash.digest('hex')!==sha)throw Error('Update checksum mismatch');
 }
 function run(script,args){return new Promise((resolve,reject)=>{const child=spawn('powershell.exe',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',script,...args],{windowsHide:true,stdio:'ignore'});child.on('error',reject);child.on('exit',code=>code===0?resolve():reject(Error('Update staging failed')));});}
+function waitForReady(child,file,timeout=60000){
+ return new Promise((resolve,reject)=>{
+  let finished=false;
+  const done=error=>{if(finished)return;finished=true;clearInterval(poll);clearTimeout(deadline);child.off('error',onError);child.off('exit',onExit);error?reject(error):resolve();};
+  const onError=()=>done(Error('Update helper could not start'));
+  const onExit=()=>done(Error('Update helper exited before readiness'));
+  const poll=setInterval(async()=>{try{const ready=JSON.parse((await fs.readFile(file,'utf8')).replace(/^\uFEFF/,''));if(ready.status==='ready')done();}catch{}},100);
+  const deadline=setTimeout(()=>{done(Error('Update helper readiness timed out'));child.kill();},timeout);
+  child.once('error',onError);child.once('exit',onExit);
+ });
+}
+exports.takeResult=async app=>{
+ const file=path.join(app.getPath('userData'),'update-result.json');
+ try{const result=JSON.parse((await fs.readFile(file,'utf8')).replace(/^\uFEFF/,''));await fs.unlink(file);return result;}catch{return null;}
+};
 exports.check=app=>checkUpdate(app.getVersion(),'windows');
 exports.install=async(app,onProgress,beforeQuit)=>{
  if(running)throw Error('Update already running');running=true;
@@ -27,12 +42,16 @@ exports.install=async(app,onProgress,beforeQuit)=>{
   // PowerShell cannot read virtual paths inside Electron's app.asar.
   const stageHelper=path.join(base,'stage-update.ps1');
   await fs.copyFile(path.join(__dirname,'stage-update.ps1'),stageHelper);
-  await run(stageHelper,[zip,stage]);onProgress({percent:100});
+  await run(stageHelper,[zip,stage]);
+  const staged=JSON.parse(require('node:fs').readFileSync(path.join(stage,'resources','app.asar','package.json'),'utf8'));
+  if(staged.version!==release.version||staged.name!=='miku-weather-reborn')throw Error('Staged app version mismatch');
   const settings=path.join(base,'update.json'),helper=path.join(base,'apply-update.ps1');
   await fs.copyFile(path.join(__dirname,'apply-update.ps1'),helper);
-  await fs.writeFile(settings,JSON.stringify({pid:process.pid,target,stage,executable:path.basename(process.execPath),log:path.join(base,'update.log')}));
+  const ready=path.join(base,'ready.json');
+  await fs.writeFile(settings,JSON.stringify({pid:process.pid,target,stage,version:release.version,executable:path.basename(process.execPath),ready,log:path.join(app.getPath('userData'),'update.log'),result:path.join(app.getPath('userData'),'update-result.json')}));
   const child=spawn('powershell.exe',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',helper,settings],{detached:true,windowsHide:true,stdio:'ignore'});
-  await new Promise((resolve,reject)=>{child.once('spawn',resolve);child.once('error',reject);});child.unref();beforeQuit();app.quit();return {status:'restarting'};
+  await waitForReady(child,ready);onProgress({percent:100});child.unref();beforeQuit();app.quit();return {status:'restarting'};
  }finally{running=false;}
 };
 exports.download=download;
+exports.waitForReady=waitForReady;

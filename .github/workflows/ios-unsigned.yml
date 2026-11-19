@@ -2,7 +2,7 @@ name: Build mobile packages
 on:
   workflow_dispatch:
   push:
-    branches: [main, update/multilingual-ios]
+    branches: [main, update/multilingual-ios, fix/windows-updater]
     paths:
       - 'src/**'
       - 'shared/**'
@@ -10,7 +10,7 @@ on:
       - 'tests/**'
       - 'android/**'
       - 'ios/**'
-      - 'desktop/service.json'
+      - 'desktop/**'
       - 'package*.json'
       - 'index.html'
       - 'pet.html'
@@ -19,6 +19,18 @@ on:
 permissions:
   contents: read
 jobs:
+  windows:
+    runs-on: windows-2022
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Check Windows PowerShell updater and rollback
+        run: npm test
   android:
     runs-on: ubuntu-24.04
     timeout-minutes: 25
