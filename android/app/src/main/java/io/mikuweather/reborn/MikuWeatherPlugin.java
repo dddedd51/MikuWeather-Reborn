@@ -84,7 +84,9 @@ public class MikuWeatherPlugin extends Plugin {
             ipLocation = attempt; ipLocationCall = call;
             executor.execute(() -> {
                 try {
-                    JSObject result = new JSObject(attempt.locate().toString());
+                    org.json.JSONObject position = attempt.locate();
+                    JSObject result = new JSObject();
+                    for (String field : new String[]{"lat", "lon", "source", "approximate", "adInfo"}) result.put(field, position.opt(field));
                     getActivity().runOnUiThread(() -> {
                         if (ipLocationCall != call) return;
                         ipLocationCall = null; ipLocation = null; call.resolve(result);
