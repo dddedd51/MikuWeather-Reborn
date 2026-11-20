@@ -130,6 +130,10 @@ function showDialog(name) {
   box.innerHTML=`<div class="modal-title"><div><div class="eyebrow">MIKU WEATHER</div><h2>${title}</h2></div><button class="icon-btn" data-action="close" aria-label="关闭">${icon('x')}</button></div>`;
   if(name==='search') {
     box.innerHTML+=`<div class="location-card"><button class="secondary locate-button" data-action="locate" ${locating||demo?'disabled':''}>${icon('locate-fixed')} ${locating?'正在定位…':desktop?'IP 定位当前城市 · 腾讯位置服务':android?'定位当前城市 · GPS / 系统定位':'定位当前城市'}</button>${desktop?`<button class="secondary" data-action="locate-system" ${locating||demo?'disabled':''}>使用 Windows 系统定位</button>`:''}<p>${desktop?'IP 定位经 Cloudflare 天气代理连接腾讯，代理把请求端公网 IP 交给腾讯匹配城市；应用不保存 IP。IP 推算可能偏到另一座城市，请先确认候选。':android?'仅点击后申请定位权限，精确位置允许时优先 GPS；也支持系统网络定位。完成、取消或超时后停止。':'系统定位坐标仅在本机处理。'}设备定位坐标仅在本机匹配、不上传、不留存；选择后只请求该城市的天气。</p><div id="location-error" role="status"></div></div>`;
+    if(android) {
+      box.querySelector('.locate-button').insertAdjacentHTML('afterend',` <button class="secondary locate-button locate-ip-button" data-action="locate-ip" ${locating||demo?'disabled':''}>${icon('map-pin')} ${locating?'正在定位…':'IP 定位当前城市 · 腾讯位置服务'}</button>`);
+      box.querySelector('.location-card p').textContent='系统定位仅点击后申请位置权限，允许精确位置时优先 GPS。IP 定位无需位置权限，会将当前网络的公网 IP 交给腾讯位置服务估算城市；应用不保存 IP。VPN、代理或运营商出口可能影响结果，请确认城市候选。完成、取消或超时后停止；设备定位坐标仅在本机匹配，不上传、不留存。';
+    }
     box.innerHTML+=`<form id="search-form"><label for="city-query">城市名 / 拼音</label><div class="search-field">${icon('search')}<input id="city-query" name="query" placeholder="例如：杭州、珠海、Tokyo" autocomplete="off" maxlength="80"><button class="primary" type="submit">搜索</button></div></form><div id="search-results" aria-live="polite"><p class="modal-hint">常用城市</p>${cityResults(CITIES)}</div>`;
   } else if(name==='settings') {
     box.innerHTML+=`<div class="setting-row"><span>语言<small>立即生效，并同步桌宠与小组件</small></span><select id="language-select" aria-label="语言" data-no-i18n>${Object.entries(languages).map(([value,label])=>`<option value="${value}">${label}</option>`).join('')}</select></div>`;
@@ -141,7 +145,7 @@ function showDialog(name) {
     bindWidgetSettings(box,prefs,()=>{save('miku:prefs',prefs);syncCompanion();});bindUpdates(box);
     $('#language-select').value=getLanguage(); $('#theme-select').value=prefs.theme; $('#unit-select').value=prefs.unit;
   } else if(name==='about') {
-    box.innerHTML+=`${artImg('100','about-miku')}<p>把熟悉的初音天气，带回每一天。</p><p>这是 <a href="https://github.com/lzcapp/MikuWeather_Windows" target="_blank" rel="noreferrer">lzcapp / MikuWeather_Windows</a> 的非官方重制版，延续原作的天气插画与陪伴感。</p><p>原作者：RainySummer / lzcapp<br>天气数据：<a href="https://www.qweather.com/" target="_blank" rel="noreferrer">和风天气 QWeather</a><br>版本：0.3.5 · Windows / Android / iOS</p><p>角色插画沿用原仓库资源，角色及素材权利属于各自权利人。本项目与角色权利人无官方关联。</p><details><summary>原作许可证 · Anti-996</summary><pre id="license-text">正在读取…</pre></details><p class="modal-hint">城市列表与天气缓存保存在本机。主动定位在本机匹配附近城市，定位坐标不上传、不留存；天气请求经 Cloudflare 代理发送所选城市的公开中心坐标，服务凭据只保存在服务端。本地城市库来自和风官方城市列表，主要覆盖中国城市及区县。不后台定位，不记录轨迹。系统定位服务自身的数据处理由系统控制。无账号、无广告。</p>`;
+    box.innerHTML+=`${artImg('100','about-miku')}<p>把熟悉的初音天气，带回每一天。</p><p>这是 <a href="https://github.com/lzcapp/MikuWeather_Windows" target="_blank" rel="noreferrer">lzcapp / MikuWeather_Windows</a> 的非官方重制版，延续原作的天气插画与陪伴感。</p><p>原作者：RainySummer / lzcapp<br>天气数据：<a href="https://www.qweather.com/" target="_blank" rel="noreferrer">和风天气 QWeather</a><br>版本：0.3.6 · Windows / Android / iOS</p><p>角色插画沿用原仓库资源，角色及素材权利属于各自权利人。本项目与角色权利人无官方关联。</p><details><summary>原作许可证 · Anti-996</summary><pre id="license-text">正在读取…</pre></details><p class="modal-hint">城市列表与天气缓存保存在本机。Android 和 Windows 的 IP 定位仅主动点击后请求，服务端将当前网络的公网 IP 交给腾讯匹配大致城市，应用不保存 IP；VPN、代理或运营商出口可能影响结果。系统主动定位在本机匹配附近城市，定位坐标不上传、不留存；天气请求经 Cloudflare 代理发送所选城市的公开中心坐标，服务凭据只保存在服务端。本地城市库来自和风官方城市列表，主要覆盖中国城市及区县。不后台定位，不记录轨迹。系统定位服务自身的数据处理由系统控制。无账号、无广告。</p>`;
     fetch('./LICENSE.txt').then(r=>r.text()).then(t=>{if($('#license-text'))$('#license-text').textContent=t;}).catch(()=>{if($('#license-text'))$('#license-text').textContent='请查看安装目录随附的 LICENSE 文件。';});
   }
   createIcons({icons});
@@ -156,7 +160,7 @@ async function locateCity(mode=desktop?'ip':'precise') {
   try {
     const position=await getPosition(mode);
     if(run!==locationEpoch||dialogName!=='search')return;
-    const description=positionDescription(position,Date.now(),{allowApproximate:desktop&&mode==='ip'});
+    const description=positionDescription(position,Date.now(),{allowApproximate:(desktop||android)&&mode==='ip'});
     const candidates=await nearbyCities(position);
     if(run!==locationEpoch||dialogName!=='search')return;
     if(!candidates.length)throw new Error('本地城市库暂未覆盖这个位置，请手动搜索城市');
@@ -180,6 +184,7 @@ document.addEventListener('click', async e=>{
   switch(b.dataset.action) {
     case 'search':case 'settings':case 'about': showDialog(b.dataset.action); break;
     case 'locate':locateCity();break;
+    case 'locate-ip':if(android)locateCity('ip');break;
     case 'locate-system':if(desktop)locateCity('precise');break;
     case 'close':closeDialog();break;
     case 'refresh':if(Date.now()-refreshingAt<10_000){toast('刚刚更新过，请稍后再试');break;}refreshingAt=Date.now();loadWeather();break;

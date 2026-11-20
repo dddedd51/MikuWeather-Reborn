@@ -11,7 +11,7 @@ export async function getPosition(mode='precise') {
     if(!result.ok)throw new Error(result.message||'定位暂不可用，请手动选择城市');
     return {lat:result.lat,lon:result.lon,accuracy:result.accuracy,source:result.source,timestamp:result.timestamp,approximate:result.approximate,adInfo:result.adInfo};
   }
-  if(android)return NativeWeather.locate();
+  if(android)return mode==='ip'?NativeWeather.locateIp():NativeWeather.locate();
   if(Capacitor.getPlatform()==='ios'){const p=await Geolocation.getCurrentPosition({enableHighAccuracy:true,timeout:30000,maximumAge:0});return {lat:Number(p.coords.latitude.toFixed(2)),lon:Number(p.coords.longitude.toFixed(2)),accuracy:Math.max(800,p.coords.accuracy),timestamp:p.timestamp,source:'Obfuscated'};}
   return new Promise((resolve,reject)=>{
     if(!navigator.geolocation){reject(new Error('此设备不支持定位，请手动选择城市'));return;}

@@ -24,10 +24,12 @@ public class MikuWeatherPlugin extends Plugin {
     private final ExecutorService executor = Executors.newFixedThreadPool(3);
     private PluginCall locationCall;
     private ForegroundLocation location;
+    private PluginCall ipLocationCall;
+    private TencentIpLocation ipLocation;
 
     @PluginMethod public void locate(PluginCall call) {
         getActivity().runOnUiThread(() -> {
-            if (locationCall != null) { call.reject("正在定位，请稍候或先取消", "LOCATION_BUSY"); return; }
+            if (locationCall != null || ipLocationCall != null) { call.reject("正在定位，请稍候或先取消", "LOCATION_BUSY"); return; }
             if (!getActivity().getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
                 call.reject("请在天气界面中点击定位", "LOCATION_CANCELLED"); return;
             }
@@ -72,7 +74,35 @@ public class MikuWeatherPlugin extends Plugin {
     @PluginMethod public void cancelLocate(PluginCall call) {
         getActivity().runOnUiThread(() -> { cancelLocation(); call.resolve(); });
     }
+    @PluginMethod public void locateIp(PluginCall call) {
+        getActivity().runOnUiThread(() -> {
+            if (locationCall != null || ipLocationCall != null) { call.reject("正在定位，请稍候或先取消", "LOCATION_BUSY"); return; }
+            if (!getActivity().getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+                call.reject("请在天气界面中点击定位", "LOCATION_CANCELLED"); return;
+            }
+            TencentIpLocation attempt = new TencentIpLocation(getContext());
+            ipLocation = attempt; ipLocationCall = call;
+            executor.execute(() -> {
+                try {
+                    JSObject result = new JSObject(attempt.locate().toString());
+                    getActivity().runOnUiThread(() -> {
+                        if (ipLocationCall != call) return;
+                        ipLocationCall = null; ipLocation = null; call.resolve(result);
+                    });
+                } catch (TencentIpLocation.IpException error) {
+                    getActivity().runOnUiThread(() -> {
+                        if (ipLocationCall != call) return;
+                        ipLocationCall = null; ipLocation = null; call.reject(error.getMessage(), error.code);
+                    });
+                }
+            });
+        });
+    }
     private void cancelLocation() {
+        TencentIpLocation pendingClient = ipLocation; ipLocation = null;
+        PluginCall pendingIp = ipLocationCall; ipLocationCall = null;
+        if (pendingClient != null) pendingClient.cancel();
+        if (pendingIp != null) pendingIp.reject("IP 定位已取消或超时", "IP_CANCELLED");
         if (location != null) location.cancel();
         else if (locationCall != null) {
             PluginCall pending = locationCall; locationCall = null; pending.reject("已取消定位", "LOCATION_CANCELLED");

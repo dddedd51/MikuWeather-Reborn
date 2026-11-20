@@ -4,13 +4,17 @@
 
 ![初音天气重制版实测](docs/images/cover.jpg)
 
-重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.3.5**。
+重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.3.6**。
 
-**[下载 Windows / Android / iOS 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.3.5)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
+**[下载 Windows / Android / iOS 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.3.6)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
 
 📖 [开发日志：我用约 3636 万累计 token，重写了初音天气](docs/DEVLOG.md) · [用量统计范围](docs/token-usage.json) · [构建说明](docs/BUILD.md) · [第三方来源](THIRD_PARTY_NOTICES.md)
 
 > 标题里的累计用量包含缓存输入，不代表新生成 token 数或实际费用。
+
+## 0.3.6 · Android 腾讯 IP 定位
+
+Android 城市选择页新增腾讯 IP 定位按钮，无需位置权限；原有 GPS / 系统网络定位入口保留。仅主动点击后查询，返回网络出口的大致城市，确认候选后才切换城市。完成、取消、退出前台或超时后结束请求；网络失败可重试或手动搜索。详见 [0.3.6 更新说明](docs/UPDATE-0.3.6.md)。
 
 ## 0.3.5 · 修复 Windows 应用内更新
 
@@ -49,7 +53,7 @@ iPhone 继续提供 iOS 14+ 未签名 IPA，检查到更新后打开下载页，
 | Windows | Android | 共享功能 |
 | --- | --- | --- |
 | 透明桌宠、天气气泡、拖动、右键菜单和托盘 | 天气页面、宽版与紧凑版原生桌面小组件 | 当前天气、逐小时和七日预报 |
-| 腾讯 IP 定位，保留系统定位入口 | 系统 GPS / 网络定位，候选城市确认 | 城市搜索与收藏、温度单位、缓存提示 |
+| 腾讯 IP 定位，保留系统定位入口 | 系统 GPS / 网络定位及腾讯 IP 定位，候选城市确认 | 城市搜索与收藏、温度单位、缓存提示 |
 | 日出日落主题与插画切换 | 主题与小组件同步、手动刷新 | 浅色、深色、跟随系统与太阳主题 |
 
 ## 实测画面

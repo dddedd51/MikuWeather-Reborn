@@ -1,4 +1,4 @@
-初音天气 · Reborn 0.3.5（服务端代理版）
+初音天气 · Reborn 0.3.6（服务端代理版）
 
 请把 ZIP 完整解压到普通英文目录，再运行 Miku Weather Reborn.exe。
 例如 D:\MikuWeatherReborn\
