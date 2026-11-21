@@ -1,100 +1,85 @@
-name: Build mobile packages
+name: Complete 0.3.6 Windows release in cloud
 on:
   workflow_dispatch:
-  push:
-    branches: [main, update/multilingual-ios, fix/windows-updater]
-    paths:
-      - 'src/**'
-      - 'shared/**'
-      - 'worker/**'
-      - 'tests/**'
-      - 'android/**'
-      - 'ios/**'
-      - 'desktop/**'
-      - 'package*.json'
-      - 'index.html'
-      - 'pet.html'
-      - 'scripts/build-ios.sh'
-      - '.github/workflows/ios-unsigned.yml'
 permissions:
-  contents: read
+  contents: write
 jobs:
-  windows:
+  windows-release:
     runs-on: windows-2022
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-node@v7.1.0
-        with:
-          node-version: '22'
-          cache: npm
-      - run: npm ci
-      - name: Check Windows PowerShell updater and rollback
-        run: npm test
-  android:
-    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-node@v7.1.0
         with:
-          node-version: '22'
-          cache: npm
-      - uses: actions/setup-java@v6.3.0
-        with:
-          distribution: temurin
-          java-version: '21'
-      - uses: android-actions/setup-android@v4.0.4
-      - uses: gradle/actions/setup-gradle@v6.4.1
-        with:
-          gradle-version: '8.11.1'
-      - run: npm ci
-        env:
-          ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
-      - run: npm run build && npx cap sync android
-      - name: Build and check unsigned Android APK
-        run: gradle -p android --no-daemon assembleRelease testReleaseUnitTest lintRelease
-      - uses: actions/upload-artifact@v7.0.2
-        with:
-          name: MikuWeather-Reborn-Android-unsigned
-          path: android/app/build/outputs/apk/release/*unsigned.apk
-          if-no-files-found: error
-      - uses: actions/upload-artifact@v7.0.2
-        if: always()
-        with:
-          name: Android-check-reports
-          path: |
-            android/app/build/reports/
-            android/app/build/test-results/
-          if-no-files-found: ignore
-  ios:
-    runs-on: macos-15
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v7.0.1
+          ref: 5e3f1984d6d941da6eca411423017811825557bf
+          persist-credentials: false
       - uses: actions/setup-node@v7.1.0
         with:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - name: Run Windows tests
+        run: npm test
+      - name: Build portable Windows package
+        run: npm run package:win
+      - name: Audit, upload and publish complete release
         env:
-          ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
-      - run: npm test
-      - run: npm run build
-      - run: npx cap sync ios
-      - name: Compile unsigned arm64 app and package IPA
-        run: bash scripts/build-ios.sh
-      - name: Upload unsigned IPA
-        uses: actions/upload-artifact@v7.0.2
-        with:
-          name: MikuWeather-Reborn-iOS-unsigned
-          path: release/*iOS-unsigned.ipa
-          if-no-files-found: error
-          retention-days: 30
-      - name: Upload build diagnostics
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $mikuScript=Join-Path $env:RUNNER_TEMP 'miku-cloud-release.mjs'
+          @'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import {createRequire} from 'node:module';
+          const root=process.env.GITHUB_WORKSPACE,slug='dddedd51/MikuWeather-Reborn',head='5e3f1984d6d941da6eca411423017811825557bf';
+          const token=process.env.GITHUB_TOKEN;if(!token)throw Error('Missing job token');
+          const headers={Authorization:'Bearer '+token,'User-Agent':'MikuWeather-Reborn',Accept:'application/vnd.github+json'};
+          async function api(route,method='GET',body){const r=await fetch('https://api.github.com'+route,{method,headers:{...headers,'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(60000)});if(!r.ok)throw Error('GitHub HTTP '+r.status);return r.status===204?null:r.json();}
+          const hash=data=>crypto.createHash('sha256').update(data).digest('hex');
+          const expected={
+           'MikuWeather-Reborn-0.3.6-Android.apk':'950e8c53c344c1d37b8c4b141f315ad908aa252f33bcb0692361cd54d46d298e',
+           'MikuWeather-Reborn-0.3.6-iOS-unsigned.ipa':'ebfade3c9b4a1dd017decc3ac177885d5a199f55d77c9fdb4606f112c64e8592',
+           'MikuWeather-Reborn-0.3.6-Source.zip':'4f4dc2c069a09d27d293d989d0f787c5c0ac509b6ebceb35e305170bc639a29b'
+          };
+          let release=await api(`/repos/${slug}/releases/452836798`);
+          if(!release.draft||release.tag_name!=='v0.3.6'||release.target_commitish!==head||(await api(`/repos/${slug}/commits/main`)).sha!==head)throw Error('Draft release or main changed');
+          let assets=await api(`/repos/${slug}/releases/${release.id}/assets`);
+          for(const [name,digest] of Object.entries(expected)){const a=assets.find(a=>a.name===name);if(!a||a.state!=='uploaded'||a.digest!=='sha256:'+digest)throw Error('Existing signed artifact mismatch: '+name);}
+          const asar=createRequire(path.join(root,'package.json'))('@electron/asar'),app=path.join(root,'release/win-unpacked/resources/app.asar');
+          const pkg=JSON.parse(asar.extractFile(app,'package.json'));if(pkg.version!=='0.3.6')throw Error('Windows version mismatch');
+          const entries=asar.listPackage(app);if(entries.some(n=>/(?:private\.json|\.keystore|\.jks|\.p12|\.pem)$|\/secrets\//i.test(n)))throw Error('Private file in app package');
+          const service=JSON.parse(asar.extractFile(app,'desktop/service.json'));
+          if(service.proxyUrl!=='https://miku-weather-reborn-api.pages.dev'||service.tencent?.proxyUrl!==service.proxyUrl||JSON.stringify(service).includes('secret'))throw Error('Public service configuration mismatch');
+          const packageBytes=fs.readFileSync(app);if(packageBytes.includes(Buffer.from(token)))throw Error('Job token included in package');
+          const windowsName='MikuWeather-Reborn-0.3.6-Windows-x64.zip',windowsPath=path.join(root,'release',windowsName),windowsBytes=fs.readFileSync(windowsPath),windowsDigest=hash(windowsBytes);
+          expected[windowsName]=windowsDigest;
+          const oldWindows=assets.find(a=>a.name===windowsName);
+          if(oldWindows){if(oldWindows.state==='starter'&&oldWindows.digest==null)await api(`/repos/${slug}/releases/assets/${oldWindows.id}`,'DELETE');else if(oldWindows.digest!=='sha256:'+windowsDigest)throw Error('An existing Windows file differs');}
+          async function upload(name,data){const r=await fetch(release.upload_url.split('{')[0]+'?name='+encodeURIComponent(name),{method:'POST',headers:{...headers,'Content-Type':'application/octet-stream'},body:data,signal:AbortSignal.timeout(600000)});if(r.status!==201)throw Error('Upload HTTP '+r.status);const a=await r.json();if(a.digest!=='sha256:'+hash(data)||a.size!==data.length)throw Error('Uploaded hash mismatch');console.log('Uploaded and verified '+name);}
+          if(!oldWindows||oldWindows.state==='starter')await upload(windowsName,windowsBytes);
+          assets=await api(`/repos/${slug}/releases/${release.id}/assets`);
+          const order=[Object.keys(expected)[0],Object.keys(expected)[1],windowsName,Object.keys(expected)[2]];
+          const checksumBytes=Buffer.from(order.map(n=>expected[n]+'  '+n+'\n').join(''));
+          const oldChecksums=assets.find(a=>a.name==='SHA256SUMS.txt');
+          if(oldChecksums&&oldChecksums.digest!=='sha256:'+hash(checksumBytes)){
+           if(oldChecksums.digest!=='sha256:8f3332fcce3468925f37c36bf3d98e9d08c105ef5165672973d639b074e860dd')throw Error('Checksum file changed unexpectedly');
+           await api(`/repos/${slug}/releases/assets/${oldChecksums.id}`,'DELETE');
+          }
+          if(!oldChecksums||oldChecksums.digest!=='sha256:'+hash(checksumBytes))await upload('SHA256SUMS.txt',checksumBytes);
+          assets=await api(`/repos/${slug}/releases/${release.id}/assets`);
+          for(const [name,digest] of Object.entries({...expected,'SHA256SUMS.txt':hash(checksumBytes)})){const a=assets.find(a=>a.name===name);if(!a||a.state!=='uploaded'||a.digest!=='sha256:'+digest)throw Error('Final asset mismatch: '+name);}
+          const audit={version:'0.3.6',head,runId:process.env.GITHUB_RUN_ID,windows:{file:windowsName,sha256:windowsDigest,bytes:windowsBytes.length,version:pkg.version,privateFiles:0,jobTokenMatches:0,asarEntries:entries.length},assets:assets.map(a=>({name:a.name,digest:a.digest,size:a.size,url:a.browser_download_url}))};
+          fs.mkdirSync(path.join(root,'work'),{recursive:true});fs.writeFileSync(path.join(root,'work/Windows-cloud-audit.json'),JSON.stringify(audit,null,2));
+          release=await api(`/repos/${slug}/releases/${release.id}`,'PATCH',{draft:false,make_latest:'true'});
+          audit.url=release.html_url;fs.writeFileSync(path.join(root,'work/Windows-cloud-audit.json'),JSON.stringify(audit,null,2));
+          console.log(JSON.stringify(audit));
+          
+          '@ | Set-Content -LiteralPath $mikuScript -Encoding utf8
+          & node $mikuScript
+          if($LASTEXITCODE -ne 0){exit $LASTEXITCODE}
+      - uses: actions/upload-artifact@v7.0.2
         if: always()
-        uses: actions/upload-artifact@v7.0.2
         with:
-          name: iOS-build-diagnostics
-          path: work/ios-build.log
+          name: Windows-cloud-release-audit
+          path: work/Windows-cloud-audit.json
           if-no-files-found: ignore
