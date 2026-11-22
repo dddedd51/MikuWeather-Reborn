@@ -24,8 +24,8 @@ sleep 8
 container="$(xcrun simctl get_app_container "$sim" io.mikuweather.reborn data)"
 python3 - "$container/Documents/widget-store-test.json" <<'PY'
 import json,sys
-value=json.load(open(sys.argv[1]));assert value.get('sharedGroupAvailable') and value.get('cacheRoundTrip'),value
-print('Simulator App Group cache round-trip passed')
+value=json.load(open(sys.argv[1]));assert all(value.get(key) for key in ['sharedGroupAvailable','cacheRoundTrip','bridgeControllerReady','nativeBridgeReady']),value
+print('Simulator App Group cache round-trip and native bridge startup passed')
 PY
 xcrun simctl terminate "$sim" io.mikuweather.reborn
 for spec in 'small,zh-CN,light' 'medium,en,light' 'large,ja,dark' 'medium,zh-TW,dark' 'small,en,light,F'; do

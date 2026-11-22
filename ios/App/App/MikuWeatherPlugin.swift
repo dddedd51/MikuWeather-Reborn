@@ -21,7 +21,6 @@ public class MikuWeatherPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 }
 
-@objc(MikuBridgeViewController)
 class MikuBridgeViewController: CAPBridgeViewController {
     override func capacitorDidLoad() { bridge?.registerPluginInstance(MikuWeatherPlugin()) }
 }
