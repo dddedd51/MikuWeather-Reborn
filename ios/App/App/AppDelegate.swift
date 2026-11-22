@@ -1,5 +1,7 @@
 import UIKit
 import Capacitor
+import SwiftUI
+import WidgetKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -7,7 +9,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--widget-store-test") {
+            let output = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("widget-store-test.json")
+            do {
+                try WidgetStore.save(city: .preview)
+                try WidgetStore.save(weather: .preview(), for: .preview)
+                let success = WidgetStore.weather(for: .preview)?.temperature == 26
+                let result = try JSONSerialization.data(withJSONObject: ["sharedGroupAvailable": true, "cacheRoundTrip": success])
+                try result.write(to: output, options: .atomic)
+            } catch {
+                try? JSONSerialization.data(withJSONObject: ["sharedGroupAvailable": false, "error": String(describing: error)]).write(to: output, options: .atomic)
+            }
+        }
+        if let argument = ProcessInfo.processInfo.arguments.first(where: { $0.hasPrefix("--widget-preview=") }) {
+            let parts = argument.replacingOccurrences(of: "--widget-preview=", with: "").split(separator: ",").map(String.init)
+            let family: WidgetFamily = parts.first == "small" ? .systemSmall : parts.first == "large" ? .systemLarge : .systemMedium
+            let controller = UIHostingController(rootView: WidgetPreview(family: family, language: parts.count > 1 ? parts[1] : "zh-CN", theme: parts.count > 2 ? parts[2] : "light"))
+            window = UIWindow(frame: UIScreen.main.bounds); window?.rootViewController = controller; window?.makeKeyAndVisible()
+        }
+        #endif
         return true
     }
 

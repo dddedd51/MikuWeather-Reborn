@@ -1563,5 +1563,50 @@
     "城市列表與天氣快取保存在本機。Android 和 Windows 的 IP 定位僅主動點擊後請求，伺服器將目前網路的公網 IP 交給騰訊比對大致城市，應用不儲存 IP；VPN、代理或電信業者出口可能影響結果。系統定位在本機比對附近城市，裝置座標不上傳、不儲存；天氣請求經 Cloudflare 代理傳送所選城市的公開中心座標，服務憑據只保存在伺服器端。本機城市庫來自和風官方城市列表，主要涵蓋中國城市及區縣。不在背景定位，不記錄軌跡。系統定位服務自身的資料處理由系統控制。無帳號、無廣告。",
     "Cities and weather caches are stored on this device. Android and Windows request IP location only when tapped. The server sends your public IP to Tencent to estimate a city; the app does not save it. VPNs, proxies and carrier routing may affect results. Device coordinates are matched locally, never uploaded or saved. Weather requests send only the selected city’s public center coordinates through Cloudflare; credentials stay on the server. The local city index comes from QWeather and mainly covers China. No background location, tracking, accounts or ads. System location services follow the operating system’s policies.",
     "都市一覧と天気キャッシュは端末内に保存されます。Android と Windows はタップ時にのみ IP 位置推定を行います。サーバーは公開 IP を Tencent に送り都市を推定し、アプリは IP を保存しません。VPN、プロキシ、通信事業者の経路が結果に影響する場合があります。端末座標は端末内で都市と照合し、送信・保存しません。天気リクエストは選択した都市の公開中心座標のみを Cloudflare 経由で送り、認証情報はサーバーに保持します。都市一覧は QWeather の公式データで、主に中国の都市と地区を対象とします。バックグラウンド位置取得、移動履歴、アカウント、広告はありません。システムの位置情報サービスは OS の規約に従います。"
+  ],
+  "打开初音天气设置城市": [
+    "開啟初音天氣設定城市",
+    "Open Miku Weather to choose a city",
+    "ミク天気で都市を設定"
+  ],
+  "预报暂不可用": [
+    "預報暫不可用",
+    "Forecast unavailable",
+    "予報を取得できません"
+  ],
+  "预览": [
+    "預覽",
+    "Preview",
+    "プレビュー"
+  ],
+  "缓存": [
+    "快取",
+    "Cached",
+    "キャッシュ"
+  ],
+  "更新于": [
+    "更新於",
+    "Updated",
+    "更新"
+  ],
+  "iPhone 桌面小组件": [
+    "iPhone 桌面小工具",
+    "iPhone home screen widgets",
+    "iPhoneホーム画面ウィジェット"
+  ],
+  "长按主屏幕空白处，点击“编辑”→“添加小组件”，搜索“初音天气”，选择小、中或大尺寸。小组件跟随当前城市、语言、温度单位和明暗主题；点击小组件打开天气。": [
+    "長按主畫面空白處，點選「編輯」→「加入小工具」，搜尋「初音天氣」，選擇小、中或大尺寸。小工具會同步目前城市、語言、溫度單位和明暗主題；點選即可開啟天氣。",
+    "Touch and hold the home screen, choose Edit → Add Widget, search for Miku Weather, and choose a small, medium or large widget. Widgets follow the current city, language, temperature unit and theme. Tap one to open the weather.",
+    "ホーム画面の空白部分を長押しし、「編集」→「ウィジェットを追加」で「初音天气」を検索してサイズを選んでください。都市、言語、温度単位、テーマをアプリから同期します。タップすると天気を開きます。"
+  ],
+  "小组件由 iOS 安排刷新，断网时保留最近数据并标注缓存；时钟按分钟更新，无需每分钟联网。": [
+    "小工具由 iOS 安排更新，離線時保留最近資料並標示快取；時鐘每分鐘更新，不需每分鐘連線。",
+    "iOS schedules weather refreshes. Offline widgets keep recent data and label it as cached. The clock updates each minute without a new weather request.",
+    "天気の更新はiOSが管理します。オフラインでは前回のデータにキャッシュ表示を付けます。時計は毎分更新され、毎分の通信は不要です。"
+  ],
+  "小组件数据共享未启用，请使用包含 App Groups 权限的签名": [
+    "小工具資料共享未啟用，請使用包含 App Groups 權限的簽名",
+    "Widget sharing is unavailable. Sign the app and extension with matching App Groups permissions.",
+    "共有データを利用できません。アプリと拡張を同じApp Groups権限で署名してください。"
   ]
 }

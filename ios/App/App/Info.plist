@@ -29,6 +29,7 @@
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>Location is used only while you request nearby cities. No background tracking is performed.</string>
     <key>ITSAppUsesNonExemptEncryption</key><false/>
+    <key>CFBundleURLTypes</key><array><dict><key>CFBundleURLName</key><string>io.mikuweather.reborn</string><key>CFBundleURLSchemes</key><array><string>mikuweather</string></array></dict></array>
     <key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

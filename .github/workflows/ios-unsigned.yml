@@ -1,75 +1,12 @@
-name: Build mobile packages
+name: Build iOS weather widgets
 on:
   workflow_dispatch:
-  push:
-    branches: [main, update/multilingual-ios, fix/windows-updater]
-    paths:
-      - 'src/**'
-      - 'shared/**'
-      - 'worker/**'
-      - 'tests/**'
-      - 'android/**'
-      - 'ios/**'
-      - 'desktop/**'
-      - 'package*.json'
-      - 'index.html'
-      - 'pet.html'
-      - 'scripts/build-ios.sh'
-      - '.github/workflows/ios-unsigned.yml'
 permissions:
   contents: read
 jobs:
-  windows:
-    runs-on: windows-2022
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-node@v7.1.0
-        with:
-          node-version: '22'
-          cache: npm
-      - run: npm ci
-      - name: Check Windows PowerShell updater and rollback
-        run: npm test
-  android:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 25
-    steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-node@v7.1.0
-        with:
-          node-version: '22'
-          cache: npm
-      - uses: actions/setup-java@v6.3.0
-        with:
-          distribution: temurin
-          java-version: '21'
-      - uses: android-actions/setup-android@v4.0.4
-      - uses: gradle/actions/setup-gradle@v6.4.1
-        with:
-          gradle-version: '8.11.1'
-      - run: npm ci
-        env:
-          ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
-      - run: npm run build && npx cap sync android
-      - name: Build and check unsigned Android APK
-        run: gradle -p android --no-daemon assembleRelease testReleaseUnitTest lintRelease
-      - uses: actions/upload-artifact@v7.0.2
-        with:
-          name: MikuWeather-Reborn-Android-unsigned
-          path: android/app/build/outputs/apk/release/*unsigned.apk
-          if-no-files-found: error
-      - uses: actions/upload-artifact@v7.0.2
-        if: always()
-        with:
-          name: Android-check-reports
-          path: |
-            android/app/build/reports/
-            android/app/build/test-results/
-          if-no-files-found: ignore
-  ios:
+  ios-widgets:
     runs-on: macos-15
-    timeout-minutes: 30
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: actions/setup-node@v7.1.0
@@ -79,22 +16,34 @@ jobs:
       - run: npm ci
         env:
           ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
-      - run: npm test
-      - run: npm run build
-      - run: npx cap sync ios
-      - name: Compile unsigned arm64 app and package IPA
+      - name: Shared application tests
+        run: npm test
+      - name: Native widget data and cache tests
+        run: |
+          mkdir -p work
+          swiftc ios/App/SharedWidget/WidgetData.swift tests/ios-widget/main.swift -o work/widget-data-tests
+          work/widget-data-tests | tee work/widget-data-tests.log
+      - name: Build web application and sync iOS
+        run: npm run build && npx cap sync ios
+      - name: Compile arm64 application with embedded WidgetKit extension
         run: bash scripts/build-ios.sh
-      - name: Upload unsigned IPA
-        uses: actions/upload-artifact@v7.0.2
+      - name: Simulator shared data and widget layout review
+        run: bash scripts/verify-ios-widget-simulator.sh
+      - uses: actions/upload-artifact@v7.0.2
         with:
-          name: MikuWeather-Reborn-iOS-unsigned
-          path: release/*iOS-unsigned.ipa
+          name: MikuWeather-Reborn-iOS-widgets-unsigned
+          path: |
+            release/*iOS-unsigned.ipa
+            docs/iOS-WIDGETS.md
+            work/ios-widget-package-audit.json
           if-no-files-found: error
           retention-days: 30
-      - name: Upload build diagnostics
+      - uses: actions/upload-artifact@v7.0.2
         if: always()
-        uses: actions/upload-artifact@v7.0.2
         with:
-          name: iOS-build-diagnostics
-          path: work/ios-build.log
+          name: iOS-widget-review
+          path: |
+            work/*build.log
+            work/widget-data-tests.log
+            work/widget-previews/*.png
           if-no-files-found: ignore

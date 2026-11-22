@@ -6,6 +6,18 @@
 	objectVersion = 60;
 	objects = {
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D5CA4F9637977DD527FB280D /* Embed App Extensions */ = {isa = PBXCopyFilesBuildPhase; buildActionMask = 2147483647; dstPath = ""; dstSubfolderSpec = 13; files = (5D13128031DAFD62E5119F3E, ); name = "Embed App Extensions"; runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		C2D70C98642F1E8F680AACD9 = {isa = PBXContainerItemProxy; containerPortal = 504EC2FC1FED79650016851F; proxyType = 1; remoteGlobalIDString = 9C82D67F3E0AF5A1A35B9038; remoteInfo = MikuWeatherWidgetExtension; };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		2E823CE4FCA33AA46142EA6F = {isa = PBXTargetDependency; target = 9C82D67F3E0AF5A1A35B9038; targetProxy = C2D70C98642F1E8F680AACD9; };
+/* End PBXTargetDependency section */
+
 /* Begin PBXBuildFile section */
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
 		4D22ABE92AF431CB00220026 /* CapApp-SPM in Frameworks */ = {isa = PBXBuildFile; productRef = 4D22ABE82AF431CB00220026 /* CapApp-SPM */; };
@@ -15,6 +27,20 @@
 		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
+		C4E006C2C354840F5931EC99 /* WidgetData.swift in App */ = {isa = PBXBuildFile; fileRef = E902F2329D7D74B4B8D8DB6D /* WidgetData.swift */; };
+		04AA2DA354B01B5A4D4A26AD /* WidgetStore.swift in App */ = {isa = PBXBuildFile; fileRef = 33220CE80AA10C9B3B6719E6 /* WidgetStore.swift */; };
+		22108DAA1AD3A8DB03A72A75 /* WidgetView.swift in App */ = {isa = PBXBuildFile; fileRef = 7CF7D023DF56877B3FDFF078 /* WidgetView.swift */; };
+		A6A94BA7D8FCCAE21FE07D78 /* WidgetData.swift in Widget */ = {isa = PBXBuildFile; fileRef = E902F2329D7D74B4B8D8DB6D /* WidgetData.swift */; };
+		0A6C025036F8671AA38EA830 /* WidgetStore.swift in Widget */ = {isa = PBXBuildFile; fileRef = 33220CE80AA10C9B3B6719E6 /* WidgetStore.swift */; };
+		ABB79107612970E434F04ABB /* WidgetView.swift in Widget */ = {isa = PBXBuildFile; fileRef = 7CF7D023DF56877B3FDFF078 /* WidgetView.swift */; };
+		FA2915605FDDD74EF20C3E64 /* MikuWeatherPlugin.swift in App */ = {isa = PBXBuildFile; fileRef = 3E8AF87DAC0C14BFDFEB417D /* MikuWeatherPlugin.swift */; };
+		7B8BA472985CB0F064943D6E /* WidgetPreview.swift in App */ = {isa = PBXBuildFile; fileRef = 686F2C92C163C76A86FCA5A0 /* WidgetPreview.swift */; };
+		0C942D6B8D20D80A1F90F189 /* MikuWeatherWidget.swift in Widget */ = {isa = PBXBuildFile; fileRef = D12FB12FAE0F73A75EFDE6C9 /* MikuWeatherWidget.swift */; };
+		C9D38F35C7B8F503AD9F7F9B /* WidgetAssets.xcassets in App */ = {isa = PBXBuildFile; fileRef = 52D966F80B711C4139C25B06 /* WidgetAssets.xcassets */; };
+		14B8520F2EFC3E06497585F1 /* WidgetLocalizations.json in App */ = {isa = PBXBuildFile; fileRef = 5C9DFE575786814B85AA311D /* WidgetLocalizations.json */; };
+		F3E46329A155C81A8A163420 /* WidgetAssets.xcassets in Widget */ = {isa = PBXBuildFile; fileRef = 52D966F80B711C4139C25B06 /* WidgetAssets.xcassets */; };
+		8921968CFD43ED30520E6E3C /* WidgetLocalizations.json in Widget */ = {isa = PBXBuildFile; fileRef = 5C9DFE575786814B85AA311D /* WidgetLocalizations.json */; };
+		5D13128031DAFD62E5119F3E /* MikuWeatherWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3AE94A3A684C7968AA0BCF39; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +54,18 @@
 		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 		958DCC722DB07C7200EA8C5F /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = debug.xcconfig; path = ../debug.xcconfig; sourceTree = SOURCE_ROOT; };
+		E902F2329D7D74B4B8D8DB6D /* WidgetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetData.swift; sourceTree = "<group>"; };
+		33220CE80AA10C9B3B6719E6 /* WidgetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetStore.swift; sourceTree = "<group>"; };
+		7CF7D023DF56877B3FDFF078 /* WidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetView.swift; sourceTree = "<group>"; };
+		52D966F80B711C4139C25B06 /* WidgetAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = WidgetAssets.xcassets; sourceTree = "<group>"; };
+		5C9DFE575786814B85AA311D /* WidgetLocalizations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = WidgetLocalizations.json; sourceTree = "<group>"; };
+		3E8AF87DAC0C14BFDFEB417D /* MikuWeatherPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MikuWeatherPlugin.swift; sourceTree = "<group>"; };
+		686F2C92C163C76A86FCA5A0 /* WidgetPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetPreview.swift; sourceTree = "<group>"; };
+		5D1D67119D9A7DFC4EB3AAC4 /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
+		D12FB12FAE0F73A75EFDE6C9 /* MikuWeatherWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MikuWeatherWidget.swift; sourceTree = "<group>"; };
+		29729FB98BF92DFC2D6F989F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		45A8047D7C7B13BA460E8B99 /* MikuWeatherWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MikuWeatherWidget.entitlements; sourceTree = "<group>"; };
+		3AE94A3A684C7968AA0BCF39 /* MikuWeatherWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MikuWeatherWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +77,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		135960488B427865724A84AE = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -46,6 +85,8 @@
 			isa = PBXGroup;
 			children = (
 				958DCC722DB07C7200EA8C5F /* debug.xcconfig */,
+				17F0DFCDED0182D67A996FA3 /* SharedWidget */,
+				E0889FA81C6C607C14BBFC3C /* MikuWeatherWidget */,
 				504EC3061FED79650016851F /* App */,
 				504EC3051FED79650016851F /* Products */,
 			);
@@ -55,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				504EC3041FED79650016851F /* App.app */,
+				3AE94A3A684C7968AA0BCF39 /* MikuWeatherWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -64,6 +106,9 @@
 			children = (
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
+				3E8AF87DAC0C14BFDFEB417D /* MikuWeatherPlugin.swift */,
+				686F2C92C163C76A86FCA5A0 /* WidgetPreview.swift */,
+				5D1D67119D9A7DFC4EB3AAC4 /* App.entitlements */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
@@ -74,6 +119,8 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		17F0DFCDED0182D67A996FA3 /* SharedWidget */ = {isa = PBXGroup; children = (E902F2329D7D74B4B8D8DB6D /* WidgetData.swift */, 33220CE80AA10C9B3B6719E6 /* WidgetStore.swift */, 7CF7D023DF56877B3FDFF078 /* WidgetView.swift */, 52D966F80B711C4139C25B06 /* WidgetAssets.xcassets */, 5C9DFE575786814B85AA311D /* WidgetLocalizations.json */, ); path = SharedWidget; sourceTree = "<group>"; };
+		E0889FA81C6C607C14BBFC3C /* MikuWeatherWidget */ = {isa = PBXGroup; children = (D12FB12FAE0F73A75EFDE6C9 /* MikuWeatherWidget.swift */, 29729FB98BF92DFC2D6F989F /* Info.plist */, 45A8047D7C7B13BA460E8B99 /* MikuWeatherWidget.entitlements */, ); path = MikuWeatherWidget; sourceTree = "<group>"; };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -84,10 +131,12 @@
 				504EC3001FED79650016851F /* Sources */,
 				504EC3011FED79650016851F /* Frameworks */,
 				504EC3021FED79650016851F /* Resources */,
+				D5CA4F9637977DD527FB280D /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2E823CE4FCA33AA46142EA6F,
 			);
 			name = App;
 			packageProductDependencies = (
@@ -97,6 +146,7 @@
 			productReference = 504EC3041FED79650016851F /* App.app */;
 			productType = "com.apple.product-type.application";
 		};
+		9C82D67F3E0AF5A1A35B9038 /* MikuWeatherWidgetExtension */ = {isa = PBXNativeTarget; buildConfigurationList = 893333851A663EBC46F5DDCE; buildPhases = (8B941411A55ED89FD1000D38, 135960488B427865724A84AE, 72C9644558699938176071D0, ); buildRules = (); dependencies = (); name = MikuWeatherWidgetExtension; productName = MikuWeatherWidgetExtension; productReference = 3AE94A3A684C7968AA0BCF39; productType = "com.apple.product-type.app-extension"; };
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -130,6 +180,7 @@
 			projectRoot = "";
 			targets = (
 				504EC3031FED79650016851F /* App */,
+				9C82D67F3E0AF5A1A35B9038 /* MikuWeatherWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -140,6 +191,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */,
+				C9D38F35C7B8F503AD9F7F9B /* WidgetAssets.xcassets */,
+				14B8520F2EFC3E06497585F1 /* WidgetLocalizations.json */,
 				50B271D11FEDC1A000F3C39B /* public in Resources */,
 				504EC30F1FED79650016851F /* Assets.xcassets in Resources */,
 				50379B232058CBB4000EE86E /* capacitor.config.json in Resources */,
@@ -148,6 +201,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		72C9644558699938176071D0 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (F3E46329A155C81A8A163420, 8921968CFD43ED30520E6E3C, ); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -156,9 +210,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
+				C4E006C2C354840F5931EC99 /* WidgetData.swift */,
+				04AA2DA354B01B5A4D4A26AD /* WidgetStore.swift */,
+				22108DAA1AD3A8DB03A72A75 /* WidgetView.swift */,
+				FA2915605FDDD74EF20C3E64 /* MikuWeatherPlugin.swift */,
+				7B8BA472985CB0F064943D6E /* WidgetPreview.swift */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8B941411A55ED89FD1000D38 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A6A94BA7D8FCCAE21FE07D78, 0A6C025036F8671AA38EA830, ABB79107612970E434F04ABB, 0C942D6B8D20D80A1F90F189, ); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
@@ -296,14 +356,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				INFOPLIST_FILE = App/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.3.6;
+				MARKETING_VERSION = 0.3.7;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = io.mikuweather.reborn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -318,14 +379,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				INFOPLIST_FILE = App/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.3.6;
+				MARKETING_VERSION = 0.3.7;
 				PRODUCT_BUNDLE_IDENTIFIER = io.mikuweather.reborn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
@@ -334,6 +396,8 @@
 			};
 			name = Release;
 		};
+		2D7A36376D49304D8801A8D2 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = MikuWeatherWidget/MikuWeatherWidget.entitlements; CURRENT_PROJECT_VERSION = 13; MARKETING_VERSION = 0.3.7; INFOPLIST_FILE = MikuWeatherWidget/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 14.0; LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@executable_path/../../Frameworks", ); PRODUCT_BUNDLE_IDENTIFIER = io.mikuweather.reborn.widget; PRODUCT_NAME = "$(TARGET_NAME)"; SKIP_INSTALL = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; }; name = Debug; };
+		506708EB566CA658FFF7FB36 /* Release */ = {isa = XCBuildConfiguration; buildSettings = { APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = MikuWeatherWidget/MikuWeatherWidget.entitlements; CURRENT_PROJECT_VERSION = 13; MARKETING_VERSION = 0.3.7; INFOPLIST_FILE = MikuWeatherWidget/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 14.0; LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@executable_path/../../Frameworks", ); PRODUCT_BUNDLE_IDENTIFIER = io.mikuweather.reborn.widget; PRODUCT_NAME = "$(TARGET_NAME)"; SKIP_INSTALL = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = ""; }; name = Release; };
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -355,6 +419,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		893333851A663EBC46F5DDCE = {isa = XCConfigurationList; buildConfigurations = (2D7A36376D49304D8801A8D2, 506708EB566CA658FFF7FB36, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */

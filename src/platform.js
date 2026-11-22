@@ -5,6 +5,7 @@ import { Capacitor, CapacitorHttp, registerPlugin } from '@capacitor/core';
 const NativeWeather = registerPlugin('MikuWeather');
 export const desktop = !!window.miku;
 export const android = Capacitor.getPlatform() === 'android';
+export const ios = Capacitor.getPlatform() === 'ios';
 export async function getPosition(mode='precise') {
   if (window.miku) {
     const result=mode==='ip'?await window.miku.locateIp():await window.miku.locate();
@@ -22,8 +23,9 @@ export function cancelLocation() {
   window.miku?.cancelLocate();
   if(android)NativeWeather.cancelLocate().catch(()=>{});
 }
-export async function selectWidgetCity(city, unit, theme = 'solar', language = 'zh-CN', opacity=0, textScale=110) {
+export async function selectWidgetCity(city, unit, theme = 'solar', language = 'zh-CN', opacity=0, textScale=110, weather=null) {
   if (android) return NativeWeather.selectCity({ city, unit, theme, language, opacity, textScale });
+  if (ios) return NativeWeather.selectCity({ city, unit, theme, language, weather });
 }
 export async function pinWidget(style) {
   if (android) return NativeWeather.pinWidget({ style });

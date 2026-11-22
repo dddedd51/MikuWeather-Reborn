@@ -6,7 +6,7 @@ import './style.css';
 import { createIcons, AudioLines, Search, MapPin, LocateFixed, Building2, Plus, Music2, Settings2, Heart, SunMoon, PictureInPicture2, RefreshCw, WifiOff, Cloud, ArrowUp, ArrowDown, Sparkles, Droplets, Wind, Umbrella, Eye, Clock3, CalendarDays, Droplet, ChevronRight, Sunrise, Sunset, X, ArrowUpRight, CloudLightning, CloudSnow, CloudRain, Snowflake, CloudFog, Moon, Sun, CloudSun } from 'lucide';
 const icons = { AudioLines, Search, MapPin, LocateFixed, Building2, Plus, Music2, Settings2, Heart, SunMoon, PictureInPicture2, RefreshCw, WifiOff, Cloud, ArrowUp, ArrowDown, Sparkles, Droplets, Wind, Umbrella, Eye, Clock3, CalendarDays, Droplet, ChevronRight, Sunrise, Sunset, X, ArrowUpRight, CloudLightning, CloudSnow, CloudRain, Snowflake, CloudFog, Moon, Sun, CloudSun };
 import { CITIES, solarArt as art, normalizeCurrent, normalizeDaily, normalizeHourly, demoWeather, localDate } from './weather.js';
-import { request, desktop, android, selectWidgetCity, pinWidget, getPosition, cancelLocation } from './platform.js';
+import { request, desktop, android, ios, selectWidgetCity, pinWidget, getPosition, cancelLocation } from './platform.js';
 import { nearbyCities,positionDescription } from './location.js';
 import { solarPixelIcon as pixelIcon } from './weather-icons.js';
 import { solarNight } from './solar.js';
@@ -100,6 +100,7 @@ async function loadWeather() {
   if (demo) { data=demoWeather(city); loading=false; render(); return; }
   const cached=read(cacheKey(),null);
   data=cached?.cityId===city.id && cached?.current && Array.isArray(cached.daily) && Array.isArray(cached.hourly) ? cached : null;
+  if(ios)syncCompanion();
   render();
   const results=await Promise.allSettled(['current','daily','hourly'].map(kind=>request(kind,{lat:selected.lat,lon:selected.lon})));
   if(run!==epoch) return;
@@ -112,14 +113,14 @@ async function loadWeather() {
       catch(e) { next.partial.push(label+'：'+e.message); }
     }
     next.attributions=[...new Set(results.filter(r=>r.status==='fulfilled').flatMap(r=>r.value.metadata?.attributions||[]).filter(s=>typeof s==='string'))];
-    data=next; save(cacheKey(),next); window.miku?.setWeather({city:displayCity(city).name,temp:temp(next.current.temp),text:t(next.current.text)});
+    data=next; save(cacheKey(),next); window.miku?.setWeather({city:displayCity(city).name,temp:temp(next.current.temp),text:t(next.current.text)});if(ios)syncCompanion();
   } catch(e) { error=e.message; }
   render();
 }
 function syncCompanion() {
   window.miku?.setCity({...city,displayName:displayCity(city).name});
   window.miku?.setPreferences(prefs);
-  selectWidgetCity({...city,displayName:displayCity(city).name}, prefs.unit, prefs.theme, prefs.language,prefs.widgetOpacity,prefs.widgetTextScale).catch(()=>toast('桌面小组件暂未同步，请稍后重试'));
+  selectWidgetCity({...city,displayName:displayCity(city).name}, prefs.unit, prefs.theme, prefs.language,prefs.widgetOpacity,prefs.widgetTextScale,!demo&&data?.cityId===city.id?data:null).catch(error=>toast(error.code==='WIDGET_APP_GROUP'?'小组件数据共享未启用，请使用包含 App Groups 权限的签名':'桌面小组件暂未同步，请稍后重试'));
 }
 function pickCity(c) { if(!saved.some(s=>s.id===c.id)) { saved.push(c); save('miku:cities',saved); } city=c; save('miku:selected',c.id); syncCompanion(); localizeCities(); closeDialog(); loadWeather(); }
 function closeDialog() { searchEpoch++;locationEpoch++;locating=false;cancelLocation();dialogName=''; $('#modal')?.close(); }
@@ -139,13 +140,14 @@ function showDialog(name) {
     box.innerHTML+=`<div class="setting-row"><span>语言<small>立即生效，并同步桌宠与小组件</small></span><select id="language-select" aria-label="语言" data-no-i18n>${Object.entries(languages).map(([value,label])=>`<option value="${value}">${label}</option>`).join('')}</select></div>`;
     box.innerHTML+=`<div class="setting-row"><span>外观<small>为你的每一天换个颜色</small></span><select id="theme-select" aria-label="外观主题"><option value="dark">深海绿</option><option value="light">薄荷白</option><option value="system">跟随系统</option></select></div><div class="setting-row"><span>温度单位</span><select id="unit-select" aria-label="温度单位"><option value="C">摄氏度 °C</option><option value="F">华氏度 °F</option></select></div>${desktop?'<div class="setting-row"><span>桌面置顶<small>让初音一直陪在屏幕上</small></span><button class="secondary" data-action="pin">切换置顶</button></div>':''}<h3 class="settings-subtitle">管理城市</h3>${saved.map(c=>`<div class="manage-city"><span>${cityField(c,'name')}</span><button data-remove="${esc(c.id)}" ${saved.length===1?'disabled':''}>移除</button></div>`).join('')}<div class="settings-note">每 15 分钟自动更新。网络中断时保留最近一次天气，并标明缓存状态。无需填写 API 密钥。</div><button class="secondary" data-action="demo">${demo?'返回实时天气':'查看界面演示'}</button>`;
     if(android) box.innerHTML+=widgetSettings(prefs,displayCity(city),data);
+    if(ios)box.innerHTML+=`<h3 class="settings-subtitle">iPhone 桌面小组件</h3><p class="modal-hint">长按主屏幕空白处，点击“编辑”→“添加小组件”，搜索“初音天气”，选择小、中或大尺寸。小组件跟随当前城市、语言、温度单位和明暗主题；点击小组件打开天气。</p><p class="modal-hint">小组件由 iOS 安排刷新，断网时保留最近数据并标注缓存；时钟按分钟更新，无需每分钟联网。</p>`;
     box.innerHTML+=updatePanel();
     if(android) box.innerHTML+=`<h3 class="settings-subtitle">桌面小组件</h3><p class="modal-hint">初音、时钟与天气常驻手机桌面。小组件跟随当前城市和温度单位，点击打开天气详情。</p><div class="widget-actions"><button class="secondary" data-action="widget-wide">添加宽版 · 4×2</button><button class="secondary" data-action="widget-compact">添加紧凑版 · 2×2</button></div><p class="modal-hint">也可长按手机桌面，选择“小组件”→“初音天气”。后台更新时间受系统省电策略影响。</p>`;
     $('#theme-select').insertAdjacentHTML('afterbegin','<option value="solar">自动 · 日出浅色 / 日落深色</option>');
     bindWidgetSettings(box,prefs,()=>{save('miku:prefs',prefs);syncCompanion();});bindUpdates(box);
     $('#language-select').value=getLanguage(); $('#theme-select').value=prefs.theme; $('#unit-select').value=prefs.unit;
   } else if(name==='about') {
-    box.innerHTML+=`${artImg('100','about-miku')}<p>把熟悉的初音天气，带回每一天。</p><p>这是 <a href="https://github.com/lzcapp/MikuWeather_Windows" target="_blank" rel="noreferrer">lzcapp / MikuWeather_Windows</a> 的非官方重制版，延续原作的天气插画与陪伴感。</p><p>原作者：RainySummer / lzcapp<br>天气数据：<a href="https://www.qweather.com/" target="_blank" rel="noreferrer">和风天气 QWeather</a><br>版本：0.3.6 · Windows / Android / iOS</p><p>角色插画沿用原仓库资源，角色及素材权利属于各自权利人。本项目与角色权利人无官方关联。</p><details><summary>原作许可证 · Anti-996</summary><pre id="license-text">正在读取…</pre></details><p class="modal-hint">城市列表与天气缓存保存在本机。Android 和 Windows 的 IP 定位仅主动点击后请求，服务端将当前网络的公网 IP 交给腾讯匹配大致城市，应用不保存 IP；VPN、代理或运营商出口可能影响结果。系统主动定位在本机匹配附近城市，定位坐标不上传、不留存；天气请求经 Cloudflare 代理发送所选城市的公开中心坐标，服务凭据只保存在服务端。本地城市库来自和风官方城市列表，主要覆盖中国城市及区县。不后台定位，不记录轨迹。系统定位服务自身的数据处理由系统控制。无账号、无广告。</p>`;
+    box.innerHTML+=`${artImg('100','about-miku')}<p>把熟悉的初音天气，带回每一天。</p><p>这是 <a href="https://github.com/lzcapp/MikuWeather_Windows" target="_blank" rel="noreferrer">lzcapp / MikuWeather_Windows</a> 的非官方重制版，延续原作的天气插画与陪伴感。</p><p>原作者：RainySummer / lzcapp<br>天气数据：<a href="https://www.qweather.com/" target="_blank" rel="noreferrer">和风天气 QWeather</a><br>版本：0.3.7 · Windows / Android / iOS</p><p>角色插画沿用原仓库资源，角色及素材权利属于各自权利人。本项目与角色权利人无官方关联。</p><details><summary>原作许可证 · Anti-996</summary><pre id="license-text">正在读取…</pre></details><p class="modal-hint">城市列表与天气缓存保存在本机。Android 和 Windows 的 IP 定位仅主动点击后请求，服务端将当前网络的公网 IP 交给腾讯匹配大致城市，应用不保存 IP；VPN、代理或运营商出口可能影响结果。系统主动定位在本机匹配附近城市，定位坐标不上传、不留存；天气请求经 Cloudflare 代理发送所选城市的公开中心坐标，服务凭据只保存在服务端。本地城市库来自和风官方城市列表，主要覆盖中国城市及区县。不后台定位，不记录轨迹。系统定位服务自身的数据处理由系统控制。无账号、无广告。</p>`;
     fetch('./LICENSE.txt').then(r=>r.text()).then(t=>{if($('#license-text'))$('#license-text').textContent=t;}).catch(()=>{if($('#license-text'))$('#license-text').textContent='请查看安装目录随附的 LICENSE 文件。';});
   }
   createIcons({icons});
