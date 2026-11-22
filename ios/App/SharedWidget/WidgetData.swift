@@ -129,10 +129,16 @@ struct WidgetWeather: Codable {
         return hour < 6 || hour >= 18
     }
     static func preview(at now: Date = Date()) -> WidgetWeather {
-        WidgetWeather(cityIdentity: WidgetCity.preview.identity, fetchedAt: now, observedAt: now, temperature: 26, condition: "多云", code: "101", humidity: 64, wind: 2.4,
-                      high: 28, low: 21, sunrise: nil, sunset: nil,
-                      hours: (1...4).map { WidgetHour(date: now.addingTimeInterval(Double($0) * 3600), temperature: 26 - Double($0), code: "101") },
-                      days: (0...3).map { WidgetDay(date: now.addingTimeInterval(Double($0) * 86400), high: 28 - Double($0), low: 21 - Double($0), code: $0 == 2 ? "305" : "101") })
+        let hours: [WidgetHour] = (1...4).map { index in
+            let date = now.addingTimeInterval(Double(index) * 3600)
+            return WidgetHour(date: date, temperature: 26.0 - Double(index), code: "101")
+        }
+        let days: [WidgetDay] = (0...3).map { index in
+            let date = now.addingTimeInterval(Double(index) * 86400)
+            return WidgetDay(date: date, high: 28.0 - Double(index), low: 21.0 - Double(index), code: index == 2 ? "305" : "101")
+        }
+        return WidgetWeather(cityIdentity: WidgetCity.preview.identity, fetchedAt: now, observedAt: now, temperature: 26.0, condition: "多云", code: "101", humidity: 64.0, wind: 2.4,
+                             high: 28.0, low: 21.0, sunrise: nil, sunset: nil, hours: hours, days: days)
     }
 }
 
