@@ -17,7 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 try WidgetStore.save(weather: .preview(), for: .preview)
                 let success = WidgetStore.weather(for: .preview)?.temperature == 26
                 let older = WidgetWeather.preview(at: Date().addingTimeInterval(-3600), temperatureC: 10)
-                let rejected = try !WidgetStore.save(weather: older, for: .preview)
+                let savedOld = try WidgetStore.save(weather: older, for: .preview)
+                let rejected = !savedOld
                 let result = try JSONSerialization.data(withJSONObject: ["sharedGroupAvailable": true, "cacheRoundTrip": success])
                 try result.write(to: output, options: .atomic)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
