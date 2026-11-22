@@ -10,9 +10,12 @@ struct MikuWeatherEntry: TimelineEntry {
 }
 
 struct MikuWeatherWidgetView: View {
-    @Environment(\.widgetFamily) var family
+    @Environment(\.widgetFamily) private var systemFamily
     @Environment(\.colorScheme) var scheme
     let entry: MikuWeatherEntry
+    let previewFamily: WidgetFamily?
+    init(entry: MikuWeatherEntry, previewFamily: WidgetFamily? = nil) { self.entry = entry; self.previewFamily = previewFamily }
+    private var family: WidgetFamily { previewFamily ?? systemFamily }
     private var city: WidgetCity { entry.city ?? .preview }
     private var dark: Bool {
         switch city.theme {
@@ -97,7 +100,7 @@ struct MikuWeatherWidgetView: View {
         }.padding(8)
     }
     private func expanded(size: CGSize) -> some View {
-        VStack(alignment: .leading, spacing: family == .systemLarge ? 10 : 4) {
+        VStack(alignment: .leading, spacing: family == .systemLarge ? 6 : 4) {
             HStack(alignment: .firstTextBaseline) {
                 HStack(spacing: 5) { Image(systemName: "location.fill").font(.system(size: 10)); Text(city.name).font(.system(size: 15, weight: .semibold)).lineLimit(1).minimumScaleFactor(0.7) }
                 Spacer(minLength: 4)
@@ -107,14 +110,14 @@ struct MikuWeatherWidgetView: View {
             HStack(spacing: 2) {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text(degrees(entry.weather?.temperature)).font(.system(size: family == .systemLarge ? 54 : 42, weight: .semibold, design: .rounded)).lineLimit(1).minimumScaleFactor(0.65)
+                        Text(degrees(entry.weather?.temperature)).font(.system(size: family == .systemLarge ? 48 : 36, weight: .semibold, design: .rounded)).lineLimit(1).minimumScaleFactor(0.65)
                         Text(city.unit).font(.system(size: 12)).foregroundColor(muted)
                     }
-                    HStack(spacing: 5) { Image(systemName: symbol(entry.weather?.code ?? "", night: dark)); Text(text(entry.weather?.condition ?? "等待天气数据")).lineLimit(1).minimumScaleFactor(0.7) }.font(.system(size: 12, weight: .medium))
+                    HStack(spacing: 5) { Image(systemName: symbol(entry.weather?.code ?? "", night: entry.weather?.night(at: entry.date, city: city) ?? dark)); Text(text(entry.weather?.condition ?? "等待天气数据")).lineLimit(1).minimumScaleFactor(0.7) }.font(.system(size: 12, weight: .medium))
                     Text("↑ \(degrees(entry.weather?.high))   ↓ \(degrees(entry.weather?.low))").font(.system(size: 11)).foregroundColor(muted).lineLimit(1)
                 }.frame(maxWidth: .infinity, alignment: .leading)
-                Image(artwork).resizable().scaledToFit().frame(width: size.width * 0.43, height: family == .systemLarge ? 119 : max(55, size.height - 49)).accessibilityHidden(true)
-            }.frame(maxHeight: family == .systemLarge ? 122 : .infinity)
+                Image(artwork).resizable().scaledToFit().frame(width: size.width * 0.43, height: family == .systemLarge ? 96 : max(55, size.height - 70)).accessibilityHidden(true)
+            }.frame(maxHeight: family == .systemLarge ? 100 : .infinity)
             if family == .systemLarge {
                 HStack { Text(text("相对湿度") + " " + (entry.weather?.humidity.map { String(Int($0.rounded())) + "%" } ?? "—")); Spacer(); Text(text("风速") + " " + (entry.weather?.wind.map { String(format: "%.1f m/s", $0) } ?? "—")) }.font(.system(size: 10)).foregroundColor(muted)
                 Divider().background(ink.opacity(0.10))
@@ -123,7 +126,7 @@ struct MikuWeatherWidgetView: View {
                         VStack(spacing: 5) { Text(clock(hour.date)).foregroundColor(muted); Image(systemName: symbol(hour.code)); Text(degrees(hour.temperature)).fontWeight(.semibold) }.font(.system(size: 11)).frame(maxWidth: .infinity)
                     }
                     if entry.weather?.hours.isEmpty != false { Text(text("预报暂不可用")).font(.system(size: 11)).foregroundColor(muted).frame(maxWidth: .infinity) }
-                }.frame(height: 48)
+                }.frame(height: 44)
                 ForEach(Array((entry.weather?.days ?? []).prefix(3).enumerated()), id: \.offset) { index, day in
                     HStack { Text(index == 0 ? text("今天") : clock(day.date, format: "EEE")); Spacer(); Image(systemName: symbol(day.code)); Spacer(); Text(degrees(day.low) + " / " + degrees(day.high)) }.font(.system(size: 11)).frame(height: 16)
                 }

@@ -6,10 +6,10 @@ device_type="$(xcrun simctl list devicetypes -j | python3 -c 'import json,sys;v=
 runtime="$(xcrun simctl list runtimes -j | python3 -c 'import json,sys;v=[r for r in json.load(sys.stdin)["runtimes"] if r.get("isAvailable") and "iOS" in r["name"]];print(max(v,key=lambda r:tuple(map(int,r["version"].split("."))))["identifier"])')"
 sim="$(xcrun simctl create MikuWidgetReview "$device_type" "$runtime")"
 xcrun simctl boot "$sim"
-xcrun simctl bootstatus "$sim" -b
 xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug \
   -destination "platform=iOS Simulator,id=$sim" -derivedDataPath work/ios-sim \
   CODE_SIGNING_ALLOWED=NO CURRENT_PROJECT_VERSION=13 MARKETING_VERSION=0.3.7 build 2>&1 | tee work/ios-sim-build.log
+xcrun simctl bootstatus "$sim" -b
 app="$PWD/work/ios-sim/Build/Products/Debug-iphonesimulator/App.app"
 if [[ -d "$app/Frameworks" ]]; then
   for framework in "$app"/Frameworks/*.framework; do
