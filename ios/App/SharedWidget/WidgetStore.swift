@@ -20,11 +20,13 @@ enum WidgetStore {
         guard let folder = folder else { throw WidgetFailure.unavailableGroup }
         try JSONEncoder().encode(city).write(to: folder.appendingPathComponent("widget-city.json"), options: .atomic)
     }
-    static func save(weather: WidgetWeather, for city: WidgetCity) throws {
+    @discardableResult static func save(weather: WidgetWeather, for city: WidgetCity) throws -> Bool {
         // A completed background request must not restore a city the app has already changed.
-        guard self.city()?.identity == city.identity else { return }
+        guard self.city()?.identity == city.identity else { return false }
+        if let previous = self.weather(for: city), !weather.shouldReplace(previous) { return false }
         guard let folder = folder else { throw WidgetFailure.unavailableGroup }
         try JSONEncoder().encode(weather).write(to: folder.appendingPathComponent("widget-weather.json"), options: .atomic)
+        return true
     }
 }
 

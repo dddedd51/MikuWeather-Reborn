@@ -16,11 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 try WidgetStore.save(city: .preview)
                 try WidgetStore.save(weather: .preview(), for: .preview)
                 let success = WidgetStore.weather(for: .preview)?.temperature == 26
+                let older = WidgetWeather.preview(at: Date().addingTimeInterval(-3600), temperatureC: 10)
+                let rejected = try !WidgetStore.save(weather: older, for: .preview)
                 let result = try JSONSerialization.data(withJSONObject: ["sharedGroupAvailable": true, "cacheRoundTrip": success])
                 try result.write(to: output, options: .atomic)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
                     let controller = self?.window?.rootViewController as? MikuBridgeViewController
-                    let checks: [String: Any] = ["sharedGroupAvailable": true, "cacheRoundTrip": success, "bridgeControllerReady": controller != nil, "nativeBridgeReady": controller?.bridge != nil]
+                    let checks: [String: Any] = ["sharedGroupAvailable": true, "cacheRoundTrip": success, "olderCacheRejected": rejected, "bridgeControllerReady": controller != nil, "nativeBridgeReady": controller?.bridge != nil]
                     if let data = try? JSONSerialization.data(withJSONObject: checks) { try? data.write(to: output, options: .atomic) }
                 }
             } catch {

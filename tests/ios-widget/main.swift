@@ -31,4 +31,10 @@ check("cached daily forecasts move to the new city-local day after midnight") {
     let days = sample.forecastDays(for: city, at: start.addingTimeInterval(86400))
     try require(days.count == 3 && days.first?.high == 27 && days.first?.low == 20)
 }
+check("opening the app cannot downgrade a newer widget observation") {
+    let previous = WidgetWeather.preview(at: now)
+    let older = WidgetWeather.preview(at: now.addingTimeInterval(-3600))
+    let newer = WidgetWeather.preview(at: now.addingTimeInterval(60))
+    try require(!older.shouldReplace(previous) && !previous.shouldReplace(previous) && newer.shouldReplace(previous))
+}
 print("\(count) widget data tests passed")

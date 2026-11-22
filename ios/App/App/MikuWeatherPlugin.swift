@@ -11,9 +11,10 @@ public class MikuWeatherPlugin: CAPPlugin, CAPBridgedPlugin {
         do {
             guard let object = call.getObject("city") else { throw WidgetFailure.invalidCity }
             let city = try WidgetCity.make(city: object, unit: call.getString("unit") ?? "C", theme: call.getString("theme") ?? "solar", language: call.getString("language") ?? "zh-CN")
+            var changed = WidgetStore.city() != city
             try WidgetStore.save(city: city)
-            if let data = call.getObject("weather"), let weather = try? WidgetWeather.fromApp(data, city: city) { try WidgetStore.save(weather: weather, for: city) }
-            WidgetCenter.shared.reloadTimelines(ofKind: WidgetStore.kind)
+            if let data = call.getObject("weather"), let weather = try? WidgetWeather.fromApp(data, city: city) { let saved = try WidgetStore.save(weather: weather, for: city); changed = changed || saved }
+            if changed { WidgetCenter.shared.reloadTimelines(ofKind: WidgetStore.kind) }
             call.resolve(["synced": true])
         } catch WidgetFailure.unavailableGroup {
             call.reject("小组件数据共享未启用，请使用包含 App Groups 权限的签名", "WIDGET_APP_GROUP")
