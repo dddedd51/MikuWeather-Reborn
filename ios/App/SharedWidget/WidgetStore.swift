@@ -1,9 +1,19 @@
 import Foundation
+import Darwin
 
 enum WidgetStore {
     static let appGroup = "group.io.mikuweather.reborn"
     static let kind = "MikuWeatherWidget"
     private static var folder: URL? { FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) }
+    private static func locked<T>(_ action: (URL) throws -> T) throws -> T {
+        guard let folder = folder else { throw WidgetFailure.unavailableGroup }
+        let descriptor = Darwin.open(folder.appendingPathComponent("widget-access.lock").path, O_CREAT | O_RDWR, 0o600)
+        guard descriptor >= 0 else { throw WidgetFailure.invalidResponse }
+        defer { Darwin.close(descriptor) }
+        while Darwin.flock(descriptor, LOCK_EX) != 0 { if errno != EINTR { throw WidgetFailure.invalidResponse } }
+        defer { _ = Darwin.flock(descriptor, LOCK_UN) }
+        return try action(folder)
+    }
 
     static func city() -> WidgetCity? {
         guard let url = folder?.appendingPathComponent("widget-city.json"), let data = try? Data(contentsOf: url),
@@ -17,16 +27,16 @@ enum WidgetStore {
         return weather
     }
     static func save(city: WidgetCity) throws {
-        guard let folder = folder else { throw WidgetFailure.unavailableGroup }
-        try JSONEncoder().encode(city).write(to: folder.appendingPathComponent("widget-city.json"), options: .atomic)
+        try locked { folder in try JSONEncoder().encode(city).write(to: folder.appendingPathComponent("widget-city.json"), options: .atomic) }
     }
     @discardableResult static func save(weather: WidgetWeather, for city: WidgetCity) throws -> Bool {
         // A completed background request must not restore a city the app has already changed.
-        guard self.city()?.identity == city.identity else { return false }
-        if let previous = self.weather(for: city), !weather.shouldReplace(previous) { return false }
-        guard let folder = folder else { throw WidgetFailure.unavailableGroup }
-        try JSONEncoder().encode(weather).write(to: folder.appendingPathComponent("widget-weather.json"), options: .atomic)
-        return true
+        return try locked { folder in
+            guard self.city()?.identity == city.identity else { return false }
+            if let previous = self.weather(for: city), !weather.shouldReplace(previous) { return false }
+            try JSONEncoder().encode(weather).write(to: folder.appendingPathComponent("widget-weather.json"), options: .atomic)
+            return true
+        }
     }
 }
 
