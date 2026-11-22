@@ -27,6 +27,10 @@ struct MikuWeatherWidgetView: View {
     }
     private var ink: Color { dark ? Color(red: 0.89, green: 0.98, blue: 0.96) : Color(red: 0.10, green: 0.28, blue: 0.29) }
     private var muted: Color { ink.opacity(0.65) }
+    private var calendar: Calendar { var value = Calendar(identifier: .gregorian); value.timeZone = city.zone; return value }
+    private var days: [WidgetDay] { entry.weather?.forecastDays(for: city, at: entry.date) ?? [] }
+    private var high: Double? { guard let day = days.first, calendar.isDate(day.date, inSameDayAs: entry.date) else { return nil }; return day.high }
+    private var low: Double? { guard let day = days.first, calendar.isDate(day.date, inSameDayAs: entry.date) else { return nil }; return day.low }
     private var background: LinearGradient {
         LinearGradient(gradient: Gradient(colors: dark ? [Color(red: 0.07, green: 0.17, blue: 0.20), Color(red: 0.12, green: 0.28, blue: 0.30)] : [Color(red: 0.88, green: 0.98, blue: 0.94), Color(red: 0.74, green: 0.93, blue: 0.88)]), startPoint: .topLeading, endPoint: .bottomTrailing)
     }
@@ -95,7 +99,7 @@ struct MikuWeatherWidgetView: View {
                     Text(text(entry.weather?.condition ?? "等待天气数据")).font(.system(size: 10, weight: .medium)).lineLimit(1).frame(maxWidth: size.width * 0.51, alignment: .leading)
                 }.frame(width: size.width * 0.49, alignment: .leading)
             }.frame(maxHeight: .infinity)
-            Text("↑ \(degrees(entry.weather?.high))  ↓ \(degrees(entry.weather?.low))").font(.system(size: 9)).foregroundColor(muted).lineLimit(1)
+            Text("↑ \(degrees(high))  ↓ \(degrees(low))").font(.system(size: 9)).foregroundColor(muted).lineLimit(1)
             status.font(.system(size: 8)).lineLimit(1).minimumScaleFactor(0.6)
         }.padding(8)
     }
@@ -114,7 +118,7 @@ struct MikuWeatherWidgetView: View {
                         Text(city.unit).font(.system(size: 12)).foregroundColor(muted)
                     }
                     HStack(spacing: 5) { Image(systemName: symbol(entry.weather?.code ?? "", night: entry.weather?.night(at: entry.date, city: city) ?? dark)); Text(text(entry.weather?.condition ?? "等待天气数据")).lineLimit(1).minimumScaleFactor(0.7) }.font(.system(size: 12, weight: .medium))
-                    Text("↑ \(degrees(entry.weather?.high))   ↓ \(degrees(entry.weather?.low))").font(.system(size: 11)).foregroundColor(muted).lineLimit(1)
+                    Text("↑ \(degrees(high))   ↓ \(degrees(low))").font(.system(size: 11)).foregroundColor(muted).lineLimit(1)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 Image(artwork).resizable().scaledToFit().frame(width: size.width * 0.43, height: family == .systemLarge ? 96 : max(55, size.height - 70)).accessibilityHidden(true)
             }.frame(maxHeight: family == .systemLarge ? 100 : .infinity)
@@ -127,8 +131,8 @@ struct MikuWeatherWidgetView: View {
                     }
                     if entry.weather?.hours.isEmpty != false { Text(text("预报暂不可用")).font(.system(size: 11)).foregroundColor(muted).frame(maxWidth: .infinity) }
                 }.frame(height: 44)
-                ForEach(Array((entry.weather?.days ?? []).prefix(3).enumerated()), id: \.offset) { index, day in
-                    HStack { Text(index == 0 ? text("今天") : clock(day.date, format: "EEE")); Spacer(); Image(systemName: symbol(day.code)); Spacer(); Text(degrees(day.low) + " / " + degrees(day.high)) }.font(.system(size: 11)).frame(height: 16)
+                ForEach(Array(days.prefix(3).enumerated()), id: \.offset) { _, day in
+                    HStack { Text(calendar.isDate(day.date, inSameDayAs: entry.date) ? text("今天") : clock(day.date, format: "EEE")); Spacer(); Image(systemName: symbol(day.code)); Spacer(); Text(degrees(day.low) + " / " + degrees(day.high)) }.font(.system(size: 11)).frame(height: 16)
                 }
                 Spacer(minLength: 0)
             }
@@ -139,7 +143,7 @@ struct MikuWeatherWidgetView: View {
         let cached = entry.offline || entry.weather?.stale(at: entry.date) == true
         return HStack(spacing: 4) {
             if cached { Image(systemName: "wifi.slash") }
-            Text(entry.preview ? text("预览") : entry.weather.map { (cached ? text("缓存") : text("更新于")) + " " + clock($0.observedAt) } ?? text("等待天气数据"))
+            Text(entry.preview ? text("预览") : entry.weather.map { (cached ? text("缓存") : text("更新于")) + " " + clock($0.observedAt, format: calendar.isDate($0.observedAt, inSameDayAs: entry.date) ? "HH:mm" : "MM/dd HH:mm") } ?? text("等待天气数据"))
             Spacer(minLength: 0)
             Image(systemName: "arrow.up.right").font(.system(size: 8))
         }.foregroundColor(muted)

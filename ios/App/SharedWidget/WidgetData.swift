@@ -119,6 +119,11 @@ struct WidgetWeather: Codable {
         cityIdentity == city.identity && temperature.isFinite && now.timeIntervalSince(fetchedAt) >= -600 && now.timeIntervalSince(fetchedAt) <= 86400
     }
     func stale(at now: Date) -> Bool { now.timeIntervalSince(fetchedAt) > 1200 || now.timeIntervalSince(observedAt) > 7200 }
+    func forecastDays(for city: WidgetCity, at now: Date) -> [WidgetDay] {
+        var calendar = Calendar(identifier: .gregorian); calendar.timeZone = city.zone
+        let today = calendar.startOfDay(for: now)
+        return days.filter { calendar.startOfDay(for: $0.date) >= today }
+    }
     func night(at now: Date, city: WidgetCity) -> Bool {
         if let sunrise = sunrise, let sunset = sunset {
             var calendar = Calendar(identifier: .gregorian); calendar.timeZone = city.zone

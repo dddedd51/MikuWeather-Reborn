@@ -25,4 +25,10 @@ check("application cache is accepted without re-converting humidity") { let valu
 check("old city and demo data cannot replace widget weather") { var value = app; value["cityId"] = "old"; try rejects { _ = try WidgetWeather.fromApp(value, city: city) }; value = app; value["demo"] = true; try rejects { _ = try WidgetWeather.fromApp(value, city: city) } }
 check("codable preserves cache identity and optional fields") { let data = try JSONEncoder().encode(weather); let restored = try JSONDecoder().decode(WidgetWeather.self, from: data); try require(restored.usable(for: city, at: now) && restored.high == nil) }
 check("observation older than two hours is stale even after refetch") { var old = current; old["validTime"] = ISO8601DateFormatter().string(from: now.addingTimeInterval(-7201)); let value = try WidgetWeather.fromAPI(current: old, daily: nil, hourly: nil, city: city, now: now); try require(value.stale(at: now)) }
+check("cached daily forecasts move to the new city-local day after midnight") {
+    let start = WidgetWeather.date("2026-11-20T09:00:00+08:00")!
+    let sample = WidgetWeather.preview(at: start)
+    let days = sample.forecastDays(for: city, at: start.addingTimeInterval(86400))
+    try require(days.count == 3 && days.first?.high == 27 && days.first?.low == 20)
+}
 print("\(count) widget data tests passed")
