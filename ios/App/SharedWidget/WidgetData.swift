@@ -128,17 +128,17 @@ struct WidgetWeather: Codable {
         let hour = calendar.component(.hour, from: now)
         return hour < 6 || hour >= 18
     }
-    static func preview(at now: Date = Date()) -> WidgetWeather {
+    static func preview(at now: Date = Date(), temperatureC: Double = 26) -> WidgetWeather {
         let hours: [WidgetHour] = (1...4).map { index in
             let date = now.addingTimeInterval(Double(index) * 3600)
-            return WidgetHour(date: date, temperature: 26.0 - Double(index), code: "101")
+            return WidgetHour(date: date, temperature: temperatureC - Double(index), code: "101")
         }
         let days: [WidgetDay] = (0...3).map { index in
             let date = now.addingTimeInterval(Double(index) * 86400)
-            return WidgetDay(date: date, high: 28.0 - Double(index), low: 21.0 - Double(index), code: index == 2 ? "305" : "101")
+            return WidgetDay(date: date, high: temperatureC + 2 - Double(index), low: temperatureC - 5 - Double(index), code: index == 2 ? "305" : "101")
         }
-        return WidgetWeather(cityIdentity: WidgetCity.preview.identity, fetchedAt: now, observedAt: now, temperature: 26.0, condition: "多云", code: "101", humidity: 64.0, wind: 2.4,
-                             high: 28.0, low: 21.0, sunrise: nil, sunset: nil, hours: hours, days: days)
+        return WidgetWeather(cityIdentity: WidgetCity.preview.identity, fetchedAt: now, observedAt: now, temperature: temperatureC, condition: "多云", code: "101", humidity: 64.0, wind: 2.4,
+                             high: temperatureC + 2, low: temperatureC - 5, sunrise: nil, sunset: nil, hours: hours, days: days)
     }
 }
 

@@ -6,10 +6,12 @@ struct WidgetPreview: View {
     let family: WidgetFamily
     let language: String
     let theme: String
+    let unit: String
     var body: some View {
         let base = WidgetCity.preview
-        let city = WidgetCity(id: base.id, name: language == "en" ? "Shenzhen" : language == "ja" ? "深圳市" : "深圳", latitude: base.latitude, longitude: base.longitude, timeZone: base.timeZone, unit: "C", theme: theme, language: language)
-        let entry = MikuWeatherEntry(date: Date(), city: city, weather: .preview(), offline: false, preview: true)
+        let city = WidgetCity(id: base.id, name: language == "en" ? "Shenzhen" : language == "ja" ? "深圳市" : "深圳", latitude: base.latitude, longitude: base.longitude, timeZone: base.timeZone, unit: unit, theme: theme, language: language)
+        let sample = WidgetWeather.preview(temperatureC: unit == "F" ? 40 : 26)
+        let entry = MikuWeatherEntry(date: Date(), city: city, weather: sample, offline: false, preview: true)
         let size: CGSize = family == .systemSmall ? CGSize(width: 170, height: 170) : family == .systemMedium ? CGSize(width: 350, height: 170) : CGSize(width: 350, height: 365)
         return ZStack {
             Color(red: 0.94, green: 0.95, blue: 0.96).ignoresSafeArea()

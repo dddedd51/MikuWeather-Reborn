@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let argument = ProcessInfo.processInfo.arguments.first(where: { $0.hasPrefix("--widget-preview=") }) {
             let parts = argument.replacingOccurrences(of: "--widget-preview=", with: "").split(separator: ",").map(String.init)
             let family: WidgetFamily = parts.first == "small" ? .systemSmall : parts.first == "large" ? .systemLarge : .systemMedium
-            let controller = UIHostingController(rootView: WidgetPreview(family: family, language: parts.count > 1 ? parts[1] : "zh-CN", theme: parts.count > 2 ? parts[2] : "light"))
+            let controller = UIHostingController(rootView: WidgetPreview(family: family, language: parts.count > 1 ? parts[1] : "zh-CN", theme: parts.count > 2 ? parts[2] : "light", unit: parts.count > 3 ? parts[3] : "C"))
             window = UIWindow(frame: UIScreen.main.bounds); window?.rootViewController = controller; window?.makeKeyAndVisible()
         }
         #endif

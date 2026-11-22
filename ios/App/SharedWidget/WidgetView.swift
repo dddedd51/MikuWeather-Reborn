@@ -90,10 +90,10 @@ struct MikuWeatherWidgetView: View {
             ZStack(alignment: .leading) {
                 HStack { Spacer(); Image(artwork).resizable().scaledToFit().frame(width: size.width * 0.52, height: size.height * 0.53).accessibilityHidden(true) }
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(degrees(entry.weather?.temperature)).font(.system(size: min(42, size.width * 0.30), weight: .semibold, design: .rounded)).minimumScaleFactor(0.7).lineLimit(1)
+                    Text(degrees(entry.weather?.temperature)).font(.system(size: min(42, size.width * 0.30), weight: .semibold, design: .rounded)).minimumScaleFactor(0.55).lineLimit(1)
                     Text("°" + city.unit).font(.system(size: 9)).foregroundColor(muted)
                     Text(text(entry.weather?.condition ?? "等待天气数据")).font(.system(size: 10, weight: .medium)).lineLimit(1).frame(maxWidth: size.width * 0.51, alignment: .leading)
-                }
+                }.frame(width: size.width * 0.49, alignment: .leading)
             }.frame(maxHeight: .infinity)
             Text("↑ \(degrees(entry.weather?.high))  ↓ \(degrees(entry.weather?.low))").font(.system(size: 9)).foregroundColor(muted).lineLimit(1)
             status.font(.system(size: 8)).lineLimit(1).minimumScaleFactor(0.6)

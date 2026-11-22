@@ -28,7 +28,7 @@ value=json.load(open(sys.argv[1]));assert value.get('sharedGroupAvailable') and 
 print('Simulator App Group cache round-trip passed')
 PY
 xcrun simctl terminate "$sim" io.mikuweather.reborn
-for spec in 'small,zh-CN,light' 'medium,en,light' 'large,ja,dark' 'medium,zh-TW,dark'; do
+for spec in 'small,zh-CN,light' 'medium,en,light' 'large,ja,dark' 'medium,zh-TW,dark' 'small,en,light,F'; do
   xcrun simctl launch "$sim" io.mikuweather.reborn "--widget-preview=$spec"
   sleep 4
   xcrun simctl io "$sim" screenshot "work/widget-previews/$spec.png"
