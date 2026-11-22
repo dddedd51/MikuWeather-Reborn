@@ -102,7 +102,7 @@ struct MikuWeatherWidgetView: View {
                 HStack(spacing: 5) { Image(systemName: "location.fill").font(.system(size: 10)); Text(city.name).font(.system(size: 15, weight: .semibold)).lineLimit(1).minimumScaleFactor(0.7) }
                 Spacer(minLength: 4)
                 // Minute entries advance the clock without fetching weather every minute.
-                Text(entry.date, style: .time).font(.system(size: 21, weight: .medium, design: .rounded)).monospacedDigit().lineLimit(1)
+                Text(entry.date, style: .time).font(.system(size: 21, weight: .medium, design: .monospaced)).lineLimit(1)
             }
             HStack(spacing: 2) {
                 VStack(alignment: .leading, spacing: 4) {

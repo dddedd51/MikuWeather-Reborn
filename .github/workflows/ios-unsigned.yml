@@ -20,6 +20,7 @@ jobs:
         run: npm test
       - name: Native widget data and cache tests
         run: |
+          set -euo pipefail
           mkdir -p work
           swiftc ios/App/SharedWidget/WidgetData.swift tests/ios-widget/main.swift -o work/widget-data-tests
           work/widget-data-tests | tee work/widget-data-tests.log
