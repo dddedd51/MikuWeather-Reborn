@@ -5,13 +5,15 @@ enum WidgetStore {
     static let appGroup = "group.io.mikuweather.reborn"
     static let kind = "MikuWeatherWidget"
     private static var folder: URL? { FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) }
+    private static let processLock = NSLock()
     private static func locked<T>(_ action: (URL) throws -> T) throws -> T {
         guard let folder = folder else { throw WidgetFailure.unavailableGroup }
+        processLock.lock(); defer { processLock.unlock() }
         let descriptor = Darwin.open(folder.appendingPathComponent("widget-access.lock").path, O_CREAT | O_RDWR, 0o600)
         guard descriptor >= 0 else { throw WidgetFailure.invalidResponse }
         defer { Darwin.close(descriptor) }
-        while Darwin.flock(descriptor, LOCK_EX) != 0 { if errno != EINTR { throw WidgetFailure.invalidResponse } }
-        defer { _ = Darwin.flock(descriptor, LOCK_UN) }
+        while Darwin.lockf(descriptor, F_LOCK, 0) != 0 { if errno != EINTR { throw WidgetFailure.invalidResponse } }
+        defer { _ = Darwin.lockf(descriptor, F_ULOCK, 0) }
         return try action(folder)
     }
 

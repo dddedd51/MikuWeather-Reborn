@@ -16,7 +16,7 @@ struct MikuWeatherProvider: TimelineProvider {
         let client = WidgetWeatherClient()
         client.fetch(city: city) { result in
             let now = Date()
-            if let result = result { try? WidgetStore.save(weather: result, for: city) }
+            if let result = result { _ = try? WidgetStore.save(weather: result, for: city) }
             let currentCity = WidgetStore.city()
             let weather = currentCity.flatMap { WidgetStore.weather(for: $0, at: now) }
             completion(self.timeline(city: currentCity, weather: weather, offline: result == nil, now: now))
