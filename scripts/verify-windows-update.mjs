@@ -69,8 +69,10 @@ try {
   server.close();
   const stop="Get-Process -Name 'Miku Weather Reborn' -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $env:MIKU_UI_EXE } | Stop-Process -Force -ErrorAction SilentlyContinue";
   spawnSync('powershell.exe',['-NoProfile','-NonInteractive','-Command',stop],{windowsHide:true,env:{...process.env,MIKU_UI_EXE:exe}});
-  if(path.dirname(temp)===path.resolve(os.tmpdir())&&path.basename(temp).startsWith('miku-ui-update-'))
-    fs.rmSync(temp,{recursive:true,force:true,maxRetries:10,retryDelay:350});
+  if(path.dirname(temp)===path.resolve(os.tmpdir())&&path.basename(temp).startsWith('miku-ui-update-')){
+    try { fs.rmSync(temp,{recursive:true,force:true,maxRetries:10,retryDelay:350}); }
+    catch(error){ if(!['EBUSY','EPERM','EACCES'].includes(error.code))throw error;console.warn('Temporary test folder still in use:',temp); }
+  }
 }
 
 // This function exists only in the test installation's temporary entry point.
