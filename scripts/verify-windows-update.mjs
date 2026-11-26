@@ -9,6 +9,7 @@ import {once} from 'node:events';
 import {createHash} from 'node:crypto';
 import {spawn,spawnSync} from 'node:child_process';
 import {createPackageWithOptions, extractAll, extractFile} from '@electron/asar';
+import electron from 'electron';
 
 const root=path.resolve(import.meta.dirname,'..'), out=path.join(root,'release');
 const version=JSON.parse(fs.readFileSync(path.join(root,'package.json'))).version;
@@ -24,8 +25,10 @@ const server=http.createServer((req,res)=>{
 });
 server.listen(0,'127.0.0.1');await once(server,'listening');
 try {
-  fs.cpSync(path.join(root,'node_modules/electron/dist'),target,{recursive:true});
-  fs.renameSync(path.join(target,'electron.exe'),exe);
+  fs.mkdirSync(target);
+  const unpack=spawnSync('tar.exe',['-xf',archive,'-C',target],{windowsHide:true,encoding:'utf8'});
+  assert.equal(unpack.status,0,unpack.stderr);
+  fs.copyFileSync(electron,exe);
   const appAsar=path.join(out,'win-unpacked/resources/app.asar');
   extractAll(appAsar,source);
   const pkg=JSON.parse(fs.readFileSync(path.join(source,'package.json')));
