@@ -13,6 +13,26 @@ on:
 permissions:
   contents: read
 jobs:
+  windows:
+    if: github.event_name == 'push' || inputs.platform == 'windows' || inputs.platform == 'all'
+    runs-on: windows-2022
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --test --test-concurrency=1 tests/*.test.mjs
+      - run: npm run package:win
+      - name: Update through the packaged Settings window and verify the restarted version
+        run: node scripts/verify-windows-update.mjs
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: MikuWeather-Reborn-Windows
+          path: release/*Windows-*.zip
+          if-no-files-found: error
   android:
     if: github.event_name == 'push' || inputs.platform == 'android' || inputs.platform == 'all'
     runs-on: ubuntu-24.04
