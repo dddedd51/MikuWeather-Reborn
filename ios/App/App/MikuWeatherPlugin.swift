@@ -4,7 +4,7 @@ import Capacitor
 public class MikuWeatherPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "MikuWeatherPlugin"
     public let jsName = "MikuWeather"
-    public let pluginMethods = [CAPPluginMethod(name: "widgetSupport", returnType: CAPPluginReturnPromise)]
+    public let pluginMethods: [CAPPluginMethod] = [CAPPluginMethod(name: "widgetSupport", returnType: CAPPluginReturnPromise)]
 
     @objc func widgetSupport(_ call: CAPPluginCall) {
         let plugin = Bundle.main.builtInPlugInsURL?.appendingPathComponent("MikuWeatherWidgetExtension.appex")

@@ -111,6 +111,12 @@ finally {if($owned){$mutex.ReleaseMutex()};if($mutex){$mutex.Dispose()}}
 if(-not $mikuFailure -and (Split-Path -Parent $mikuBase) -eq [IO.Path]::GetTempPath().TrimEnd('\') -and (Split-Path -Leaf $mikuBase) -like 'miku-update-*'){
     foreach($item in @('stage','backup','update.zip')){
         $cleanup=[IO.Path]::GetFullPath((Join-Path $mikuBase $item));Assert-MikuChild $cleanup $mikuBase
-        if(Test-Path -LiteralPath $cleanup){Remove-Item -LiteralPath $cleanup -Recurse -Force -ErrorAction SilentlyContinue}
+        try {
+            if(Test-Path -LiteralPath $cleanup){Remove-Item -LiteralPath $cleanup -Recurse -Force -ErrorAction Stop}
+        } catch {
+            # A scanner or another process can still hold a temporary file after a successful install.
+            try {('Temp cleanup deferred: '+$cleanup) | Add-Content -LiteralPath $mikuLog -Encoding UTF8 -ErrorAction Stop} catch {}
+        }
     }
 }
+exit 0
