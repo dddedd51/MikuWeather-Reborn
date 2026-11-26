@@ -132,6 +132,6 @@ else{
     ipcMain.on('window:mini',event=>{if(trusted(event)&&details)details.setSize(400,600);});
     ipcMain.handle('window:pin',event=>{if(!trusted(event))return false;state.pinned=!state.pinned;pet.setAlwaysOnTop(state.pinned);updateTray();save();return state.pinned;});
     pet.loadURL('miku://app/pet.html').catch(e=>{log('pet load '+e.message);dialog.showErrorBox('初音天气加载失败','桌宠资源未能加载，程序目录中的 miku-startup.log 已记录具体错误。');});
-    log('desktop pet startup '+JSON.stringify({electron:process.versions.electron,windows:process.getSystemVersion(),packaged:app.isPackaged}));
+    log('desktop pet startup '+JSON.stringify({version:app.getVersion(),electron:process.versions.electron,windows:process.getSystemVersion(),packaged:app.isPackaged}));
   }).catch(e=>{log('startup error '+e.message);dialog.showErrorBox('初音天气启动失败',e.message);app.quit();});
 }

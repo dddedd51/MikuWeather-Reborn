@@ -4,13 +4,19 @@
 
 ![初音天气重制版实测](docs/images/cover.jpg)
 
-重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.3.6**。
+重制自 [lzcapp/MikuWeather_Windows](https://github.com/lzcapp/MikuWeather_Windows)，保留随天气变化的初音插画，重做天气页面、Windows 透明桌宠和 Android 桌面小组件。天气数据来自[和风天气](https://www.qweather.com/)。当前版本 **0.3.8**。
 
-**[下载 Windows / Android / iOS 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.3.6)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
+**[下载 Windows / Android / iOS 安装包](https://github.com/dddedd51/MikuWeather-Reborn/releases/tag/v0.3.8)**。Windows 完整解压到 **`D:\MikuWeatherReborn`** 等不含中文的目录后运行。
 
 📖 [开发日志：我用约 3636 万累计 token，重写了初音天气](docs/DEVLOG.md) · [用量统计范围](docs/token-usage.json) · [构建说明](docs/BUILD.md) · [第三方来源](THIRD_PARTY_NOTICES.md)
 
 > 标题里的累计用量包含缓存输入，不代表新生成 token 数或实际费用。
+
+## 0.3.8 · Windows 更新与 iPhone 小组件
+
+Windows 更新使用系统代理，校验安装包后备份有变化的文件。旧版无法完成更新时，解压本次发布的 Windows-Repair.zip，运行 Repair.cmd，选择旧目录中的程序。完整 Windows ZIP 与修复工具放在一起即可离线更新。
+
+iPhone 小组件使用普通的主应用和扩展描述文件。长按小组件可独立设置城市，也可粘贴主应用生成的配置码。只支持签一个应用的工具可用 AppOnly 版。[iPhone 安装和设置](docs/iOS-WIDGETS.md)
 
 ## 0.3.6 · Android 腾讯 IP 定位
 

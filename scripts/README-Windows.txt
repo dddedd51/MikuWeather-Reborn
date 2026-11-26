@@ -1,4 +1,4 @@
-初音天气 · Reborn 0.3.6（服务端代理版）
+初音天气 · Reborn 0.3.8（服务端代理版）
 
 请把 ZIP 完整解压到普通英文目录，再运行 Miku Weather Reborn.exe。
 例如 D:\MikuWeatherReborn\
@@ -32,3 +32,5 @@
 
 
 0.3.5：设置可选择简体中文、繁體中文、English、日本語。桌宠天气气泡不再显示数据来源，详情与关于页保留。
+
+设置内可直接下载并安装更新。旧版更新中断时，解压 Windows-Repair.zip，运行 Repair.cmd 并选择旧版 EXE。把同版本的完整 Windows ZIP 放在 Repair.cmd 旁即可离线使用。

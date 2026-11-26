@@ -16,7 +16,7 @@ function Copy-MikuFile([string]$Source,[string]$Destination) {
 }
 function Get-MikuHash([string]$File) {
     $mikuHasher=[Security.Cryptography.SHA256]::Create()
-    $mikuStream=[IO.File]::OpenRead($File)
+    $mikuStream=[IO.File]::Open($File,'Open','Read',([IO.FileShare]::ReadWrite -bor [IO.FileShare]::Delete))
     try {return [BitConverter]::ToString($mikuHasher.ComputeHash($mikuStream)).Replace('-','')}
     finally {$mikuStream.Dispose();$mikuHasher.Dispose()}
 }
@@ -36,6 +36,13 @@ try {
     if([IO.Path]::GetFileName($mikuConfig.executable) -ne $mikuConfig.executable){throw 'Invalid executable'}
     $mikuExe=Join-Path $mikuTarget $mikuConfig.executable
     if(-not (Test-Path -LiteralPath $mikuExe -PathType Leaf) -or -not (Test-Path -LiteralPath (Join-Path $mikuStage $mikuConfig.executable) -PathType Leaf) -or -not (Test-Path -LiteralPath (Join-Path $mikuStage 'resources/app.asar') -PathType Leaf)){throw 'Incomplete update'}
+    $targetKey=[Text.Encoding]::UTF8.GetBytes($mikuTarget.ToUpperInvariant())
+    $keyHash=[Security.Cryptography.SHA256]::Create()
+    try {$mutexName='Local\MikuWeatherUpdate-'+[BitConverter]::ToString($keyHash.ComputeHash($targetKey)).Replace('-','')}
+    finally {$keyHash.Dispose()}
+    $mutex=[Threading.Mutex]::new($false,$mutexName)
+    try {$owned=$mutex.WaitOne(0)} catch [Threading.AbandonedMutexException] {$owned=$true}
+    if(-not $owned){throw 'Another update is in progress'}
     $mikuBackup=Join-Path $mikuBase 'backup'
     Assert-MikuChild $mikuBackup $mikuBase
     $mikuPlan=@()
@@ -51,18 +58,23 @@ try {
             $mikuParent=Split-Path -Parent $mikuParent
         }
         $mikuOld=Test-Path -LiteralPath $mikuDestination
+        $mikuHash=Get-MikuHash $mikuFile.FullName
+        if($mikuOld -and ((Get-Item -LiteralPath $mikuDestination -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)){throw 'Linked installation paths are not supported'}
+        if($mikuOld -and (Get-Item -LiteralPath $mikuDestination).Length -eq $mikuFile.Length -and (Get-MikuHash $mikuDestination) -eq $mikuHash){continue}
         if($mikuOld -and ((Get-Item -LiteralPath $mikuDestination -Force).Attributes -band ([IO.FileAttributes]::ReadOnly -bor [IO.FileAttributes]::ReparsePoint))){throw 'Update destination is read-only or linked'}
         $mikuCopy=Join-Path $mikuBackup $mikuRelative
         if($mikuOld){
             New-Item -ItemType Directory -Path (Split-Path -Parent $mikuCopy) -Force | Out-Null
             Copy-Item -LiteralPath $mikuDestination -Destination $mikuCopy -Force
         }
-        $mikuPlan+=@{source=$mikuFile.FullName;destination=$mikuDestination;backup=$mikuCopy;existed=$mikuOld;hash=(Get-MikuHash $mikuFile.FullName)}
+        $mikuPlan+=@{source=$mikuFile.FullName;destination=$mikuDestination;backup=$mikuCopy;existed=$mikuOld;hash=$mikuHash}
     }
     # The app only quits after validation and a recoverable backup are complete.
     @{status='ready'} | ConvertTo-Json -Compress | Set-Content -LiteralPath $mikuConfig.ready -Encoding UTF8
-    Wait-Process -Id $mikuConfig.pid -Timeout 60 -ErrorAction SilentlyContinue
-    if(Get-Process -Id $mikuConfig.pid -ErrorAction SilentlyContinue){throw 'App still running'}
+    if([int]$mikuConfig.pid -gt 0){
+        Wait-Process -Id $mikuConfig.pid -Timeout 90 -ErrorAction SilentlyContinue
+        if(Get-Process -Id $mikuConfig.pid -ErrorAction SilentlyContinue){throw 'App still running'}
+    }
     $mikuExited=$true
     Start-Sleep -Milliseconds 500
     foreach($mikuItem in $mikuPlan){
@@ -86,5 +98,19 @@ try {
     Write-MikuResult 'failed' $mikuFailure
     if(-not $mikuExited){exit 1}
 }
-try {Start-Process -FilePath $mikuExe -WorkingDirectory $mikuTarget -WindowStyle Hidden}
+try {
+    if(-not $mikuConfig.noRestart){
+        $launch=@{FilePath=$mikuExe;WorkingDirectory=$mikuTarget;WindowStyle='Hidden'}
+        if($mikuConfig.profileOverride){$launch.ArgumentList='--user-data-dir="'+$mikuConfig.profileOverride+'"'}
+        Start-Process @launch
+    }
+}
 catch {Write-MikuResult 'failed' ('Restart failed: '+$_.Exception.Message);exit 1}
+finally {if($owned){$mutex.ReleaseMutex()};if($mutex){$mutex.Dispose()}}
+# Keep logs and failed recovery data. Successful, uniquely named temp stages can release their disk space.
+if(-not $mikuFailure -and (Split-Path -Parent $mikuBase) -eq [IO.Path]::GetTempPath().TrimEnd('\') -and (Split-Path -Leaf $mikuBase) -like 'miku-update-*'){
+    foreach($item in @('stage','backup','update.zip')){
+        $cleanup=[IO.Path]::GetFullPath((Join-Path $mikuBase $item));Assert-MikuChild $cleanup $mikuBase
+        if(Test-Path -LiteralPath $cleanup){Remove-Item -LiteralPath $cleanup -Recurse -Force -ErrorAction SilentlyContinue}
+    }
+}

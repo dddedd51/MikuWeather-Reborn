@@ -16,4 +16,5 @@ run(process.execPath,['node_modules/electron-builder/cli.js','--win','--dir','--
 copyFileSync(path.join(root,'scripts/README-Windows.txt'),path.join(root,'release/win-unpacked/README-Windows.txt'));
 const output=`release/MikuWeather-Reborn-${pkg.version}-Windows-x64.zip`;
 run('tar.exe',['-a','-cf',output,'-C','release/win-unpacked','.']);
+run(process.execPath,['scripts/package-recovery.mjs']);
 console.log('Windows 便携包已生成：'+output);

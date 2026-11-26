@@ -7,12 +7,16 @@
     <key>INIntents</key><array><dict>
         <key>INIntentName</key><string>WeatherLocation</string>
         <key>INIntentType</key><string>Custom</string>
-        <key>INIntentCategory</key><string>information</string>
+        <key>INIntentCategory</key><string>generic</string>
+        <key>INIntentVerb</key><string>Do</string>
+        <key>INIntentIneligibleForSuggestions</key><true/>
+        <key>INIntentLastParameterTag</key><integer>1</integer>
         <key>INIntentTitle</key><string>初音天气</string>
         <key>INIntentDescription</key><string>输入城市名称，或从初音天气设置中复制配置码。</string>
         <key>INIntentEligibleForWidgets</key><true/>
         <key>INIntentParameters</key><array><dict>
             <key>INIntentParameterName</key><string>city</string>
+            <key>INIntentParameterTag</key><integer>1</integer>
             <key>INIntentParameterDisplayName</key><string>城市或配置码</string>
             <key>INIntentParameterType</key><string>String</string>
             <key>INIntentParameterConfigurable</key><true/>

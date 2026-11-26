@@ -1638,5 +1638,50 @@
     "請長按選取的設定碼並複製",
     "Hold the selected code and choose Copy",
     "選択したコードを長押ししてコピーしてください"
+  ],
+  "连接发布服务失败，请检查网络或系统代理": [
+    "連線到發布服務失敗，請檢查網路或系統代理",
+    "Could not reach the release service. Check the network or system proxy.",
+    "配信サーバーに接続できません。ネットワークまたはシステムプロキシを確認してください。"
+  ],
+  "应用目录不可写，请将便携版解压到可写文件夹": [
+    "應用程式目錄無法寫入，請將可攜版解壓縮至可寫入的資料夾",
+    "The app folder is read-only. Extract the ZIP to a writable folder.",
+    "アプリのフォルダーに書き込めません。書き込み可能なフォルダーに展開してください。"
+  ],
+  "下载或校验失败，可重试或打开发布页": [
+    "下載或驗證失敗，可重試或開啟發布頁",
+    "Download or verification failed. Retry or open the release page.",
+    "ダウンロードまたは検証に失敗しました。再試行するか配布ページを開いてください。"
+  ],
+  "安装包解压或版本校验失败": [
+    "安裝包解壓縮或版本驗證失敗",
+    "Extraction or package version verification failed.",
+    "展開またはパッケージのバージョン確認に失敗しました。"
+  ],
+  "更新助手未能备份文件，请查看更新日志": [
+    "更新工具未能備份檔案，請查看更新記錄",
+    "The updater could not prepare a backup. See the update log.",
+    "更新時のバックアップに失敗しました。更新ログを確認してください。"
+  ],
+  "正在解压并验证安装包…": [
+    "正在解壓縮並驗證安裝包…",
+    "Extracting and verifying the package…",
+    "パッケージを展開して検証しています…"
+  ],
+  "正在备份旧版文件…": [
+    "正在備份舊版檔案…",
+    "Backing up the previous version…",
+    "旧バージョンをバックアップしています…"
+  ],
+  "正在重启应用…": [
+    "正在重新啟動應用程式…",
+    "Restarting the app…",
+    "アプリを再起動しています…"
+  ],
+  "打开发布页": [
+    "開啟發布頁",
+    "Open release page",
+    "配布ページを開く"
   ]
 }
