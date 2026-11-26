@@ -25,8 +25,8 @@ const server=http.createServer((req,res)=>{
 });
 server.listen(0,'127.0.0.1');await once(server,'listening');
 try {
-  fs.mkdirSync(target);
-  const unpack=spawnSync('tar.exe',['-xf',archive,'-C',target],{windowsHide:true,encoding:'utf8'});
+  const unpack=spawnSync('powershell.exe',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass',
+    '-File',path.join(root,'desktop/stage-update.ps1'),archive,target,version],{windowsHide:true,encoding:'utf8'});
   assert.equal(unpack.status,0,unpack.stderr);
   fs.copyFileSync(electron,exe);
   const appAsar=path.join(out,'win-unpacked/resources/app.asar');
