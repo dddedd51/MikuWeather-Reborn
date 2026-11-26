@@ -1,0 +1,41 @@
+name: Check live weather with the released iOS widget
+on:
+  workflow_dispatch:
+    inputs:
+      cities:
+        description: Comma-separated names from the widget's city catalog
+        type: string
+        default: 深圳,北京
+        required: true
+permissions:
+  contents: read
+jobs:
+  released-widget:
+    runs-on: macos-15
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: v0.3.8
+          path: released
+          sparse-checkout: |
+            ios/App/SharedWidget
+            public/assets/locations
+          persist-credentials: false
+      - name: Fetch live forecasts and read the 0.3.8 widget cache on iPadOS
+        env:
+          WIDGET_CITIES: ${{ inputs.cities }}
+        run: |
+          set -euo pipefail
+          device="$(xcrun simctl create WidgetWeatherCheck com.apple.CoreSimulator.SimDeviceType.iPad-10th-generation)"
+          trap 'xcrun simctl delete "$device"' EXIT
+          xcrun simctl boot "$device"
+          xcrun --sdk iphonesimulator swiftc -target "$(uname -m)-apple-ios16.0-simulator" \
+            -sdk "$(xcrun --sdk iphonesimulator --show-sdk-path)" \
+            released/ios/App/SharedWidget/{WidgetData,WidgetStore}.swift tests/ios-widget-live/main.swift \
+            -o "$RUNNER_TEMP/check-widget"
+          xcrun simctl bootstatus "$device" -b
+          xcrun simctl spawn "$device" "$RUNNER_TEMP/check-widget" "$PWD/released/public/assets/locations/china.json" "$WIDGET_CITIES"

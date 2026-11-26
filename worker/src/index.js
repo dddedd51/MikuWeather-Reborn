@@ -37,6 +37,35 @@ export function ipResult(data){
   const text=x=>typeof x==='string'?x.slice(0,80):'';
   return {status:0,result:{location:{lat:Number(loc.lat.toFixed(2)),lng:Number(loc.lng.toFixed(2))},ad_info:{nation:text(ad.nation),province:text(ad.province),city:text(ad.city),district:text(ad.district)}}};
 }
+const forecastBounds = ['forecastStartTime', 'forecastEndTime'];
+const astronomyTimes = ['sunrise', 'sunset', 'astronomicalDawn', 'nauticalDawn', 'civilDawn',
+  'astronomicalDusk', 'nauticalDusk', 'civilDusk', 'solarNoon', 'solarMidnight',
+  'moonrise', 'moonset', 'moonTransit', 'moonUnderfoot'];
+const minuteTimestamp = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})(Z|[+-]\d{2}:\d{2})$/;
+
+function includeSeconds(record, fields) {
+  for (const field of fields) {
+    const value = record?.[field];
+    if (typeof value === 'string') record[field] = value.replace(minuteTimestamp, '$1:00$2');
+  }
+}
+
+// The released WidgetKit client uses ISO8601DateFormatter, which requires seconds.
+function normalizeWeatherTimes(kind, data) {
+  if (kind === 'current') includeSeconds(data, ['validTime']);
+  if (kind === 'hourly' && Array.isArray(data.hours)) {
+    for (const hour of data.hours) includeSeconds(hour, ['forecastTime']);
+  }
+  if (kind === 'daily' && Array.isArray(data.days)) {
+    for (const day of data.days) {
+      includeSeconds(day, forecastBounds);
+      includeSeconds(day?.daytime, forecastBounds);
+      includeSeconds(day?.nighttime, forecastBounds);
+      includeSeconds(day?.astro, astronomyTimes);
+    }
+  }
+}
+
 export async function handle(request,env,ctx,fetchImpl=fetch,cache=globalThis.caches?.default){
   const url=new URL(request.url);
   const relay=env.RELAY_SECRET&&request.headers.get('Authorization')==='Bearer '+env.RELAY_SECRET;
@@ -61,13 +90,17 @@ export async function handle(request,env,ctx,fetchImpl=fetch,cache=globalThis.ca
       if(data.status!==0)return failure(502);
       return json(ipResult(data),200,{'Cache-Control':'no-store'});
     }
-    const key=new Request(url.origin+spec.path);
+    const cacheUrl = new URL(spec.path, url.origin);
+    // Older edge entries still contain minute-only timestamps.
+    if (spec.kind !== 'lookup') cacheUrl.searchParams.set('_time', 'seconds');
+    const key = new Request(cacheUrl);
     const hit=await cache?.match(key);if(hit)return hit;
     const auth=await jwt(env);
     const response=await fetchImpl('https://'+env.QWEATHER_HOST+spec.path,{headers:{Authorization:'Bearer '+auth,Accept:'application/json'},redirect:'manual',signal:AbortSignal.timeout(12000)});
     if(!response.ok)return failure([400,401,402,403,404,429].includes(response.status)?response.status:502);
     const data=await response.json();
     if(data.error||(data.code&&String(data.code)!=='200'))return failure(502);
+    normalizeWeatherTimes(spec.kind, data);
     const result=json(data,200,{'Cache-Control':'public, max-age='+spec.ttl});
     if(cache)ctx.waitUntil(cache.put(key,result.clone()));
     return result;

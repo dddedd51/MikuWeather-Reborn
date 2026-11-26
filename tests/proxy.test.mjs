@@ -22,6 +22,60 @@ test('worker limits upstream routes and canonicalizes forecast windows',()=>{
   assert.throws(()=>route(new URL('https://proxy.test/https://attacker.test')));
   assert.throws(()=>route(new URL('https://proxy.test/geo/v2/city/lookup?location=a&url=https://attacker.test')));
 });
+test('weather timestamps include seconds on cold and cached requests from the released iOS widget', async () => {
+  const minute = '2026-11-26T16:15+08:00', seconds = '2026-11-26T16:15:00+08:00';
+  const metadata = {tag: minute};
+  const cases = [
+    ['current', {metadata, validTime: minute, temperature: {value: 16.92}},
+      {metadata, validTime: seconds, temperature: {value: 16.92}}],
+    ['daily', {metadata, days: [
+      {forecastStartTime: '2026-11-26T00:00+08:00', forecastEndTime: minute,
+        daytime: {forecastStartTime: minute}, nighttime: {forecastEndTime: minute},
+        astro: {sunrise: '2026-11-26T07:25+08:00', sunset: '2026-11-26T17:55+08:00', moonTransit: minute, moonPhase: 'waning-gibbous'}},
+      {forecastStartTime: '2026-11-27T00:00Z', astro: {sunrise: null}}]},
+      {metadata, days: [
+        {forecastStartTime: '2026-11-26T00:00:00+08:00', forecastEndTime: seconds,
+          daytime: {forecastStartTime: seconds}, nighttime: {forecastEndTime: seconds},
+          astro: {sunrise: '2026-11-26T07:25:00+08:00', sunset: '2026-11-26T17:55:00+08:00', moonTransit: seconds, moonPhase: 'waning-gibbous'}},
+        {forecastStartTime: '2026-11-27T00:00:00Z', astro: {sunrise: null}}]}],
+    ['hourly', {hours: [
+      {forecastTime: '2026-11-26T17:00-03:30', temperature: {value: 17}},
+      {forecastTime: '2026-11-26T18:00:37Z'}, {forecastTime: '2026-11-26T19:00:05.123+05:45'},
+      {forecastTime: '2026-11-26T20:00'}, {}]},
+      {hours: [
+        {forecastTime: '2026-11-26T17:00:00-03:30', temperature: {value: 17}},
+        {forecastTime: '2026-11-26T18:00:37Z'}, {forecastTime: '2026-11-26T19:00:05.123+05:45'},
+        {forecastTime: '2026-11-26T20:00'}, {}]}],
+  ];
+  for (const [kind, upstream, expected] of cases) {
+    const path = qweather.buildPath(kind, {lat: 29.03, lon: 106.65});
+    const request = new Request('https://proxy.test' + path);
+    const entries = new Map([[request.url, Response.json(upstream)]]);
+    const cache = {match: key => entries.get(key.url)?.clone(), put: (key, value) => entries.set(key.url, value)};
+    let upstreamCalls = 0;
+    const fetcher = async url => {
+      assert.equal(url, 'https://' + env.QWEATHER_HOST + path);
+      upstreamCalls++;
+      return Response.json(upstream);
+    };
+    for (let i = 0; i < 2; i++) {
+      const result = await handle(request, env, {waitUntil() {}}, fetcher, cache);
+      assert.equal(result.status, 200);
+      assert.deepEqual(await result.json(), expected);
+      assert.equal(result.headers.get('Cache-Control'), 'public, max-age=' + (kind === 'current' ? 300 : 1800));
+    }
+    assert.equal(upstreamCalls, 1);
+  }
+});
+
+test('city lookups continue to use existing cache entries', async () => {
+  const request = new Request('https://proxy.test/geo/v2/city/lookup?location=Tokyo');
+  const cachedURL = new URL(route(new URL(request.url)).path, request.url).href;
+  const cached = {code: '200', location: [{name: 'Tokyo'}]};
+  const cache = {match: key => key.url === cachedURL ? Response.json(cached) : undefined};
+  const response = await handle(request, env, {}, () => assert.fail('cache miss'), cache);
+  assert.deepEqual(await response.json(), cached);
+});
 test('worker signs a valid Ed25519 token without returning the signing material',async()=>{
   const token=await jwt(env,1794560000000),[h,b,s]=token.split('.');
   assert.equal(verify(null,Buffer.from(h+'.'+b),pair.publicKey,Buffer.from(s,'base64url')),true);
