@@ -51,9 +51,10 @@ async function download(url, file, size, sha, onProgress, fetchImpl = fetch) {
 }
 
 const powershell = path.join(process.env.SystemRoot || 'C:/Windows', 'System32/WindowsPowerShell/v1.0/powershell.exe');
-function startHelper(script, args, detached = false) {
+function startHelper(script, args, logFd) {
+  const stdio = logFd === undefined ? ['ignore','ignore','pipe'] : ['ignore',logFd,logFd];
   return spawn(powershell, ['-NoLogo','-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',script,...args],
-    {windowsHide:true, detached, stdio:detached ? 'ignore' : ['ignore','ignore','pipe'], cwd:path.dirname(script)});
+    {windowsHide:true, stdio, cwd:path.dirname(script)});
 }
 function runStage(script, args) {
   return new Promise((resolve, reject) => {
@@ -74,7 +75,7 @@ function waitForReady(child, file, timeout = 300000) {
       error ? reject(error) : resolve();
     };
     const onError = () => done(Error('Update helper could not start'));
-    const onExit = () => done(Error('Update helper exited before readiness'));
+    const onExit = (code, signal) => done(Error('Update helper exited before readiness (' + (code ?? signal) + ')'));
     const poll = setInterval(async () => {
       try { if ((await readJson(file)).status === 'ready') done(); } catch {}
     }, 100);
@@ -132,13 +133,16 @@ async function install(app, onProgress, beforeQuit) {
     const profileOverride = app.commandLine.hasSwitch('user-data-dir') ? profile : null;
     await fs.writeFile(settings,JSON.stringify({pid:process.pid,target,stage,version:release.version,
       executable:path.basename(process.execPath),ready,log,result:resultFile,profileOverride}));
-    const child = startHelper(path.join(base,'apply-update.ps1'),[settings],true);
+    // Windows keeps an unreferenced child alive after its GUI parent exits. A normal child
+    // also inherits the interactive user's session. Keep its diagnostic output on disk.
+    const diagnostics = await fs.open(path.join(profile,'update-helper.log'),'a');
+    const child = startHelper(path.join(base,'apply-update.ps1'),[settings],diagnostics.fd);
     try { await waitForReady(child,ready); }
     catch (error) {
       const failure = await readJson(resultFile).catch(() => null);
       if (failure?.status === 'failed' && failure.version === release.version) throw Error(failure.message);
       throw error;
-    }
+    } finally { await diagnostics.close(); }
     handedOff = true;
     child.unref(); onProgress({percent:100, stage:'restart'}); beforeQuit(); app.quit();
     return {status:'restarting'};

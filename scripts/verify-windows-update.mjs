@@ -50,12 +50,14 @@ try {
   while(Date.now()<deadline) {
     const evidenceText=fs.existsSync(evidence)?fs.readFileSync(evidence,'utf8'):'';
     if(evidenceText.includes('ERROR'))throw Error(evidenceText);
+    const updateLog=path.join(profile,'update.log');
+    if(fs.existsSync(updateLog)&&/\bfailed:/i.test(fs.readFileSync(updateLog,'utf8')))break;
     const logs=fs.existsSync(startup)?fs.readFileSync(startup,'utf8'):'';
     if(logs.includes('"version":"'+version+'"')&&logs.includes('update result applied')){success=true;break;}
     await new Promise(resolve=>setTimeout(resolve,500));
   }
   if(!success) {
-    for(const file of [evidence,startup,path.join(profile,'update.log')])if(fs.existsSync(file))console.error(fs.readFileSync(file,'utf8').slice(-4000));
+    for(const file of [evidence,startup,path.join(profile,'update.log'),path.join(profile,'update-helper.log')])if(fs.existsSync(file))console.error(fs.readFileSync(file,'utf8').slice(-4000));
     throw Error('The release did not restart and confirm the applied update');
   }
   assert.match(fs.readFileSync(evidence,'utf8'),/proxy redirect and body passed/);

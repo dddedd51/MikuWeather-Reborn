@@ -1,5 +1,6 @@
 import {createCityLabels,cityLanguage} from './city-labels.js';
 import {widgetCode} from './widget-code.js';
+import pkg from '../package.json' with {type:'json'};
 import {NativeWeather} from './platform.js';
 import {widgetSettings,bindWidgetSettings,widgetOpacity,widgetTextScale} from './widget-settings.js';
 import {updatePanel,bindUpdates,startUpdateChecks} from './updates.js';
@@ -131,6 +132,7 @@ function showDialog(name) {
   dialogName=name;
   const title=name==='search'?'去看看另一座城':name==='settings'?'让天气，更合心意':name==='about'?'初音天气 · Reborn':'天气详情';
   const box=$('#modal-content');
+  if(!box)return; // A tray action can arrive before the first render builds the dialog.
   box.innerHTML=`<div class="modal-title"><div><div class="eyebrow">MIKU WEATHER</div><h2>${title}</h2></div><button class="icon-btn" data-action="close" aria-label="关闭">${icon('x')}</button></div>`;
   if(name==='search') {
     box.innerHTML+=`<div class="location-card"><button class="secondary locate-button" data-action="locate" ${locating||demo?'disabled':''}>${icon('locate-fixed')} ${locating?'正在定位…':desktop?'IP 定位当前城市 · 腾讯位置服务':android?'定位当前城市 · GPS / 系统定位':'定位当前城市'}</button>${desktop?`<button class="secondary" data-action="locate-system" ${locating||demo?'disabled':''}>使用 Windows 系统定位</button>`:''}<p>${desktop?'IP 定位经 Cloudflare 天气代理连接腾讯，代理把请求端公网 IP 交给腾讯匹配城市；应用不保存 IP。IP 推算可能偏到另一座城市，请先确认候选。':android?'仅点击后申请定位权限，精确位置允许时优先 GPS；也支持系统网络定位。完成、取消或超时后停止。':'系统定位坐标仅在本机处理。'}设备定位坐标仅在本机匹配、不上传、不留存；选择后只请求该城市的天气。</p><div id="location-error" role="status"></div></div>`;
@@ -155,7 +157,7 @@ function showDialog(name) {
     bindWidgetSettings(box,prefs,()=>{save('miku:prefs',prefs);syncCompanion();});bindUpdates(box);
     $('#language-select').value=getLanguage(); $('#theme-select').value=prefs.theme; $('#unit-select').value=prefs.unit;
   } else if(name==='about') {
-    box.innerHTML+=`${artImg('100','about-miku')}<p>把熟悉的初音天气，带回每一天。</p><p>这是 <a href="https://github.com/lzcapp/MikuWeather_Windows" target="_blank" rel="noreferrer">lzcapp / MikuWeather_Windows</a> 的非官方重制版，延续原作的天气插画与陪伴感。</p><p>原作者：RainySummer / lzcapp<br>天气数据：<a href="https://www.qweather.com/" target="_blank" rel="noreferrer">和风天气 QWeather</a><br>版本：0.3.7 · Windows / Android / iOS</p><p>角色插画沿用原仓库资源，角色及素材权利属于各自权利人。本项目与角色权利人无官方关联。</p><details><summary>原作许可证 · Anti-996</summary><pre id="license-text">正在读取…</pre></details><p class="modal-hint">城市列表与天气缓存保存在本机。Android 和 Windows 的 IP 定位仅主动点击后请求，服务端将当前网络的公网 IP 交给腾讯匹配大致城市，应用不保存 IP；VPN、代理或运营商出口可能影响结果。系统主动定位在本机匹配附近城市，定位坐标不上传、不留存；天气请求经 Cloudflare 代理发送所选城市的公开中心坐标，服务凭据只保存在服务端。本地城市库来自和风官方城市列表，主要覆盖中国城市及区县。不后台定位，不记录轨迹。系统定位服务自身的数据处理由系统控制。无账号、无广告。</p>`;
+    box.innerHTML+=`${artImg('100','about-miku')}<p>把熟悉的初音天气，带回每一天。</p><p>这是 <a href="https://github.com/lzcapp/MikuWeather_Windows" target="_blank" rel="noreferrer">lzcapp / MikuWeather_Windows</a> 的非官方重制版，延续原作的天气插画与陪伴感。</p><p>原作者：RainySummer / lzcapp<br>天气数据：<a href="https://www.qweather.com/" target="_blank" rel="noreferrer">和风天气 QWeather</a><br>版本：${pkg.version} · Windows / Android / iOS</p><p>角色插画沿用原仓库资源，角色及素材权利属于各自权利人。本项目与角色权利人无官方关联。</p><details><summary>原作许可证 · Anti-996</summary><pre id="license-text">正在读取…</pre></details><p class="modal-hint">城市列表与天气缓存保存在本机。Android 和 Windows 的 IP 定位仅主动点击后请求，服务端将当前网络的公网 IP 交给腾讯匹配大致城市，应用不保存 IP；VPN、代理或运营商出口可能影响结果。系统主动定位在本机匹配附近城市，定位坐标不上传、不留存；天气请求经 Cloudflare 代理发送所选城市的公开中心坐标，服务凭据只保存在服务端。本地城市库来自和风官方城市列表，主要覆盖中国城市及区县。不后台定位，不记录轨迹。系统定位服务自身的数据处理由系统控制。无账号、无广告。</p>`;
     fetch('./LICENSE.txt').then(r=>r.text()).then(t=>{if($('#license-text'))$('#license-text').textContent=t;}).catch(()=>{if($('#license-text'))$('#license-text').textContent='请查看安装目录随附的 LICENSE 文件。';});
   }
   createIcons({icons});
