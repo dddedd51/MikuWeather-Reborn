@@ -1,4 +1,6 @@
 import {createCityLabels,cityLanguage} from './city-labels.js';
+import {widgetCode} from './widget-code.js';
+import {NativeWeather} from './platform.js';
 import {widgetSettings,bindWidgetSettings,widgetOpacity,widgetTextScale} from './widget-settings.js';
 import {updatePanel,bindUpdates,startUpdateChecks} from './updates.js';
 import {languages,setLanguage,getLanguage,t,localize,observeTranslations} from './i18n.js';
@@ -11,6 +13,7 @@ import { nearbyCities,positionDescription } from './location.js';
 import { solarPixelIcon as pixelIcon } from './weather-icons.js';
 import { solarNight } from './solar.js';
 const $ = s => document.querySelector(s);
+let iosWidgetEmbedded = false;
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const icon = (name, cls = '') => `<i data-lucide="${name}" class="${cls}"></i>`;
 const weatherSymbol=(code,night=false)=>{const src=pixelIcon(code,night);return src?`<img class="weather-icon" src="${src}" alt="" aria-hidden="true" draggable="false">`:icon('cloud');};
@@ -120,7 +123,7 @@ async function loadWeather() {
 function syncCompanion() {
   window.miku?.setCity({...city,displayName:displayCity(city).name});
   window.miku?.setPreferences(prefs);
-  selectWidgetCity({...city,displayName:displayCity(city).name}, prefs.unit, prefs.theme, prefs.language,prefs.widgetOpacity,prefs.widgetTextScale,!demo&&data?.cityId===city.id?data:null).catch(error=>toast(error.code==='WIDGET_APP_GROUP'?'小组件数据共享未启用，请使用包含 App Groups 权限的签名':'桌面小组件暂未同步，请稍后重试'));
+  selectWidgetCity({...city,displayName:displayCity(city).name}, prefs.unit, prefs.theme, prefs.language,prefs.widgetOpacity,prefs.widgetTextScale,!demo&&data?.cityId===city.id?data:null).catch(error=>toast('桌面小组件暂未同步，请稍后重试'));
 }
 function pickCity(c) { if(!saved.some(s=>s.id===c.id)) { saved.push(c); save('miku:cities',saved); } city=c; save('miku:selected',c.id); syncCompanion(); localizeCities(); closeDialog(); loadWeather(); }
 function closeDialog() { searchEpoch++;locationEpoch++;locating=false;cancelLocation();dialogName=''; $('#modal')?.close(); }
@@ -140,10 +143,15 @@ function showDialog(name) {
     box.innerHTML+=`<div class="setting-row"><span>语言<small>立即生效，并同步桌宠与小组件</small></span><select id="language-select" aria-label="语言" data-no-i18n>${Object.entries(languages).map(([value,label])=>`<option value="${value}">${label}</option>`).join('')}</select></div>`;
     box.innerHTML+=`<div class="setting-row"><span>外观<small>为你的每一天换个颜色</small></span><select id="theme-select" aria-label="外观主题"><option value="dark">深海绿</option><option value="light">薄荷白</option><option value="system">跟随系统</option></select></div><div class="setting-row"><span>温度单位</span><select id="unit-select" aria-label="温度单位"><option value="C">摄氏度 °C</option><option value="F">华氏度 °F</option></select></div>${desktop?'<div class="setting-row"><span>桌面置顶<small>让初音一直陪在屏幕上</small></span><button class="secondary" data-action="pin">切换置顶</button></div>':''}<h3 class="settings-subtitle">管理城市</h3>${saved.map(c=>`<div class="manage-city"><span>${cityField(c,'name')}</span><button data-remove="${esc(c.id)}" ${saved.length===1?'disabled':''}>移除</button></div>`).join('')}<div class="settings-note">每 15 分钟自动更新。网络中断时保留最近一次天气，并标明缓存状态。无需填写 API 密钥。</div><button class="secondary" data-action="demo">${demo?'返回实时天气':'查看界面演示'}</button>`;
     if(android) box.innerHTML+=widgetSettings(prefs,displayCity(city),data);
-    if(ios)box.innerHTML+=`<h3 class="settings-subtitle">iPhone 桌面小组件</h3><p class="modal-hint">长按主屏幕空白处，点击“编辑”→“添加小组件”，搜索“初音天气”，选择小、中或大尺寸。小组件跟随当前城市、语言、温度单位和明暗主题；点击小组件打开天气。</p><p class="modal-hint">小组件由 iOS 安排刷新，断网时保留最近数据并标注缓存；时钟按分钟更新，无需每分钟联网。</p>`;
+    if(iosWidgetEmbedded)box.innerHTML+=`<h3 class="settings-subtitle">iPhone 桌面小组件</h3><p class="modal-hint">添加「初音天气」后，长按小组件并选择「编辑小组件」。输入城市名，或粘贴下方配置码使用当前城市和偏好。</p><p class="modal-hint">小组件由 iOS 安排刷新，断网时保留最近数据并标注缓存；时钟按分钟更新，无需每分钟联网。</p><label class="modal-hint" for="widget-code">小组件配置码</label><input id="widget-code" data-no-i18n readonly value="${esc(widgetCode({...city,displayName:displayCity(city).name},prefs))}"><button class="secondary" id="copy-widget-code">复制配置码</button>`;
     box.innerHTML+=updatePanel();
     if(android) box.innerHTML+=`<h3 class="settings-subtitle">桌面小组件</h3><p class="modal-hint">初音、时钟与天气常驻手机桌面。小组件跟随当前城市和温度单位，点击打开天气详情。</p><div class="widget-actions"><button class="secondary" data-action="widget-wide">添加宽版 · 4×2</button><button class="secondary" data-action="widget-compact">添加紧凑版 · 2×2</button></div><p class="modal-hint">也可长按手机桌面，选择“小组件”→“初音天气”。后台更新时间受系统省电策略影响。</p>`;
     $('#theme-select').insertAdjacentHTML('afterbegin','<option value="solar">自动 · 日出浅色 / 日落深色</option>');
+    box.querySelector('#copy-widget-code')?.addEventListener('click',async()=>{
+      const field=box.querySelector('#widget-code');
+      try { await navigator.clipboard.writeText(field.value); toast('已复制配置码'); }
+      catch { field.focus(); field.select(); toast('请长按选中的配置码并复制'); }
+    });
     bindWidgetSettings(box,prefs,()=>{save('miku:prefs',prefs);syncCompanion();});bindUpdates(box);
     $('#language-select').value=getLanguage(); $('#theme-select').value=prefs.theme; $('#unit-select').value=prefs.unit;
   } else if(name==='about') {
@@ -235,5 +243,5 @@ matchMedia('(prefers-color-scheme: light)').addEventListener('change',()=>{if(pr
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){updateSolarAppearance();if(!loading&&data&&Date.now()-data.fetchedAt>15*60_000)loadWeather();}});
 window.miku?.onRefresh(()=>loadWeather());
 window.miku?.onDialog(name=>showDialog(name));
-(async()=>{try{const p=await window.miku?.getPreferences();if(p){prefs={...prefs,...p};setLanguage(prefs.language);save('miku:prefs',prefs);}const c=await window.miku?.getCity();if(c){city=c;if(!saved.some(s=>s.id===c.id)){saved.push(c);save('miku:cities',saved);}save('miku:selected',c.id);}}catch{}loadWeather();syncCompanion();localizeCities();if(!demo)startUpdateChecks();})();
+(async()=>{if(ios){try{iosWidgetEmbedded=(await NativeWeather.widgetSupport()).embedded;}catch{}}try{const p=await window.miku?.getPreferences();if(p){prefs={...prefs,...p};setLanguage(prefs.language);save('miku:prefs',prefs);}const c=await window.miku?.getCity();if(c){city=c;if(!saved.some(s=>s.id===c.id)){saved.push(c);save('miku:cities',saved);}save('miku:selected',c.id);}}catch{}loadWeather();syncCompanion();localizeCities();if(!demo)startUpdateChecks();})();
 

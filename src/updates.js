@@ -1,8 +1,8 @@
-import {Capacitor,CapacitorHttp,registerPlugin} from '@capacitor/core';
+import {Capacitor,CapacitorHttp} from '@capacitor/core';
 import pkg from '../package.json' with {type:'json'};
 import {t} from './i18n.js';
 import * as updateProtocol from '../shared/updates.mjs';
-const Native=registerPlugin('MikuWeather');
+import {NativeWeather as Native} from './platform.js';
 let result=null,busy=false,status='',progress=0,listener=false;
 const platform=()=>window.miku?'windows':Capacitor.getPlatform()==='android'?'android':'ios';
 export function updatePanel(){return `<h3 class="settings-subtitle">应用更新</h3><p class="modal-hint">当前版本 <span data-no-i18n>${pkg.version}</span> · 启动时自动检查更新</p><div id="update-status" role="status">${t(status)}</div><progress id="update-progress" max="100" value="${progress}" ${busy?'':'hidden'}></progress><div class="widget-actions"><button class="secondary" id="check-update" ${busy?'disabled':''}>检查更新</button><button class="primary" id="install-update" ${!result?.available?'hidden':''} ${busy?'disabled':''}>${platform()==='ios'?'下载 IPA':'下载并安装更新'}</button></div>${platform()==='ios'?'<p class="modal-hint">iPhone 更新需要重新签名侧载，不能直接覆盖安装</p>':''}`;}

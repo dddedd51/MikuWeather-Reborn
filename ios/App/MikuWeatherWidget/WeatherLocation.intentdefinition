@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+    <key>INIntentDefinitionModelVersion</key><string>1.2</string>
+    <key>INIntentDefinitionNamespace</key><string>Miku</string>
+    <key>INIntentDefinitionToolsVersion</key><string>12.0</string>
+    <key>INIntents</key><array><dict>
+        <key>INIntentName</key><string>WeatherLocation</string>
+        <key>INIntentType</key><string>Custom</string>
+        <key>INIntentCategory</key><string>information</string>
+        <key>INIntentTitle</key><string>初音天气</string>
+        <key>INIntentDescription</key><string>输入城市名称，或从初音天气设置中复制配置码。</string>
+        <key>INIntentEligibleForWidgets</key><true/>
+        <key>INIntentParameters</key><array><dict>
+            <key>INIntentParameterName</key><string>city</string>
+            <key>INIntentParameterDisplayName</key><string>城市或配置码</string>
+            <key>INIntentParameterType</key><string>String</string>
+            <key>INIntentParameterConfigurable</key><true/>
+            <key>INIntentParameterSupportsResolution</key><false/>
+        </dict></array>
+    </dict></array>
+</dict></plist>

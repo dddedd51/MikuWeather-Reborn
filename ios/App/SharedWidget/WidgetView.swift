@@ -82,7 +82,7 @@ struct MikuWeatherWidgetView: View {
                 VStack(spacing: 9) {
                     Image("miku-cloudy-day").resizable().scaledToFit().frame(maxHeight: geometry.size.height * 0.52).accessibilityHidden(true)
                     Text(text("初音天气")).font(.system(size: 16, weight: .semibold))
-                    Text(text("打开初音天气设置城市")).font(.system(size: 11)).multilineTextAlignment(.center).foregroundColor(muted)
+                    Text(text("长按小组件，编辑城市或粘贴配置码")).font(.system(size: 11)).multilineTextAlignment(.center).foregroundColor(muted)
                 }.padding(8).frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if family == .systemSmall { small(size: geometry.size) }
             else { expanded(size: geometry.size) }

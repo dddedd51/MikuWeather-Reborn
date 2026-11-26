@@ -1,7 +1,7 @@
 import Foundation
 import CoreFoundation
 
-enum WidgetFailure: Error { case invalidCity, invalidWeather, unavailableGroup, invalidResponse }
+enum WidgetFailure: Error { case invalidCity, invalidWeather, invalidResponse }
 
 struct WidgetCity: Codable, Equatable {
     let id: String
@@ -30,6 +30,26 @@ struct WidgetCity: Codable, Equatable {
         return WidgetCity(id: id, name: name, latitude: (lat * 100).rounded() / 100, longitude: (lon * 100).rounded() / 100,
                           timeZone: tz, unit: unit == "F" ? "F" : "C", theme: ["light", "dark", "solar", "system"].contains(theme) ? theme : "solar",
                           language: ["zh-CN", "zh-TW", "en", "ja"].contains(language) ? language : "zh-CN")
+    }
+
+    // A code carries the selected city's exact coordinates, IANA time zone and display preferences.
+    static func configured(_ input: String?, catalog: @autoclosure () -> [[String: Any]]) -> WidgetCity? {
+        guard let query = input?.trimmingCharacters(in: .whitespacesAndNewlines), !query.isEmpty, query.count <= 2400 else { return nil }
+        if query.hasPrefix("MW1|") {
+            let parts = query.components(separatedBy: "|").compactMap { $0.removingPercentEncoding }
+            guard parts.count == 9 else { return nil }
+            return try? make(city: ["id": parts[1], "name": parts[2], "lat": parts[3], "lon": parts[4], "tz": parts[5]],
+                             unit: parts[6], theme: parts[7], language: parts[8])
+        }
+        let rows = catalog().filter { row in
+            guard let name = row["name"] as? String else { return false }
+            return row["id"] as? String == query || name == query || name + "市" == query
+        }
+        guard rows.count == 1, let row = rows.first else { return nil }
+        let locale = Locale.preferredLanguages.first ?? "zh"
+        let language = locale.hasPrefix("en") ? "en" : locale.hasPrefix("ja") ? "ja" :
+            (locale.contains("Hant") || locale.contains("TW") || locale.contains("HK")) ? "zh-TW" : "zh-CN"
+        return try? make(city: row, unit: "C", theme: "solar", language: language)
     }
 
     static let preview = WidgetCity(id: "101280601", name: "深圳", latitude: 22.55, longitude: 114.06, timeZone: "Asia/Shanghai", unit: "C", theme: "light", language: "zh-CN")

@@ -37,4 +37,16 @@ check("opening the app cannot downgrade a newer widget observation") {
     let newer = WidgetWeather.preview(at: now.addingTimeInterval(60))
     try require(!older.shouldReplace(previous) && !previous.shouldReplace(previous) && newer.shouldReplace(previous))
 }
+check("independent widget decodes the app's configuration without an App Group") {
+    let saved = WidgetCity.configured("MW1|JP1|%E6%9D%B1%E4%BA%AC%7C%E6%B8%AF|35.68|139.69|Asia%2FTokyo|F|dark|ja", catalog: [])
+    try require(saved?.name == "東京|港" && saved?.unit == "F" && saved?.timeZone == "Asia/Tokyo" && saved?.theme == "dark")
+    try require(WidgetCity.configured("MW1|JP1|Tokyo|100|139|Asia%2FTokyo|C|dark|ja", catalog: []) == nil)
+}
+check("city names resolve offline while ambiguous names require a specific code") {
+    let row: [String: Any] = ["id":"101280601","name":"深圳","lat":22.55,"lon":114.06,"tz":"Asia/Shanghai"]
+    try require(WidgetCity.configured("深圳市", catalog: [row])?.id == "101280601")
+    try require(WidgetCity.configured("101280601", catalog: [row])?.name == "深圳")
+    try require(WidgetCity.configured("深圳", catalog: [row, row]) == nil)
+    try require(WidgetCity.configured(nil, catalog: [row]) == nil)
+}
 print("\(count) widget data tests passed")

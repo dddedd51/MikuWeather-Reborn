@@ -1608,5 +1608,35 @@
     "小工具資料共享未啟用，請使用包含 App Groups 權限的簽名",
     "Widget sharing is unavailable. Sign the app and extension with matching App Groups permissions.",
     "共有データを利用できません。アプリと拡張を同じApp Groups権限で署名してください。"
+  ],
+  "长按小组件，编辑城市或粘贴配置码": [
+    "長按小工具，編輯城市或貼上設定碼",
+    "Hold the widget to edit the city or paste a setup code",
+    "ウィジェットを長押しして都市または設定コードを入力"
+  ],
+  "添加「初音天气」后，长按小组件并选择「编辑小组件」。输入城市名，或粘贴下方配置码使用当前城市和偏好。": [
+    "加入「初音天氣」後，長按小工具並選擇「編輯小工具」。輸入城市名稱，或貼上下方設定碼使用目前城市與偏好。",
+    "Add Miku Weather, hold the widget and choose Edit Widget. Enter a city name or paste the code below to use this city and preferences.",
+    "ミク天気を追加し、長押しして「ウィジェットを編集」を選択します。都市名または下記の設定コードを入力してください。"
+  ],
+  "小组件配置码": [
+    "小工具設定碼",
+    "Widget setup code",
+    "ウィジェット設定コード"
+  ],
+  "复制配置码": [
+    "複製設定碼",
+    "Copy setup code",
+    "設定コードをコピー"
+  ],
+  "已复制配置码": [
+    "已複製設定碼",
+    "Setup code copied",
+    "設定コードをコピーしました"
+  ],
+  "请长按选中的配置码并复制": [
+    "請長按選取的設定碼並複製",
+    "Hold the selected code and choose Copy",
+    "選択したコードを長押ししてコピーしてください"
   ]
 }

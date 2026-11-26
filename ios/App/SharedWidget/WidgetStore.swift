@@ -1,44 +1,28 @@
 import Foundation
-import Darwin
+import CryptoKit
 
 enum WidgetStore {
-    static let appGroup = "group.io.mikuweather.reborn"
     static let kind = "MikuWeatherWidget"
-    private static var folder: URL? { FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) }
-    private static let processLock = NSLock()
-    private static func locked<T>(_ action: (URL) throws -> T) throws -> T {
-        guard let folder = folder else { throw WidgetFailure.unavailableGroup }
-        processLock.lock(); defer { processLock.unlock() }
-        let descriptor = Darwin.open(folder.appendingPathComponent("widget-access.lock").path, O_CREAT | O_RDWR, 0o600)
-        guard descriptor >= 0 else { throw WidgetFailure.invalidResponse }
-        defer { Darwin.close(descriptor) }
-        while Darwin.lockf(descriptor, F_LOCK, 0) != 0 { if errno != EINTR { throw WidgetFailure.invalidResponse } }
-        defer { _ = Darwin.lockf(descriptor, F_ULOCK, 0) }
-        return try action(folder)
+    private static let lock = NSLock()
+
+    private static func file(for city: WidgetCity) throws -> URL {
+        let cache = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        let key = SHA256.hash(data: Data(city.identity.utf8)).map { String(format: "%02x", $0) }.joined()
+        return cache.appendingPathComponent("miku-weather-" + key + ".json")
     }
 
-    static func city() -> WidgetCity? {
-        guard let url = folder?.appendingPathComponent("widget-city.json"), let data = try? Data(contentsOf: url),
-              let city = try? JSONDecoder().decode(WidgetCity.self, from: data), city.latitude.isFinite, city.longitude.isFinite,
-              abs(city.latitude) <= 90, abs(city.longitude) <= 180, TimeZone(identifier: city.timeZone) != nil else { return nil }
-        return city
-    }
     static func weather(for city: WidgetCity, at now: Date = Date()) -> WidgetWeather? {
-        guard let url = folder?.appendingPathComponent("widget-weather.json"), let data = try? Data(contentsOf: url),
-              let weather = try? JSONDecoder().decode(WidgetWeather.self, from: data), weather.usable(for: city, at: now) else { return nil }
-        return weather
+        guard let data = try? Data(contentsOf: file(for: city)), let value = try? JSONDecoder().decode(WidgetWeather.self, from: data),
+              value.usable(for: city, at: now) else { return nil }
+        return value
     }
-    static func save(city: WidgetCity) throws {
-        try locked { folder in try JSONEncoder().encode(city).write(to: folder.appendingPathComponent("widget-city.json"), options: .atomic) }
-    }
+
     @discardableResult static func save(weather: WidgetWeather, for city: WidgetCity) throws -> Bool {
-        // A completed background request must not restore a city the app has already changed.
-        return try locked { folder in
-            guard self.city()?.identity == city.identity else { return false }
-            if let previous = self.weather(for: city), !weather.shouldReplace(previous) { return false }
-            try JSONEncoder().encode(weather).write(to: folder.appendingPathComponent("widget-weather.json"), options: .atomic)
-            return true
-        }
+        lock.lock(); defer { lock.unlock() }
+        guard weather.usable(for: city, at: Date()) else { return false }
+        if let previous = self.weather(for: city), !weather.shouldReplace(previous) { return false }
+        try JSONEncoder().encode(weather).write(to: file(for: city), options: .atomic)
+        return true
     }
 }
 

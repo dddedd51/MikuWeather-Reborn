@@ -8,7 +8,7 @@ sim="$(xcrun simctl create MikuWidgetReview "$device_type" "$runtime")"
 xcrun simctl boot "$sim"
 xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug \
   -destination "platform=iOS Simulator,id=$sim" -derivedDataPath work/ios-sim \
-  CODE_SIGNING_ALLOWED=NO CURRENT_PROJECT_VERSION=13 MARKETING_VERSION=0.3.7 build 2>&1 | tee work/ios-sim-build.log
+  CODE_SIGNING_ALLOWED=NO CURRENT_PROJECT_VERSION=14 MARKETING_VERSION=0.3.8 build 2>&1 | tee work/ios-sim-build.log
 xcrun simctl bootstatus "$sim" -b
 app="$PWD/work/ios-sim/Build/Products/Debug-iphonesimulator/App.app"
 if [[ -d "$app/Frameworks" ]]; then
@@ -24,8 +24,8 @@ sleep 8
 container="$(xcrun simctl get_app_container "$sim" io.mikuweather.reborn data)"
 python3 - "$container/Documents/widget-store-test.json" <<'PY'
 import json,sys
-value=json.load(open(sys.argv[1]));assert all(value.get(key) for key in ['sharedGroupAvailable','cacheRoundTrip','olderCacheRejected','bridgeControllerReady','nativeBridgeReady']),value
-print('Simulator App Group cache round-trip and native bridge startup passed')
+value=json.load(open(sys.argv[1]));assert all(value.get(key) for key in ['privateCacheAvailable','cacheRoundTrip','olderCacheRejected','bridgeControllerReady','nativeBridgeReady']),value
+print('Simulator private cache round-trip and native bridge startup passed')
 PY
 xcrun simctl terminate "$sim" io.mikuweather.reborn
 for spec in 'small,zh-CN,light' 'medium,en,light' 'large,ja,dark' 'medium,zh-TW,dark' 'small,en,light,F'; do
