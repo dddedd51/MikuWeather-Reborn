@@ -1,8 +1,9 @@
-param([Parameter(Mandatory=$true)][string]$Settings)
+param([Parameter(Mandatory=$true)][string]$Settings,
+      [ValidateSet('Full','Prepare','Resume')][string]$Phase='Full')
 $ErrorActionPreference='Stop'
 $mikuBase=Split-Path -Parent ([IO.Path]::GetFullPath($Settings))
 $mikuLog=Join-Path $mikuBase 'update.log'
-$mikuExited=$false
+$mikuExited=$Phase -eq 'Resume'
 $mikuChanged=New-Object 'System.Collections.Generic.List[object]'
 function Assert-MikuChild([string]$Path,[string]$Parent) {
     $mikuPrefix=$Parent.TrimEnd([IO.Path]::DirectorySeparatorChar)+[IO.Path]::DirectorySeparatorChar
@@ -29,6 +30,7 @@ try {
     # Settings are UTF-8 JSON even on Windows PowerShell 5.1.
     $mikuConfig=Get-Content -LiteralPath $Settings -Raw -Encoding UTF8 | ConvertFrom-Json
     if($mikuConfig.log){$mikuLog=$mikuConfig.log}
+    ("Windows update helper " + $Phase) | Add-Content -LiteralPath $mikuLog -Encoding UTF8
     $mikuTarget=[IO.Path]::GetFullPath($mikuConfig.target).TrimEnd([IO.Path]::DirectorySeparatorChar)
     $mikuStage=[IO.Path]::GetFullPath($mikuConfig.stage).TrimEnd([IO.Path]::DirectorySeparatorChar)
     Assert-MikuChild $mikuStage $mikuBase
@@ -71,7 +73,11 @@ try {
     }
     # The app only quits after validation and a recoverable backup are complete.
     @{status='ready'} | ConvertTo-Json -Compress | Set-Content -LiteralPath $mikuConfig.ready -Encoding UTF8
-    if([int]$mikuConfig.pid -gt 0){
+    if($Phase -eq 'Prepare'){
+        $mutex.ReleaseMutex();$mutex.Dispose()
+        exit 0
+    }
+    if($Phase -ne 'Resume' -and [int]$mikuConfig.pid -gt 0){
         Wait-Process -Id $mikuConfig.pid -Timeout 90 -ErrorAction SilentlyContinue
         if(Get-Process -Id $mikuConfig.pid -ErrorAction SilentlyContinue){throw 'App still running'}
     }

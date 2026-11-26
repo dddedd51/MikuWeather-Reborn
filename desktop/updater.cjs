@@ -51,18 +51,17 @@ async function download(url, file, size, sha, onProgress, fetchImpl = fetch) {
 }
 
 const powershell = path.join(process.env.SystemRoot || 'C:/Windows', 'System32/WindowsPowerShell/v1.0/powershell.exe');
-function startHelper(script, args, logFd) {
-  const stdio = logFd === undefined ? ['ignore','ignore','pipe'] : ['ignore',logFd,logFd];
+function startHelper(script, args) {
   return spawn(powershell, ['-NoLogo','-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',script,...args],
-    {windowsHide:true, stdio, cwd:path.dirname(script)});
+    {windowsHide:true, stdio:['ignore','ignore','pipe'], cwd:path.dirname(script)});
 }
-function runStage(script, args) {
+function runHelper(script, args) {
   return new Promise((resolve, reject) => {
     const child = startHelper(script, args);
     let error = '';
     child.stderr.on('data', chunk => { error = (error + chunk.toString()).slice(-1500); });
     child.once('error', reject);
-    child.once('close', code => code === 0 ? resolve() : reject(Error('ZIP extraction failed (' + code + ') ' + error.trim())));
+    child.once('close', code => code === 0 ? resolve() : reject(Error(path.basename(script) + ' (' + code + ') ' + error.trim())));
   });
 }
 function waitForReady(child, file, timeout = 300000) {
@@ -126,25 +125,29 @@ async function install(app, onProgress, beforeQuit) {
     for (const name of ['stage-update.ps1','read-package.ps1','apply-update.ps1']) {
       await fs.writeFile(path.join(base,name), await fs.readFile(path.join(__dirname,name)));
     }
-    await runStage(path.join(base,'stage-update.ps1'), [zip,stage,release.version]);
+    await runHelper(path.join(base,'stage-update.ps1'), [zip,stage,release.version]);
     step = 'backup';
     onProgress({percent:94, stage:step});
     const resultFile = path.join(profile,'update-result.json');
     const profileOverride = app.commandLine.hasSwitch('user-data-dir') ? profile : null;
     await fs.writeFile(settings,JSON.stringify({pid:process.pid,target,stage,version:release.version,
       executable:path.basename(process.execPath),ready,log,result:resultFile,profileOverride}));
-    // Windows keeps an unreferenced child alive after its GUI parent exits. A normal child
-    // also inherits the interactive user's session. Keep its diagnostic output on disk.
-    const diagnostics = await fs.open(path.join(profile,'update-helper.log'),'a');
-    const child = startHelper(path.join(base,'apply-update.ps1'),[settings],diagnostics.fd);
-    try { await waitForReady(child,ready); }
+    const helper = path.join(base,'apply-update.ps1');
+    try {
+      await runHelper(helper,[settings,'Prepare']);
+      if ((await readJson(ready)).status !== 'ready') throw Error('Backup was not confirmed');
+    }
     catch (error) {
       const failure = await readJson(resultFile).catch(() => null);
       if (failure?.status === 'failed' && failure.version === release.version) throw Error(failure.message);
       throw error;
-    } finally { await diagnostics.close(); }
+    }
+    // Electron's native relauncher waits for the old process to terminate before it
+    // starts PowerShell. No live child needs to survive destruction of its GUI parent.
+    app.relaunch({execPath:powershell,args:['-NoLogo','-NoProfile','-NonInteractive','-WindowStyle','Hidden',
+      '-ExecutionPolicy','Bypass','-File',helper,settings,'Resume']});
     handedOff = true;
-    child.unref(); onProgress({percent:100, stage:'restart'}); beforeQuit(); app.quit();
+    onProgress({percent:100, stage:'restart'}); beforeQuit(); app.quit();
     return {status:'restarting'};
   } catch (error) {
     await report(step + ' failed: ' + error.message);
